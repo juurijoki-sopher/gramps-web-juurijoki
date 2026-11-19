@@ -1,0 +1,34 @@
+# Railway deployment: builds this fork's frontend and bundles it with the
+# Gramps Web API backend in a single container. The Celery worker runs in the
+# same container because Railway volumes cannot be shared between services
+# and both processes need the same SQLite databases and media files.
+
+FROM node:22-bookworm-slim AS frontend
+WORKDIR /src
+COPY package.json package-lock.json ./
+# --ignore-scripts: skip husky git hooks (no .git in the build context)
+RUN npm ci --ignore-scripts --no-audit --no-fund
+COPY . .
+RUN npm run build
+
+FROM dmstraub/gramps-webapi:v3.26.0
+
+# Keep all persistent state under the single Railway volume mounted at /data
+ENV GRAMPSHOME=/data/home \
+    GRAMPS_DATABASE_PATH=/data/grampsdb \
+    GRAMPSWEB_USER_DB_URI=sqlite:////data/users/users.sqlite \
+    GRAMPSWEB_MEDIA_BASE_DIR=/data/media \
+    GRAMPSWEB_SEARCH_INDEX_DB_URI=sqlite:////data/indexdir/search_index.db \
+    GRAMPSWEB_THUMBNAIL_CACHE_CONFIG__CACHE_DIR=/data/thumbnail_cache \
+    GRAMPSWEB_REQUEST_CACHE_CONFIG__CACHE_DIR=/data/cache/request_cache \
+    GRAMPSWEB_PERSISTENT_CACHE_CONFIG__CACHE_DIR=/data/cache/persistent_cache \
+    GRAMPSWEB_REPORT_DIR=/data/cache/reports \
+    GRAMPSWEB_EXPORT_DIR=/data/cache/export \
+    GUNICORN_NUM_WORKERS=2 \
+    CELERY_CONCURRENCY=2
+
+COPY --from=frontend /src/dist /app/static
+COPY railway/start.sh /railway-start.sh
+RUN chmod +x /railway-start.sh
+
+ENTRYPOINT ["/railway-start.sh"]
