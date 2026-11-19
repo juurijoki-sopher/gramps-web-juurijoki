@@ -21,9 +21,8 @@ export class GrampsjsViewPeople extends GrampsjsViewObjectsBase {
   constructor() {
     super()
     this._columns = [
-      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id'},
-      {name: 'Surname', key: 'surname', sortKey: 'surname'},
-      {name: 'Given name', key: 'given'},
+      {name: 'Surname', key: 'surname', sortKey: 'surname', role: 'title'},
+      {name: 'Given name', key: 'given', role: 'title'},
       {name: 'Birth Date', key: 'birth', sortKey: 'birth'},
       {name: 'Birth Place', key: 'birthPlace', defaultVisible: false},
       {
@@ -35,7 +34,8 @@ export class GrampsjsViewPeople extends GrampsjsViewObjectsBase {
       {name: 'Age at death', key: 'age', defaultVisible: false},
       tagsColumn,
       privacyColumn,
-      {name: 'Last changed', key: 'change', sortKey: 'change'},
+      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id', role: 'meta'},
+      {name: 'Last changed', key: 'change', sortKey: 'change', role: 'meta'},
     ]
     this._objectsName = 'people'
   }

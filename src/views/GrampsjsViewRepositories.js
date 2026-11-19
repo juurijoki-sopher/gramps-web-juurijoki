@@ -19,12 +19,12 @@ export class GrampsjsViewRepositories extends GrampsjsViewObjectsBase {
   constructor() {
     super()
     this._columns = [
-      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id'},
-      {name: 'Name', key: 'name', sortKey: 'name'},
+      {name: 'Name', key: 'name', sortKey: 'name', role: 'title'},
       {name: 'Type', key: 'type', sortKey: 'type'},
       tagsColumn,
       privacyColumn,
-      {name: 'Last changed', key: 'change', sortKey: 'change'},
+      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id', role: 'meta'},
+      {name: 'Last changed', key: 'change', sortKey: 'change', role: 'meta'},
     ]
     this._objectsName = 'repositories'
   }

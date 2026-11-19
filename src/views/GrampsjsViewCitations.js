@@ -19,12 +19,12 @@ export class GrampsjsViewCitations extends GrampsjsViewObjectsBase {
   constructor() {
     super()
     this._columns = [
-      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id'},
-      {name: 'Source: Title', key: 'sourceTitle'},
+      {name: 'Source: Title', key: 'sourceTitle', role: 'title'},
       {name: 'Page', key: 'page'},
       tagsColumn,
       privacyColumn,
-      {name: 'Last changed', key: 'change', sortKey: 'change'},
+      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id', role: 'meta'},
+      {name: 'Last changed', key: 'change', sortKey: 'change', role: 'meta'},
     ]
     this._objectsName = 'citations'
   }

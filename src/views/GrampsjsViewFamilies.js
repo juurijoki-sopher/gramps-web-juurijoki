@@ -20,18 +20,24 @@ export class GrampsjsViewFamilies extends GrampsjsViewObjectsBase {
   constructor() {
     super()
     this._columns = [
-      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id'},
-      {name: 'Father', key: 'father', sortKey: 'surname'},
-      {name: 'Mother', key: 'mother'},
+      {name: 'Father', key: 'father', sortKey: 'surname', role: 'title'},
+      {name: 'Mother', key: 'mother', role: 'title'},
       {name: 'Relationship type:', key: 'relationship', defaultVisible: false},
       {name: 'Marriage Date', key: 'marriageDate'},
       {name: 'Marriage place', key: 'marriagePlace', defaultVisible: false},
       {name: 'Number of Children', key: 'children', defaultVisible: false},
       tagsColumn,
       privacyColumn,
-      {name: 'Last changed', key: 'change', sortKey: 'change'},
+      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id', role: 'meta'},
+      {name: 'Last changed', key: 'change', sortKey: 'change', role: 'meta'},
     ]
     this._objectsName = 'families'
+  }
+
+  // The partners' names already contain a comma ("Surname, Given")
+  // eslint-disable-next-line class-methods-use-this
+  get _titleSeparator() {
+    return ' & '
   }
 
   get _supportsMerge() {

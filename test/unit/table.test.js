@@ -105,3 +105,60 @@ describe('grampsjs-table sort header', () => {
     expect(ariaSort(el)[0]).toBe('descending')
   })
 })
+
+describe('grampsjs-table narrow card layout', () => {
+  const roleColumns = [
+    {name: 'Surname', role: 'title'},
+    {name: 'Given name', role: 'title'},
+    {name: 'Birth Date'},
+    {name: 'Gramps ID', role: 'meta'},
+  ]
+  const roleData = [['Smith', 'Anna', '1900', 'I0001']]
+
+  it('joins the title columns into one heading cell', async () => {
+    const el = await mount({columns: roleColumns, data: roleData})
+    const cells = [...el.shadowRoot.querySelectorAll('tbody tr td')]
+    expect(cells[0].classList.contains('row-title')).toBe(true)
+    expect(cells[0].textContent.replace(/\s+/g, ' ').trim()).toBe('Smith, Anna')
+    // the title columns get no cells of their own
+    expect(cells.map(td => td.dataset.label)).toEqual([
+      undefined,
+      'Birth Date',
+      'Gramps ID',
+    ])
+  })
+
+  it('uses the given separator between title values', async () => {
+    const el = await mount({
+      columns: roleColumns,
+      data: roleData,
+      titleSeparator: ' & ',
+    })
+    const title = el.shadowRoot.querySelector('td.row-title')
+    expect(title.textContent.replace(/\s+/g, ' ').trim()).toBe('Smith & Anna')
+  })
+
+  it('marks meta columns and hides them only when asked', async () => {
+    const el = await mount({columns: roleColumns, data: roleData})
+    const table = el.shadowRoot.querySelector('table')
+    expect(table.classList.contains('hide-meta')).toBe(false)
+    expect(el.shadowRoot.querySelector('td.role-meta')).not.toBeNull()
+    el.hideMetaNarrow = true
+    await el.updateComplete
+    expect(table.classList.contains('hide-meta')).toBe(true)
+  })
+
+  it('renders every column as a cell in the wide layout', async () => {
+    const el = await mount({columns: roleColumns, data: roleData})
+    el._containerWidth = 2000
+    await el.updateComplete
+    const cells = [...el.shadowRoot.querySelectorAll('tbody tr td')]
+    expect(cells.map(td => td.textContent.trim())).toEqual([
+      'Smith',
+      'Anna',
+      '1900',
+      'I0001',
+    ])
+    expect(el.shadowRoot.querySelector('td.row-title')).toBeNull()
+  })
+})

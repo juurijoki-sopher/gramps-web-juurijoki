@@ -25,12 +25,12 @@ export class GrampsjsViewPlaces extends GrampsjsViewObjectsBase {
   constructor() {
     super()
     this._columns = [
-      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id'},
-      {name: 'Name', key: 'title', sortKey: 'title'},
+      {name: 'Name', key: 'title', sortKey: 'title', role: 'title'},
       {name: 'Place type:', key: 'type'},
       tagsColumn,
       privacyColumn,
-      {name: 'Last changed', key: 'change', sortKey: 'change'},
+      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id', role: 'meta'},
+      {name: 'Last changed', key: 'change', sortKey: 'change', role: 'meta'},
     ]
     this._objectsName = 'places'
   }

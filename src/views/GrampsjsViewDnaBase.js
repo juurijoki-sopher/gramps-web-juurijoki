@@ -25,7 +25,7 @@ export class GrampsjsViewDnaBase extends GrampsjsStaleDataMixin(GrampsjsView) {
       css`
         md-fab {
           position: fixed;
-          bottom: 32px;
+          bottom: calc(32px + var(--grampsjs-bottom-nav-height, 0px));
           right: 32px;
         }
 

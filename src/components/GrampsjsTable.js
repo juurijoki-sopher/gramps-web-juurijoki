@@ -1,6 +1,7 @@
 import {css, html, LitElement} from 'lit'
 import '@material/web/checkbox/checkbox.js'
 import '@material/web/iconbutton/icon-button.js'
+import '@material/web/button/text-button.js'
 import '@material/web/icon/icon.js'
 import '@material/web/iconbutton/filled-icon-button'
 import '@material/web/menu/menu'
@@ -50,6 +51,39 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
 
         tbody tr:first-child {
           border-top: none;
+        }
+
+        /* Each card is its own region (law of common region), in the same
+           panel tint as the home page cards (law of similarity) */
+        table:not(.wide),
+        table:not(.wide) tbody {
+          display: block;
+        }
+
+        table:not(.wide) tbody tr {
+          border-top: none;
+          border-radius: 12px;
+          background-color: var(--grampsjs-panel-color);
+          padding: 12px 4px;
+          margin-bottom: 8px;
+        }
+
+        /* the row's name, at the top of the card (serial position) */
+        tbody td.row-title {
+          grid-column: 1 / -1;
+          font-size: 17px;
+          font-weight: 500;
+          color: var(--grampsjs-body-font-color-87);
+        }
+
+        tbody td.row-title::before {
+          content: none;
+        }
+
+        /* Gramps ID, last change: left out of the cards until the user
+           picks the columns (Hick's law) */
+        table.hide-meta:not(.wide) tbody td.role-meta {
+          display: none;
         }
 
         tbody td {
@@ -208,6 +242,11 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           margin-bottom: 15px;
         }
 
+        .mobile-sort md-text-button {
+          --md-text-button-container-height: 48px;
+          --md-text-button-label-text-color: var(--grampsjs-body-font-color-60);
+        }
+
         .mobile-sort md-menu {
           --md-menu-item-one-line-container-height: 48px;
           --md-menu-item-selected-container-color: var(
@@ -297,6 +336,8 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
       sortDescriptor: {type: String},
       selectable: {type: Boolean},
       selectionKey: {type: Number},
+      hideMetaNarrow: {type: Boolean},
+      titleSeparator: {type: String},
       _containerWidth: {type: Number},
       _selectedIndices: {type: Object},
     }
@@ -319,6 +360,8 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
     this.sortDescriptor = ''
     this.selectable = false
     this.selectionKey = 0
+    this.hideMetaNarrow = false
+    this.titleSeparator = ', '
     this._containerWidth = -1
     this._selectedIndices = new Set()
   }
@@ -345,6 +388,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           class="${classMap({
             wide: this._isWide,
             linked: this.linked,
+            'hide-meta': this.hideMetaNarrow,
           })}"
           style="${this.naturalWidth && this._isWide
             ? 'width: auto;'
@@ -390,37 +434,43 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
                         ></md-checkbox>
                       </td>`
                     : ''}
-                  ${item.map(
-                    (value, colIndex) => html`
-                      <td
-                        class="${this.columns[colIndex].hideWhenEmpty &&
-                        this._isEmpty(value)
-                          ? 'empty'
-                          : ''}"
-                        data-label="${this._colLabel(
-                          this.columns[colIndex].name
-                        )}"
-                      >
-                        <div class="cell-content">
-                          ${this.loading
-                            ? html`<span class="skeleton"
-                                ><span style="visibility: hidden;"
-                                  >${this._formatValue(
-                                    this.columns[colIndex],
-                                    value
-                                  )}</span
-                                ></span
-                              >`
-                            : this._renderCellValue(
-                                this._formatValue(
-                                  this.columns[colIndex],
-                                  value
-                                ),
-                                index
-                              )}
-                        </div>
-                      </td>
-                    `
+                  ${this._renderRowTitle(item, index)}
+                  ${item.map((value, colIndex) =>
+                    this._isTitleInRow(colIndex)
+                      ? ''
+                      : html`
+                          <td
+                            class="${classMap({
+                              empty:
+                                this.columns[colIndex].hideWhenEmpty &&
+                                this._isEmpty(value),
+                              'role-meta':
+                                this.columns[colIndex].role === 'meta',
+                            })}"
+                            data-label="${this._colLabel(
+                              this.columns[colIndex].name
+                            )}"
+                          >
+                            <div class="cell-content">
+                              ${this.loading
+                                ? html`<span class="skeleton"
+                                    ><span style="visibility: hidden;"
+                                      >${this._formatValue(
+                                        this.columns[colIndex],
+                                        value
+                                      )}</span
+                                    ></span
+                                  >`
+                                : this._renderCellValue(
+                                    this._formatValue(
+                                      this.columns[colIndex],
+                                      value
+                                    ),
+                                    index
+                                  )}
+                            </div>
+                          </td>
+                        `
                   )}
                 </tr>
               `
@@ -438,11 +488,24 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
     const isAscending = this.serverSort
       ? !this._isSortDescending()
       : !this.descending
+    const activeIndex = this.serverSort
+      ? this._getActiveSortColumn()
+      : this.sort
+    const activeColumn = hasActive ? this.columns[activeIndex] : null
+    // A labelled button, 48px high: easier to hit than the bare icon, and it
+    // tells what the list is sorted by (Fitts's law)
     return html`
       <div class="mobile-sort">
-        <md-icon-button @click="${this._toggleSortMenu}" id="btn-sort-menu">
-          <md-icon>${this._renderSortIcon(hasActive, isAscending)}</md-icon>
-        </md-icon-button>
+        <md-text-button
+          @click="${this._toggleSortMenu}"
+          id="btn-sort-menu"
+          aria-haspopup="menu"
+        >
+          <md-icon slot="icon"
+            >${this._renderSortIcon(hasActive, isAscending)}</md-icon
+          >
+          ${activeColumn ? this._colLabel(activeColumn.name) : this._('Sort')}
+        </md-text-button>
         <md-menu id="sort-menu" anchor="btn-sort-menu">
           ${this.columns
             .filter(col => !this.serverSort || col.sortKey)
@@ -463,6 +526,39 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
         </md-menu>
       </div>
     `
+  }
+
+  // Columns with role 'title' name the row. In the narrow (card) layout
+  // their values are joined into one heading at the top of the card, like
+  // the name in a phone's contact list, and their own cells are left out.
+  get _titleColumns() {
+    return this.columns
+      .map((col, i) => (col.role === 'title' ? i : -1))
+      .filter(i => i >= 0)
+  }
+
+  _isTitleInRow(colIndex) {
+    return !this._isWide && this.columns[colIndex]?.role === 'title'
+  }
+
+  _renderRowTitle(item, index) {
+    if (this._isWide) return ''
+    const values = this._titleColumns
+      .map(i => this._formatValue(this.columns[i], item[i]))
+      .filter(value => !this._isEmpty(value))
+    if (this._titleColumns.length === 0) return ''
+    const joined = values.flatMap((value, i) =>
+      i === 0 ? [value] : [this.titleSeparator, value]
+    )
+    return html`<td class="row-title">
+      <div class="cell-content">
+        ${this.loading
+          ? html`<span class="skeleton"
+              ><span style="visibility: hidden;">${joined}</span></span
+            >`
+          : this._renderCellValue(joined.length ? joined : '–', index)}
+      </div>
+    </td>`
   }
 
   _toggleSortMenu() {

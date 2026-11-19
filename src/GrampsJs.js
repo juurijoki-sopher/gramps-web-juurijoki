@@ -58,6 +58,7 @@ import {
   DRAWER_MODAL,
   DRAWER_RAIL,
 } from './components/GrampsjsNavDrawer.js'
+import {BOTTOM_NAV_HEIGHT} from './components/GrampsjsBottomNav.js'
 import './components/GrampsjsPages.js'
 import './components/GrampsjsTabBar.js'
 import './components/GrampsjsSnackbar.js'
@@ -138,7 +139,8 @@ export class GrampsJs extends LitElement {
           --grampsjs-rail-width: 72px;
           /* the height left below the app bar, for views that fill the window */
           --grampsjs-content-height: calc(
-            100dvh - var(--grampsjs-app-bar-height)
+            100dvh - var(--grampsjs-app-bar-height) -
+              var(--grampsjs-bottom-nav-height, 0px)
           );
         }
 
@@ -162,7 +164,7 @@ export class GrampsJs extends LitElement {
         }
 
         main {
-          padding: 0;
+          padding: 0 0 var(--grampsjs-bottom-nav-height, 0px) 0;
         }
 
         .page {
@@ -551,6 +553,8 @@ export class GrampsJs extends LitElement {
       this._loadStrings(grampsStrings, this.appState.settings.lang)
     }
     const drawerMode = this._drawerMode
+    // small screens get the bottom bar, which also opens the menu
+    const showBottomNav = drawerMode === DRAWER_MODAL
     return html`
       <div class="shell">
         <grampsjs-nav-drawer
@@ -565,7 +569,7 @@ export class GrampsJs extends LitElement {
             ?saving="${this._saving}"
             ?saveComplete="${this._saveComplete}"
             ?progress="${this.progress}"
-            ?menuButton="${drawerMode === DRAWER_MODAL}"
+            ?menuButton="${drawerMode === DRAWER_MODAL && !showBottomNav}"
             ?showTreeName="${drawerMode === DRAWER_RAIL}"
             .pageTitle="${this._pageTitle}"
           ></grampsjs-app-bar>
@@ -589,6 +593,11 @@ export class GrampsJs extends LitElement {
           </main>
         </div>
       </div>
+      ${showBottomNav
+        ? html`<grampsjs-bottom-nav
+            .appState="${this.appState}"
+          ></grampsjs-bottom-nav>`
+        : ''}
     `
   }
 
@@ -603,6 +612,23 @@ export class GrampsJs extends LitElement {
     const collapsed =
       this.appState.settings.drawerCollapsed ?? screenSize === 'medium'
     return collapsed ? DRAWER_RAIL : DRAWER_EXPANDED
+  }
+
+  // Fixed elements, such as the add buttons and the snackbar, and views
+  // that fill the window keep clear of the bottom bar with this variable.
+  // It is set on the document, as the snackbar is outside of this element.
+  _updateBottomNavHeight() {
+    const shown = Boolean(this.renderRoot.querySelector('grampsjs-bottom-nav'))
+    const height = shown
+      ? `calc(${BOTTOM_NAV_HEIGHT} + env(safe-area-inset-bottom, 0px))`
+      : '0px'
+    if (this._bottomNavHeight !== height) {
+      this._bottomNavHeight = height
+      document.documentElement.style.setProperty(
+        '--grampsjs-bottom-nav-height',
+        height
+      )
+    }
   }
 
   _toggleDrawer() {
@@ -1085,6 +1111,7 @@ export class GrampsJs extends LitElement {
   }
 
   updated(changed) {
+    this._updateBottomNavHeight()
     if (
       changed.has('appState') &&
       this.loadingState > LOADING_STATE_UNAUTHORIZED_NOCONNECTION
