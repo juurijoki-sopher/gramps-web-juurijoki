@@ -8,8 +8,10 @@ import {
   hexFromArgb,
 } from '@material/material-color-utilities'
 
-export const DEFAULT_PRIMARY = '#6d4c41'
-export const DEFAULT_SECONDARY = '#0277bd'
+// The colour chart of this site (see also global.css):
+// petrol blue as the main colour, copper as its warm complementary accent
+export const DEFAULT_PRIMARY = '#0E6170'
+export const DEFAULT_SECONDARY = '#A9502C'
 
 export function getSystemTheme() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -18,7 +20,9 @@ export function getSystemTheme() {
 }
 
 export function getCurrentTheme(theme) {
-  return theme === undefined || theme === 'system' ? getSystemTheme() : theme
+  // the site is light unless the user picks another theme
+  if (theme === undefined) return 'light'
+  return theme === 'system' ? getSystemTheme() : theme
 }
 
 function toKebabCase(str) {

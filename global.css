@@ -208,6 +208,24 @@ body {
 }
 
 :root[data-theme='light'] {
+  /* The site's colour chart, four colours:
+     - petrol (#0E6170): the main colour, set in theme.js (DEFAULT_PRIMARY);
+       buttons, the selected navigation item, progress bars
+     - copper (#A9502C): the accent, set in theme.js (DEFAULT_SECONDARY);
+       links, add and edit actions
+     - mist: light petrol surface for the drawer, bottom bar and panels
+     - sand: light copper surface for hovered rows
+     All text colours keep a contrast of at least 4.5:1 on both surfaces. */
+  --grampsjs-palette-mist: #e8f1f2;
+  --grampsjs-palette-sand: #f6eee5;
+  --grampsjs-drawer-background-color: var(--grampsjs-palette-mist);
+  --grampsjs-row-hover-color: var(--grampsjs-palette-sand);
+  /* the selected item's pill must stand out from the mist surface */
+  --grampsjs-tonal-color: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 22%,
+    var(--md-sys-color-surface)
+  );
   --grampsjs-top-app-bar-background-color: var(--md-sys-color-surface);
   --grampsjs-top-app-bar-font-color: var(--md-sys-color-on-surface);
   --grampsjs-body-font-color: rgba(0, 0, 0, 0.8);
