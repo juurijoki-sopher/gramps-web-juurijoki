@@ -33,7 +33,8 @@ class GrampsjsTabBar extends GrampsjsAppStateMixin(LitElement) {
         md-tabs {
           margin: 0 20px;
           width: max-content;
-          max-width: 100%;
+          /* the side margins count on top of the width */
+          max-width: calc(100% - 40px);
         }
 
         md-primary-tab {

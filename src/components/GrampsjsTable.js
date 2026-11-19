@@ -38,9 +38,11 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           display: none;
         }
 
+        /* Narrow (card) mode: kept compact so that a phone screen shows
+           several rows at once */
         tbody tr {
           display: grid;
-          gap: 0.75em;
+          gap: 8px 12px;
           border-top: 1px solid var(--grampsjs-divider-color);
           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
           padding: 10px 0;
@@ -56,14 +58,19 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           padding: 0 10px;
           border: none;
           position: relative;
-          font-size: 16px;
+          font-size: 15px;
+        }
+
+        table:not(.wide) tbody td {
+          line-height: 1.35;
         }
 
         tbody td::before {
           content: attr(data-label);
           display: block;
-          margin-bottom: 5px;
-          font-size: 14px;
+          margin-bottom: 1px;
+          font-size: 12px;
+          line-height: 1.3;
           color: var(--grampsjs-text-secondary-color);
           font-weight: 400;
         }
