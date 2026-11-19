@@ -13,9 +13,18 @@ mkdir -p /data/home /data/grampsdb /data/users /data/media /data/indexdir \
     /data/thumbnail_cache /data/cache/request_cache \
     /data/cache/persistent_cache /data/cache/reports /data/cache/export
 
+# Without an explicit key, generate one once and keep it on the volume so
+# that logins survive redeploys (upstream stores it in non-persistent /app)
 if [ -z "$GRAMPSWEB_SECRET_KEY" ]; then
-    echo "ERROR: GRAMPSWEB_SECRET_KEY is not set." >&2
-    exit 1
+    if [ ! -s /data/secret/secret_key ]; then
+        mkdir -p /data/secret
+        chmod 700 /data/secret
+        python3 -c "import secrets;print(secrets.token_urlsafe(48))" \
+            | tr -d "\n" > /data/secret/secret_key
+        chmod 600 /data/secret/secret_key
+    fi
+    GRAMPSWEB_SECRET_KEY=$(cat /data/secret/secret_key)
+    export GRAMPSWEB_SECRET_KEY
 fi
 
 # The upstream entrypoint runs the user database migrations, then execs us
