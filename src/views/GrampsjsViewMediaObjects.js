@@ -228,11 +228,11 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
     // 'first' or 'last' while the lightbox waits for the adjacent page
     this._lightboxPending = null
     this._columns = [
-      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id'},
       {name: 'Type', key: 'mime', sortKey: 'mime'},
-      {name: 'Description', key: 'desc', sortKey: 'title'},
+      {name: 'Description', key: 'desc', sortKey: 'title', role: 'title'},
       {name: 'Date', key: 'date', sortKey: 'date'},
-      {name: 'Last changed', key: 'change', sortKey: 'change'},
+      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id', role: 'meta'},
+      {name: 'Last changed', key: 'change', sortKey: 'change', role: 'meta'},
     ]
     this._objectsName = 'media'
   }

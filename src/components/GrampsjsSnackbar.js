@@ -27,7 +27,8 @@ class GrampsjsSnackbar extends GrampsjsAppStateMixin(LitElement) {
       css`
         .surface {
           position: fixed;
-          inset: auto 16px 16px 16px;
+          inset: auto 16px calc(16px + var(--grampsjs-bottom-nav-height, 0px))
+            16px;
           margin: 0 auto;
           width: fit-content;
           max-width: min(600px, calc(100vw - 32px));

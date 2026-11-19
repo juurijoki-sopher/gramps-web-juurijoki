@@ -20,12 +20,12 @@ export class GrampsjsViewNotes extends GrampsjsViewObjectsBase {
     super()
     this._objectsName = 'notes'
     this._columns = [
-      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id'},
-      {name: 'Type', key: 'type', sortKey: 'type'},
+      {name: 'Type', key: 'type', sortKey: 'type', role: 'title'},
       {name: 'Text', key: 'text', sortKey: 'text'},
       tagsColumn,
       privacyColumn,
-      {name: 'Last changed', key: 'change', sortKey: 'change'},
+      {name: 'Gramps ID', key: 'grampsId', sortKey: 'gramps_id', role: 'meta'},
+      {name: 'Last changed', key: 'change', sortKey: 'change', role: 'meta'},
     ]
   }
 

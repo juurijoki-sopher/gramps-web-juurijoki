@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import {LitElement, css, html} from 'lit'
 
-import {mdiTableOfContents, mdiPencil} from '@mdi/js'
+import {mdiTableOfContents, mdiPencil, mdiChevronDown} from '@mdi/js'
 
 import '@material/web/button/outlined-button.js'
 import '@material/web/iconbutton/icon-button.js'
@@ -43,6 +43,20 @@ import {getMediaUrl} from '../api.js'
 Define all tabs in the object view, their details, and when to display them
 (we do not display empty tabs)
 */
+
+// Sections closed until the user opens them: the less used ones, so that
+// a long page is read in a few chunks (Miller's law)
+const SECTIONS_CLOSED_BY_DEFAULT = new Set([
+  'names',
+  'placeNames',
+  'metadata',
+  'associations',
+  'repositories',
+  'references',
+  'revisions',
+  'sourceCitations',
+  'citations',
+])
 
 const _allTabs = {
   relationships: {
@@ -266,12 +280,61 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           flex-shrink: 1;
         }
 
+        /* Each section is a panel of its own (law of common region), in the
+           tint of the home page's panels (law of similarity), and it can be
+           closed to a single line */
+        details.section {
+          box-sizing: border-box;
+          margin-bottom: 16px;
+          padding: 4px 20px 8px 20px;
+          border-radius: 12px;
+          background-color: var(--grampsjs-panel-color);
+        }
+
+        details.section > summary {
+          list-style: none;
+          cursor: pointer;
+          border-radius: 8px;
+        }
+
+        details.section > summary::-webkit-details-marker {
+          display: none;
+        }
+
+        details.section > summary:focus-visible {
+          outline: 2px solid var(--md-sys-color-primary);
+          outline-offset: 2px;
+        }
+
         .sections h3 {
-          margin-top: 0;
-          margin-bottom: 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-height: 48px;
+          margin: 0;
           font-size: 24px;
-          padding-bottom: 12px;
+        }
+
+        details.section[open] > summary h3 {
+          margin-bottom: 1rem;
+          padding-bottom: 8px;
           border-bottom: 1px solid var(--grampsjs-divider-color);
+        }
+
+        .section-chevron {
+          flex: 0 0 auto;
+          transform: rotate(-90deg);
+          transition: transform 150ms ease-out;
+        }
+
+        details.section[open] .section-chevron {
+          transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .section-chevron {
+            transition: none;
+          }
         }
 
         .section * {
@@ -352,7 +415,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
         .toc-button {
           position: relative;
-          top: 4px;
+          top: 0;
           padding-left: 8px;
         }
 
@@ -392,7 +455,10 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
           .sections h3 {
             font-size: 17px;
-            margin-bottom: 12px;
+          }
+
+          details.section {
+            padding: 2px 12px 8px 12px;
           }
         }
       `,
@@ -551,6 +617,8 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
     const {sectionKey} = e.detail
     const section = this.shadowRoot.querySelector(`#section-${sectionKey}`)
     if (section) {
+      // a section picked from the table of contents opens
+      this._setSectionOpen(sectionKey, true)
       // Update the current visible section
       this._currentVisibleSection = sectionKey
 
@@ -600,31 +668,68 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
     return html`
       ${tabKeys.map(
         (key, idx, tabKeysArray) => html`<div class="row">
-          <div class="section" id="section-${key}">
-            <h3>
-              ${this._(_allTabs[key].title)}
-              ${this.tocSidebar || tabKeysArray.length <= 1 || this.preview
-                ? ''
-                : html`
-                    <md-icon-button
-                      class="toc-button"
-                      @click="${this._openTocDialog}"
-                    >
-                      <grampsjs-icon
-                        .path="${mdiTableOfContents}"
-                        color="var(--grampsjs-body-font-color-40)"
-                      ></grampsjs-icon>
-                    </md-icon-button>
-                  `}
-            </h3>
-            ${this.renderSectionContent(key)}
-          </div>
+          <details
+            class="section"
+            id="section-${key}"
+            ?open="${this._isSectionOpen(key)}"
+            @toggle="${e => this._handleSectionToggle(key, e)}"
+          >
+            <summary>
+              <h3>
+                <grampsjs-icon
+                  class="section-chevron"
+                  .path="${mdiChevronDown}"
+                  color="var(--grampsjs-body-font-color-50)"
+                ></grampsjs-icon>
+                <span class="section-title"
+                  >${this._(_allTabs[key].title)}</span
+                >
+                ${this.tocSidebar || tabKeysArray.length <= 1 || this.preview
+                  ? ''
+                  : html`
+                      <md-icon-button
+                        class="toc-button"
+                        @click="${this._openTocDialog}"
+                      >
+                        <grampsjs-icon
+                          .path="${mdiTableOfContents}"
+                          color="var(--grampsjs-body-font-color-40)"
+                        ></grampsjs-icon>
+                      </md-icon-button>
+                    `}
+              </h3>
+            </summary>
+            ${this._isSectionOpen(key) ? this.renderSectionContent(key) : ''}
+          </details>
         </div>`
       )}
     `
   }
 
-  _openTocDialog() {
+  // Whether a section is open: as the user last left it on this device, or
+  // else open unless it is one of the less used ones
+  _isSectionOpen(key) {
+    const saved = this.appState?.settings?.openSections?.[key]
+    if (typeof saved === 'boolean') return saved
+    return !SECTIONS_CLOSED_BY_DEFAULT.has(key)
+  }
+
+  _setSectionOpen(key, open) {
+    if (this._isSectionOpen(key) === open) return
+    const openSections = {...(this.appState?.settings?.openSections ?? {})}
+    openSections[key] = open
+    this.appState.updateSettings({openSections})
+    this.requestUpdate()
+  }
+
+  _handleSectionToggle(key, e) {
+    this._setSectionOpen(key, e.target.open)
+  }
+
+  _openTocDialog(e) {
+    // the button is in the section's summary, which must not toggle
+    e?.preventDefault()
+    e?.stopPropagation()
     const dialog = this.renderRoot.querySelector('#toc-dialog')
     if (dialog) {
       dialog.open = true

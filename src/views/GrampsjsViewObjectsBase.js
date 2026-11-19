@@ -82,7 +82,7 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
 
         md-fab {
           position: fixed;
-          bottom: 32px;
+          bottom: calc(32px + var(--grampsjs-bottom-nav-height, 0px));
           right: 32px;
         }
 
@@ -266,6 +266,18 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
     return this._columns.filter(col => canViewPrivate || !col.viewPrivate)
   }
 
+  // Whether the user has picked the columns for this list
+  get _hasSavedColumns() {
+    const saved = this.appState?.settings?.columns?.[this._objectsName]
+    return Array.isArray(saved) && saved.length > 0
+  }
+
+  // Joins the values of the title columns in the narrow card layout
+  // eslint-disable-next-line class-methods-use-this
+  get _titleSeparator() {
+    return ', '
+  }
+
   get _visibleColumns() {
     const columns = this._offeredColumns
     const saved = this.appState?.settings?.columns?.[this._objectsName]
@@ -304,6 +316,8 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
               ?loading="${this.loading}"
               .columns="${this._visibleColumns}"
               .data="${this._tableData}"
+              ?hideMetaNarrow="${!this._hasSavedColumns}"
+              titleSeparator="${this._titleSeparator}"
               sortDescriptor="${this._sort}"
               breakPoint="${this._tableBreakPoint}"
               .appState="${this.appState}"

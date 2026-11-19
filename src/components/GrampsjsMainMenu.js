@@ -89,7 +89,7 @@ const GROUPS = [
 ]
 
 // [outline, filled] icons; a single one where MDI has no outline variant
-const ICONS = {
+export const ICONS = {
   home: [mdiHomeOutline, mdiHome],
   blog: [mdiRss],
   tree: [mdiFamilyTree],
