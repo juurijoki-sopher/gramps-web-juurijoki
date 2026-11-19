@@ -252,7 +252,7 @@ export class GrampsjsViewSettingsUser extends GrampsjsView {
   }
 
   renderThemeSelect() {
-    const theme = this.appState.settings.theme ?? 'system'
+    const theme = this.appState.settings.theme ?? 'light'
     return html`
       <md-filled-select
         id="select-theme"

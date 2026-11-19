@@ -132,7 +132,10 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
         }
 
         table.linked tbody tr:not(.selected):hover {
-          background-color: var(--grampsjs-color-shade-240);
+          background-color: var(
+            --grampsjs-row-hover-color,
+            var(--grampsjs-color-shade-240)
+          );
         }
 
         table.linked tbody tr:focus-visible {

@@ -44,7 +44,10 @@ export class GrampsjsTableBase extends GrampsjsAppStateMixin(LitElement) {
         }
 
         table.linked tr:hover td {
-          background-color: var(--grampsjs-color-shade-240);
+          background-color: var(
+            --grampsjs-row-hover-color,
+            var(--grampsjs-color-shade-240)
+          );
           cursor: pointer;
         }
 
@@ -53,7 +56,10 @@ export class GrampsjsTableBase extends GrampsjsAppStateMixin(LitElement) {
         }
 
         table.linked tr.highlight:hover td {
-          background-color: var(--grampsjs-color-shade-240);
+          background-color: var(
+            --grampsjs-row-hover-color,
+            var(--grampsjs-color-shade-240)
+          );
           cursor: auto;
         }
 
