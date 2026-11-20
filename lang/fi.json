@@ -546,5 +546,19 @@
     "Media files are imported separately, under %s.": "Mediatiedostot tuodaan erikseen kohdassa %s.",
     "Save": "Tallenna",
     "Associated people": "Liittyvät henkilöt",
-    "%s of %s": "%s / %s"
+    "%s of %s": "%s / %s",
+    "filtering failed": "suodatus epäonnistui",
+    "loading failed": "haku epäonnistui",
+    "saving failed": "tallennus epäonnistui",
+    "updating failed": "päivitys epäonnistui",
+    "deleting failed": "poisto epäonnistui",
+    "invalid request": "virheellinen pyyntö",
+    "not signed in": "ei kirjautunut sisään",
+    "no permission": "ei oikeuksia",
+    "not found": "ei löytynyt",
+    "conflict with another change": "ristiriita toisen muutoksen kanssa",
+    "invalid data": "virheelliset tiedot",
+    "too many requests": "liian monta pyyntöä",
+    "server error": "palvelinvirhe",
+    "no connection to the server": "ei yhteyttä palvelimeen"
 }
