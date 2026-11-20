@@ -571,6 +571,7 @@ export class GrampsJs extends LitElement {
             ?progress="${this.progress}"
             ?menuButton="${drawerMode === DRAWER_MODAL && !showBottomNav}"
             ?showTreeName="${drawerMode === DRAWER_RAIL}"
+            ?hideSearchButton="${showBottomNav}"
             .pageTitle="${this._pageTitle}"
           ></grampsjs-app-bar>
 
@@ -1164,6 +1165,9 @@ export class GrampsJs extends LitElement {
         _strings = Object.assign(additionalStrings, _strings)
       }
       this._updateAppState({i18n: {strings: _strings, lang}})
+      // screen readers pick the pronunciation from the page's language
+      // (WCAG 3.1.1); Gramps codes such as pt_BR become BCP 47 (pt-BR)
+      document.documentElement.lang = lang.replace('_', '-')
     }
     this._loadingStrings = false
     if ('error' in data) {

@@ -6,6 +6,13 @@ body {
   background-color: var(--md-sys-color-background);
 }
 
+/* An element that gets focus or is scrolled to stays clear of the sticky
+   app bar and the bottom navigation bar (WCAG 2.4.11) */
+html {
+  scroll-padding-top: 64px;
+  scroll-padding-bottom: var(--grampsjs-bottom-nav-height, 0px);
+}
+
 @media print {
   html,
   body {
@@ -220,6 +227,9 @@ body {
   --grampsjs-palette-sand: #f6eee5;
   --grampsjs-drawer-background-color: var(--grampsjs-palette-mist);
   --grampsjs-row-hover-color: var(--grampsjs-palette-sand);
+  /* the shared amber reads on dark surfaces only: 1.78:1 on the light
+     warning background, this ochre 5.34:1 (WCAG 1.4.3) */
+  --grampsjs-alert-warn-font-color: #8a5a00;
   /* the selected item's pill must stand out from the mist surface */
   --grampsjs-tonal-color: color-mix(
     in srgb,

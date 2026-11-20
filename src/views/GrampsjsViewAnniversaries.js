@@ -31,9 +31,10 @@ export class GrampsjsViewAnniversaries extends GrampsjsConnectedComponent {
           height: 40px;
           width: 40px;
           border-radius: 50%;
-          background-color: var(--mdc-theme-primary);
-          opacity: 0.6;
-          color: var(--mdc-theme-on-primary);
+          /* the tonal pair of the selected navigation item: 6.7:1 with the
+             default colours; the earlier opacity of 0.6 gave 2.9:1 */
+          background-color: var(--grampsjs-tonal-color);
+          color: var(--grampsjs-on-tonal-color);
           font-size: 15px;
           line-height: 40px;
           display: inline-block;

@@ -152,7 +152,9 @@ const _allTabs = {
       'urls' in data || 'attribute_list' in data || 'address_list' in data,
   },
   associations: {
-    title: 'Associations',
+    // not the Gramps string 'Associations': its Finnish translation is the
+    // same as for 'Relationships', so the two sections had the same title
+    title: 'Associated people',
     condition: data => data?.person_ref_list?.length > 0,
     conditionEdit: data => 'person_ref_list' in data,
   },
@@ -413,10 +415,29 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           }
         }
 
-        .toc-button {
+        /* The table of contents button sits at the end of the section's
+           heading line, outside of the summary: a button inside the summary
+           (itself a button) would be a nested control (WCAG 4.1.2) */
+        .section-wrap {
           position: relative;
-          top: 0;
-          padding-left: 8px;
+          flex: 1 1 200px;
+          margin-right: 20px;
+          min-width: 0;
+          max-width: 100%;
+        }
+
+        .section-wrap > details.section {
+          margin-right: 0;
+        }
+
+        .section-wrap > details.section > summary h3 {
+          padding-right: 48px;
+        }
+
+        .toc-button {
+          position: absolute;
+          top: 8px;
+          right: 12px;
         }
 
         @container (min-width: 1200px) {
@@ -668,39 +689,43 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
     return html`
       ${tabKeys.map(
         (key, idx, tabKeysArray) => html`<div class="row">
-          <details
-            class="section"
-            id="section-${key}"
-            ?open="${this._isSectionOpen(key)}"
-            @toggle="${e => this._handleSectionToggle(key, e)}"
-          >
-            <summary>
-              <h3>
-                <grampsjs-icon
-                  class="section-chevron"
-                  .path="${mdiChevronDown}"
-                  color="var(--grampsjs-body-font-color-50)"
-                ></grampsjs-icon>
-                <span class="section-title"
-                  >${this._(_allTabs[key].title)}</span
-                >
-                ${this.tocSidebar || tabKeysArray.length <= 1 || this.preview
-                  ? ''
-                  : html`
-                      <md-icon-button
-                        class="toc-button"
-                        @click="${this._openTocDialog}"
-                      >
-                        <grampsjs-icon
-                          .path="${mdiTableOfContents}"
-                          color="var(--grampsjs-body-font-color-40)"
-                        ></grampsjs-icon>
-                      </md-icon-button>
-                    `}
-              </h3>
-            </summary>
-            ${this._isSectionOpen(key) ? this.renderSectionContent(key) : ''}
-          </details>
+          <div class="section-wrap">
+            <details
+              class="section"
+              id="section-${key}"
+              ?open="${this._isSectionOpen(key)}"
+              @toggle="${e => this._handleSectionToggle(key, e)}"
+            >
+              <summary>
+                <h3>
+                  <grampsjs-icon
+                    class="section-chevron"
+                    .path="${mdiChevronDown}"
+                    color="var(--grampsjs-body-font-color-50)"
+                  ></grampsjs-icon>
+                  <span class="section-title"
+                    >${this._(_allTabs[key].title)}</span
+                  >
+                </h3>
+              </summary>
+              ${this._isSectionOpen(key) ? this.renderSectionContent(key) : ''}
+            </details>
+            ${this.tocSidebar || tabKeysArray.length <= 1 || this.preview
+              ? ''
+              : html`
+                  <md-icon-button
+                    class="toc-button"
+                    aria-label="${this._('Table Of Contents')}"
+                    title="${this._('Table Of Contents')}"
+                    @click="${this._openTocDialog}"
+                  >
+                    <grampsjs-icon
+                      .path="${mdiTableOfContents}"
+                      color="var(--grampsjs-body-font-color-40)"
+                    ></grampsjs-icon>
+                  </md-icon-button>
+                `}
+          </div>
         </div>`
       )}
     `
@@ -726,10 +751,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
     this._setSectionOpen(key, e.target.open)
   }
 
-  _openTocDialog(e) {
-    // the button is in the section's summary, which must not toggle
-    e?.preventDefault()
-    e?.stopPropagation()
+  _openTocDialog() {
     const dialog = this.renderRoot.querySelector('#toc-dialog')
     if (dialog) {
       dialog.open = true

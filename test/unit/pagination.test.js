@@ -47,7 +47,7 @@ describe('grampsjs-pagination', () => {
       appState: {
         i18n: {
           lang: 'de',
-          strings: {'%(current)d of %(total)d': '%(current)d von %(total)d'},
+          strings: {'%s of %s': '%s von %s'},
         },
       },
       page: 1,

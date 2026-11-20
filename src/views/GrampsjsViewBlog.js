@@ -96,7 +96,11 @@ export class GrampsjsViewBlog extends GrampsjsStaleDataMixin(GrampsjsView) {
 
   renderFab() {
     return html`
-      <md-fab variant="primary" @click=${this._handleClickAdd}>
+      <md-fab
+        variant="primary"
+        @click=${this._handleClickAdd}
+        aria-label="${this._('Add')}"
+      >
         <grampsjs-icon
           slot="icon"
           .path="${mdiPlus}"

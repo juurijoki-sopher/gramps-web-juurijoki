@@ -543,5 +543,8 @@
     "Changes applied": "Muutokset tehty",
     "These changes can no longer be applied.": "Näitä muutoksia ei voi enää tehdä.",
     "Attach images": "Liitä kuvia",
-    "Media files are imported separately, under %s.": "Mediatiedostot tuodaan erikseen kohdassa %s."
+    "Media files are imported separately, under %s.": "Mediatiedostot tuodaan erikseen kohdassa %s.",
+    "Save": "Tallenna",
+    "Associated people": "Liittyvät henkilöt",
+    "%s of %s": "%s / %s"
 }
