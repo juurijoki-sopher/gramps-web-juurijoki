@@ -110,9 +110,8 @@ class GrampsjsPagination extends GrampsjsAppStateMixin(LitElement) {
       current = `${format(first)}–${format(last)}`
       total = format(this.total)
     }
-    return this._('%(current)d of %(total)d')
-      .replace('%(current)d', current)
-      .replace('%(total)d', total)
+    // a frontend string: the Gramps one had a broken Finnish translation
+    return this._('%s of %s', current, total)
   }
 
   _renderButton(path, label, page, disabled) {

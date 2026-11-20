@@ -546,7 +546,11 @@ export class GrampsjsViewTree extends GrampsjsStaleDataMixin(GrampsjsView) {
 
   renderFab() {
     return html`
-      <md-fab variant="primary" @click="${this._enableEditMode}">
+      <md-fab
+        variant="primary"
+        @click="${this._enableEditMode}"
+        aria-label="${this._('Edit')}"
+      >
         <grampsjs-icon
           slot="icon"
           .path="${mdiPencil}"

@@ -245,6 +245,8 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
       progress: {type: Boolean},
       menuButton: {type: Boolean},
       showTreeName: {type: Boolean},
+      // the bottom navigation bar has its own way to the search
+      hideSearchButton: {type: Boolean},
       pageTitle: {attribute: false},
       _scrolled: {state: true},
       _searching: {state: true},
@@ -263,6 +265,7 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
     this.progress = false
     this.menuButton = false
     this.showTreeName = false
+    this.hideSearchButton = false
     this.pageTitle = null
     this._scrolled = false
     // the search field fills the bar on small screens
@@ -469,7 +472,9 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
     const onSearchPage = this.appState.path.page === 'search'
     return html`
       ${this._small || onSearchPage ? '' : this._renderSearchField()}
-      ${this._small && !onSearchPage ? this._renderSearchButton() : ''}
+      ${this._small && !onSearchPage && !this.hideSearchButton
+        ? this._renderSearchButton()
+        : ''}
       ${this.appState.permissions.canAdd
         ? html`<grampsjs-add-menu
             .appState="${this.appState}"

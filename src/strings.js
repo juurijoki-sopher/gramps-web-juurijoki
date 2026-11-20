@@ -76,7 +76,6 @@ export function contextKey(context, message) {
 }
 
 export const grampsStrings = [
-  '%(current)d of %(total)d',
   '_Back',
   '_First',
   '_Last',
