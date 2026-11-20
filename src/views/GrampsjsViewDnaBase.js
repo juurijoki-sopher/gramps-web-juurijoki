@@ -41,7 +41,9 @@ export class GrampsjsViewDnaBase extends GrampsjsStaleDataMixin(GrampsjsView) {
         }
 
         md-filled-select {
-          --md-filled-select-text-field-input-text-font-size: 24px;
+          --md-filled-select-text-field-input-text-font-size: var(
+            --grampsjs-font-size-xl
+          );
           margin-bottom: 30px;
         }
       `,

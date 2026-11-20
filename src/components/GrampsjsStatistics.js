@@ -75,7 +75,7 @@ export class GrampsjsStatistics extends GrampsjsAppStateMixin(LitElement) {
           content: '';
           position: absolute;
           inset: 0;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
         }
 
         td.label a:focus-visible::after {

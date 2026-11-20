@@ -40,13 +40,13 @@ class GrampsjsChatProposal extends GrampsjsAppStateMixin(LitElement) {
 
         .proposal {
           border: 1px solid var(--grampsjs-body-font-color-20);
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           padding: 16px 20px 20px 20px;
         }
 
         h3 {
           margin: 0 0 20px 0;
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: 500;
         }
 
@@ -74,10 +74,10 @@ class GrampsjsChatProposal extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .change-type {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           line-height: 22px;
           padding: 0 10px;
-          border-radius: 11px;
+          border-radius: var(--grampsjs-radius-sm);
           background-color: var(--grampsjs-color-shade-230);
         }
 
@@ -111,7 +111,7 @@ class GrampsjsChatProposal extends GrampsjsAppStateMixin(LitElement) {
 
         .before,
         .after {
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           padding: 1px 4px;
         }
 

@@ -27,10 +27,10 @@ export class GrampsjsDeprecations extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .deprecations {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           padding: 0 1.4em;
           border: 1px solid var(--md-sys-color-tertiary);
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
         }
 
         .deprecation-row {
@@ -60,7 +60,7 @@ export class GrampsjsDeprecations extends GrampsjsAppStateMixin(LitElement) {
           font-size: 0.9em;
           color: var(--grampsjs-color-monospace);
           background-color: var(--grampsjs-body-font-color-5);
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           padding: 0.1em 0.3em;
         }
       `,

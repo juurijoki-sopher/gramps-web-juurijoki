@@ -34,14 +34,14 @@ export class GrampsjsWikidataBuildingBox extends GrampsjsAppStateMixin(
 
         h2 {
           font-weight: 500;
-          font-size: 22px;
+          font-size: var(--grampsjs-font-size-xl);
           margin-top: 10px;
           margin-bottom: 0;
         }
 
         h3 {
           font-weight: 400;
-          font-size: 18px;
+          font-size: var(--grampsjs-font-size-lg);
           margin-top: 24px;
           margin-bottom: 7px;
         }
@@ -50,11 +50,11 @@ export class GrampsjsWikidataBuildingBox extends GrampsjsAppStateMixin(
           margin-top: 2px;
           margin-bottom: 0;
           font-weight: var(--grampsjs-font-weight-body);
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         :host {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         img {
@@ -62,7 +62,7 @@ export class GrampsjsWikidataBuildingBox extends GrampsjsAppStateMixin(
           width: 100%;
           max-height: 220px;
           object-fit: cover;
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           margin-top: 12px;
         }
 
@@ -83,7 +83,7 @@ export class GrampsjsWikidataBuildingBox extends GrampsjsAppStateMixin(
           justify-content: space-between;
           gap: 12px;
           padding: 3px 0;
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         ul.dates {
@@ -94,7 +94,7 @@ export class GrampsjsWikidataBuildingBox extends GrampsjsAppStateMixin(
           display: flex;
           align-items: center;
           gap: 4px;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           color: var(--md-sys-color-on-surface-variant);
           margin-top: 4px;
         }
@@ -102,7 +102,7 @@ export class GrampsjsWikidataBuildingBox extends GrampsjsAppStateMixin(
         .range {
           white-space: nowrap;
           color: var(--md-sys-color-on-surface-variant);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
         }
 
         /* The external links stay together on the right, also when the

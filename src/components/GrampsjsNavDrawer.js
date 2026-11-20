@@ -99,7 +99,7 @@ class GrampsjsNavDrawer extends GrampsjsAppStateMixin(LitElement) {
         .tree-name {
           min-width: 0;
           font-family: var(--grampsjs-heading-font-family);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: var(--grampsjs-font-weight-heading);
           line-height: 17px;
           color: var(--md-sys-color-on-surface);

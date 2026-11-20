@@ -199,15 +199,15 @@ class GrampsjsMap extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .maplibregl-ctrl-group {
-          border-radius: 12px !important;
+          border-radius: var(--grampsjs-radius-md) !important;
         }
         .maplibregl-ctrl-bottom-right {
           right: 8px;
         }
         .grampsjs-place-tooltip .maplibregl-popup-content {
           padding: 4px 12px;
-          border-radius: 9999px;
-          font-size: 13px;
+          border-radius: var(--grampsjs-radius-full);
+          font-size: var(--grampsjs-font-size-xs);
           font-weight: 500;
           background: var(--md-sys-color-surface-container-high);
           color: var(--md-sys-color-on-surface);

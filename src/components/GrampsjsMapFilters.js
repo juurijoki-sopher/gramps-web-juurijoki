@@ -33,7 +33,7 @@ class GrampsjsMapFilters extends GrampsjsAppStateMixin(LitElement) {
 
         h3 {
           margin: 0;
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           font-weight: 500;
           letter-spacing: 0.04em;
           text-transform: uppercase;
@@ -42,7 +42,7 @@ class GrampsjsMapFilters extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .range {
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           color: var(--md-sys-color-on-surface-variant);
         }
 
@@ -56,9 +56,9 @@ class GrampsjsMapFilters extends GrampsjsAppStateMixin(LitElement) {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          border-radius: 9999px;
+          border-radius: var(--grampsjs-radius-full);
           padding: 6px 12px;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           font-weight: 500;
           font-family: inherit;
           line-height: 1;
@@ -83,7 +83,7 @@ class GrampsjsMapFilters extends GrampsjsAppStateMixin(LitElement) {
           background: none;
           padding: 0;
           font: inherit;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           font-weight: 500;
           color: var(--md-sys-color-primary);
           cursor: pointer;

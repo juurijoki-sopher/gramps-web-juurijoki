@@ -121,7 +121,7 @@ export class GrampsjsViewTree extends GrampsjsStaleDataMixin(GrampsjsView) {
         #controls {
           position: absolute;
           background-color: var(--md-sys-color-surface-container-low);
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
           z-index: 1;
           /* The first icon is centred below the first icon of the switcher */
           padding: 0 10px 0 5px;
@@ -167,7 +167,7 @@ export class GrampsjsViewTree extends GrampsjsStaleDataMixin(GrampsjsView) {
           height: 48px;
           padding: 0 8px 0 9px;
           border: none;
-          border-radius: 24px;
+          border-radius: var(--grampsjs-radius-lg);
           background-color: var(--md-sys-color-surface-container-low);
           color: var(--grampsjs-body-font-color);
           font: inherit;
@@ -205,12 +205,12 @@ export class GrampsjsViewTree extends GrampsjsStaleDataMixin(GrampsjsView) {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: 500;
         }
 
         #selected-person .gramps-id {
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           color: var(--grampsjs-text-secondary-color);
         }
 

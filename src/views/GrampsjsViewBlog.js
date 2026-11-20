@@ -32,7 +32,7 @@ export class GrampsjsViewBlog extends GrampsjsStaleDataMixin(GrampsjsView) {
         .post {
           display: block;
           padding: 16px;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           cursor: pointer;
           outline: none;
           transition: background-color 150ms;

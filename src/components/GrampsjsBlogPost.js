@@ -18,7 +18,7 @@ export class GrampsjsBlogPost extends GrampsjsAppStateMixin(LitElement) {
         h2 {
           color: var(--grampsjs-note-color);
           font-weight: 530;
-          font-size: 37px;
+          font-size: var(--grampsjs-font-size-3xl);
           padding-bottom: 0.75em;
           margin-bottom: 0.5em;
           padding-top: 0.5em;
@@ -29,7 +29,7 @@ export class GrampsjsBlogPost extends GrampsjsAppStateMixin(LitElement) {
         h3.author {
           font-family: var(--grampsjs-body-font-family);
           font-weight: var(--grampsjs-font-weight-body);
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           text-transform: uppercase;
           letter-spacing: 0.15em;
           margin-bottom: 60px;
@@ -58,7 +58,7 @@ export class GrampsjsBlogPost extends GrampsjsAppStateMixin(LitElement) {
 
         grampsjs-note-content {
           --grampsjs-note-line-height: 1.7em;
-          --grampsjs-note-font-size: 18px;
+          --grampsjs-note-font-size: var(--grampsjs-font-size-lg);
           --grampsjs-note-font-family: 'EB Garamond x';
         }
 
@@ -68,12 +68,12 @@ export class GrampsjsBlogPost extends GrampsjsAppStateMixin(LitElement) {
 
         @media (min-width: 768px) {
           h2 {
-            font-size: 60px;
+            font-size: var(--grampsjs-font-size-display);
             padding-bottom: 0.3em;
           }
 
           grampsjs-note-content {
-            --grampsjs-note-font-size: 23px;
+            --grampsjs-note-font-size: var(--grampsjs-font-size-xl);
           }
         }
       `,

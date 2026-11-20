@@ -103,7 +103,7 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
           display: flex;
           align-items: center;
           gap: 8px;
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           color: var(--grampsjs-text-secondary-color);
         }
 
@@ -154,7 +154,7 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
           align-items: center;
           gap: 10px;
           cursor: pointer;
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
         }
       `,
     ]

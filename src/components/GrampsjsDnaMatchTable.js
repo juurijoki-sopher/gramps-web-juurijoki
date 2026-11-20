@@ -76,7 +76,7 @@ export class GrampsjsDnaMatchTable extends GrampsjsAppStateMixin(LitElement) {
       sharedStyles,
       css`
         :host {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: 400;
         }
 

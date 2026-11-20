@@ -265,7 +265,7 @@ class GrampsjsEditor extends GrampsjsAppStateMixin(LitElement) {
 
         .framed {
           border: 1px solid var(--mdc-theme-secondary);
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           padding: 20px 25px;
         }
 
@@ -293,7 +293,7 @@ class GrampsjsEditor extends GrampsjsAppStateMixin(LitElement) {
           content: '';
           position: absolute;
           inset: 0;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background-color: Highlight;
           opacity: 0.4;
           pointer-events: none;
@@ -303,7 +303,7 @@ class GrampsjsEditor extends GrampsjsAppStateMixin(LitElement) {
           display: block;
           max-width: 100%;
           max-height: 20rem;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
         }
 
         .inline-image grampsjs-icon {
@@ -312,13 +312,13 @@ class GrampsjsEditor extends GrampsjsAppStateMixin(LitElement) {
 
         .draft-banner {
           background-color: var(--grampsjs-color-shade-230);
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           padding: 10px 14px;
           margin-bottom: 1em;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           color: var(--grampsjs-text-secondary-color);
         }
 

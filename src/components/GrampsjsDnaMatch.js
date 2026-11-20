@@ -59,7 +59,7 @@ export class GrampsjsDnaMatch extends GrampsjsAppStateMixin(LitElement) {
 
         .estimate td {
           padding: 12px 16px;
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           vertical-align: middle;
         }
 
@@ -79,13 +79,13 @@ export class GrampsjsDnaMatch extends GrampsjsAppStateMixin(LitElement) {
         .estimate .track {
           width: 120px;
           height: 8px;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background-color: var(--md-sys-color-surface-container-highest);
         }
 
         .estimate .fill {
           height: 100%;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background-color: var(--grampsjs-body-font-color-40);
         }
 

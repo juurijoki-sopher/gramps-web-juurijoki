@@ -42,7 +42,7 @@ class GrampsjsTasks extends GrampsjsAppStateMixin(LitElement) {
       sharedStyles,
       css`
         .tasks-list {
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           margin-top: 20px;
           margin-bottom: 85px;
         }
@@ -143,7 +143,7 @@ class GrampsjsTasks extends GrampsjsAppStateMixin(LitElement) {
           display: flex;
           align-items: center;
           gap: 8px;
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           color: var(--grampsjs-text-secondary-color);
         }
 

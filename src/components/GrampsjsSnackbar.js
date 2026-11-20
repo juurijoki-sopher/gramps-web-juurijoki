@@ -38,12 +38,12 @@ class GrampsjsSnackbar extends GrampsjsAppStateMixin(LitElement) {
           gap: 4px;
           padding: 4px 8px 4px 16px;
           border: none;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background-color: var(--md-sys-color-inverse-surface);
           color: var(--md-sys-color-inverse-on-surface);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2),
             0 1px 3px rgba(0, 0, 0, 0.12);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: 400;
           line-height: 20px;
           overflow: visible;

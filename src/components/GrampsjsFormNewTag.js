@@ -54,7 +54,7 @@ class GrampsjsFormNewTag extends GrampsjsObjectForm {
         .skeleton-text {
           height: 14px;
           flex: 1;
-          border-radius: 3px;
+          border-radius: var(--grampsjs-radius-xs);
         }
 
         @media (max-width: 600px) {

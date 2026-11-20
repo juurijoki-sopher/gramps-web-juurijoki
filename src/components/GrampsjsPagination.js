@@ -28,7 +28,7 @@ class GrampsjsPagination extends GrampsjsAppStateMixin(LitElement) {
           /* Room to scroll the buttons clear of a list's floating add button,
              which sits 32px from the bottom and is 56px high */
           margin-bottom: 88px;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: 400;
           color: var(--grampsjs-text-secondary-color);
         }

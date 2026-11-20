@@ -69,7 +69,7 @@ export class GrampsjsViewSearch extends GrampsjsView {
 
         /* Caption of the result list, aligned with its avatars */
         p.result-count {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--grampsjs-text-secondary-color);
           margin: 24px 0 8px 16px;
         }

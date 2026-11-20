@@ -26,9 +26,9 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
         }
 
         span.url {
-          border-radius: 5px;
+          border-radius: var(--grampsjs-radius-xs);
           border: 1px solid var(--grampsjs-body-font-color-15);
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           padding: 6px 6px;
           color: var(--grampsjs-text-secondary-color);
         }

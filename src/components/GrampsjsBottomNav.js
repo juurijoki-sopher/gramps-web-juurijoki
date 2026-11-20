@@ -68,7 +68,7 @@ class GrampsjsBottomNav extends GrampsjsAppStateMixin(LitElement) {
           color: var(--md-sys-color-on-surface-variant);
           text-decoration: none;
           font: inherit;
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           font-weight: var(--grampsjs-font-weight-medium);
           cursor: pointer;
           outline: none;
@@ -83,7 +83,7 @@ class GrampsjsBottomNav extends GrampsjsAppStateMixin(LitElement) {
           justify-content: center;
           width: 56px;
           height: 32px;
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
         }
 
         [aria-current='page'] {

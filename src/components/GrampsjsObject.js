@@ -224,7 +224,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
         pre {
           max-width: 80%;
-          font-size: 11px;
+          font-size: var(--grampsjs-font-size-2xs);
         }
 
         .header {
@@ -289,14 +289,14 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           box-sizing: border-box;
           margin-bottom: 16px;
           padding: 4px 20px 8px 20px;
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           background-color: var(--grampsjs-panel-color);
         }
 
         details.section > summary {
           list-style: none;
           cursor: pointer;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
         }
 
         details.section > summary::-webkit-details-marker {
@@ -314,7 +314,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           gap: 8px;
           min-height: 48px;
           margin: 0;
-          font-size: 24px;
+          font-size: var(--grampsjs-font-size-xl);
         }
 
         details.section[open] > summary h3 {
@@ -470,12 +470,12 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
         @container (max-width: 700px) {
           h2 {
-            font-size: 24px;
+            font-size: var(--grampsjs-font-size-xl);
             margin: 4px 0 16px;
           }
 
           .sections h3 {
-            font-size: 17px;
+            font-size: var(--grampsjs-font-size-body);
           }
 
           details.section {

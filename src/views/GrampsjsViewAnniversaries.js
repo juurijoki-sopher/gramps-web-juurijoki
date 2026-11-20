@@ -35,7 +35,7 @@ export class GrampsjsViewAnniversaries extends GrampsjsConnectedComponent {
              default colours; the earlier opacity of 0.6 gave 2.9:1 */
           background-color: var(--grampsjs-tonal-color);
           color: var(--grampsjs-on-tonal-color);
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           line-height: 40px;
           display: inline-block;
           text-align: center;

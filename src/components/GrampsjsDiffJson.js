@@ -29,20 +29,20 @@ export class GrampsjsDiffJson extends GrampsjsAppStateMixin(LitElement) {
         #container {
           overflow: hidden;
           border: 1px solid var(--grampsjs-body-font-color-20);
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           padding: 20px 8px;
         }
 
         .jsondiffpatch-delta {
           font-family: var(--grampsjs-mono-font-family);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           margin: 0;
           padding: 0 0 0 14px;
           display: inline-block;
         }
         .jsondiffpatch-delta pre {
           font-family: var(--grampsjs-mono-font-family);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           margin: 0;
           padding: 0;
           display: inline-block;

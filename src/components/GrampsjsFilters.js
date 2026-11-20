@@ -127,7 +127,7 @@ export class GrampsjsFilters extends GrampsjsAppStateMixin(LitElement) {
 
         .section-label {
           flex: none;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: 500;
           color: var(--mdc-theme-primary);
         }
@@ -142,7 +142,7 @@ export class GrampsjsFilters extends GrampsjsAppStateMixin(LitElement) {
           flex-wrap: wrap;
           gap: 8px;
           margin: 8px 0 16px 0;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
         }
       `,
     ]

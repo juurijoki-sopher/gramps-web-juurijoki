@@ -253,7 +253,7 @@ class GrampsjsFormExternalSearch extends GrampsjsObjectForm {
           margin: 1em 0;
           padding: 1em;
           border: 1px solid var(--grampsjs-body-font-color-15);
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
         }
         .add-form md-outlined-text-field {
           width: 100%;

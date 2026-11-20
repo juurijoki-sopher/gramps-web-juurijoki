@@ -28,7 +28,7 @@ export class GrampsjsReportOptions extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .label {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           line-height: 24px;
           /* first line level with the text inside the 56px fields */
           padding-top: 16px;

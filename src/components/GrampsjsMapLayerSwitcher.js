@@ -37,7 +37,7 @@ class GrampsjsMapLayerSwitcher extends GrampsjsAppStateMixin(LitElement) {
 
         .button {
           background: var(--md-sys-color-surface-container-high);
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           box-shadow: 0 1px 4px var(--grampsjs-body-font-color-20);
           padding: 2px;
           display: flex;
@@ -75,9 +75,9 @@ class GrampsjsMapLayerSwitcher extends GrampsjsAppStateMixin(LitElement) {
           padding: 12px;
           background: var(--md-sys-color-surface-container-high);
           color: var(--md-sys-color-on-surface);
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
           box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
         }
 
         .styles {
@@ -90,7 +90,7 @@ class GrampsjsMapLayerSwitcher extends GrampsjsAppStateMixin(LitElement) {
           min-width: 0;
           padding: 4px;
           border: 2px solid transparent;
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           background: none;
           color: inherit;
           font: inherit;
@@ -111,25 +111,25 @@ class GrampsjsMapLayerSwitcher extends GrampsjsAppStateMixin(LitElement) {
           width: 100%;
           height: 56px;
           object-fit: cover;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
         }
 
         .style-label {
           display: block;
           margin-top: 4px;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           font-weight: 500;
         }
 
         .style-year {
           display: block;
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           color: var(--md-sys-color-on-surface-variant);
         }
 
         h3 {
           margin: 16px 0 4px;
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           font-weight: 500;
           letter-spacing: 0.04em;
           text-transform: uppercase;
@@ -149,7 +149,7 @@ class GrampsjsMapLayerSwitcher extends GrampsjsAppStateMixin(LitElement) {
           flex: none;
           width: 40px;
           height: 40px;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -184,7 +184,7 @@ class GrampsjsMapLayerSwitcher extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .sub {
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           color: var(--md-sys-color-on-surface-variant);
         }
 

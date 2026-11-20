@@ -27,7 +27,7 @@ export class GrampsjsObjectToc extends GrampsjsAppStateMixin(LitElement) {
           margin-left: 14px;
           margin-bottom: 12px;
           margin-top: 0;
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: var(--grampsjs-font-weight-medium);
           color: var(--grampsjs-text-secondary-color);
         }

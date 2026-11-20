@@ -55,7 +55,7 @@ export class GrampsjsBackups extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .small {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--grampsjs-text-secondary-color);
         }
 

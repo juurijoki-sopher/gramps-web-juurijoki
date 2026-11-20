@@ -39,7 +39,7 @@ export class GrampsjsEditableTitle extends GrampsjsAppStateMixin(LitElement) {
 
         .text.editable {
           cursor: text;
-          border-radius: 5px;
+          border-radius: var(--grampsjs-radius-xs);
           padding: 0 6px;
           margin-left: -6px;
         }

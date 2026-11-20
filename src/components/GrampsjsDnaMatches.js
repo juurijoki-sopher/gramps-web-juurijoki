@@ -106,7 +106,7 @@ export class GrampsjsDnaMatches extends GrampsjsAppStateMixin(LitElement) {
 
         .name {
           font-weight: var(--grampsjs-font-weight-body);
-          font-size: 17px;
+          font-size: var(--grampsjs-font-size-body);
         }
 
         dl {
@@ -115,7 +115,7 @@ export class GrampsjsDnaMatches extends GrampsjsAppStateMixin(LitElement) {
         }
 
         dd {
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
         }
       `,
     ]

@@ -7,7 +7,7 @@ export const sharedStyles = css`
     --grampsjs-heading-font-family: 'Inter var', 'Gramps Symbols', sans-serif;
     --grampsjs-mono-font-family: 'Commit Mono', monospace;
     --md-ref-typeface-plain: 'Inter var', 'Gramps Symbols', sans-serif;
-    --grampsjs-body-font-size: 17px;
+    --grampsjs-body-font-size: var(--grampsjs-font-size-body);
     font-size: var(--grampsjs-body-font-size);
     font-family: var(--grampsjs-body-font-family);
     --grampsjs-body-font-weight: var(--grampsjs-font-weight-body);
@@ -32,7 +32,7 @@ export const sharedStyles = css`
 
   /* the hover layer follows the corners */
   md-list-item {
-    border-radius: 8px;
+    border-radius: var(--grampsjs-radius-sm);
     --md-list-item-label-text-weight: var(--grampsjs-body-font-weight);
     --md-list-item-label-text-size: 17px;
     --md-list-item-supporting-text-color: var(--grampsjs-text-secondary-color);
@@ -49,7 +49,7 @@ export const sharedStyles = css`
     display: inline-flex;
     place-items: center;
     gap: 12px;
-    font-size: 15px;
+    font-size: var(--grampsjs-font-size-md);
     font-weight: var(--grampsjs-font-weight-body);
     color: var(--md-sys-color-on-background);
   }
@@ -65,31 +65,31 @@ export const sharedStyles = css`
   h1 {
     font-weight: var(--grampsjs-font-weight-heading);
     font-family: var(--grampsjs-heading-font-family);
-    font-size: 34px;
+    font-size: var(--grampsjs-font-size-3xl);
   }
 
   h2 {
     font-weight: var(--grampsjs-font-weight-heading);
-    font-size: 30px;
+    font-size: var(--grampsjs-font-size-2xl);
     margin-top: 10px;
     margin-bottom: 30px;
   }
 
   h3 {
     font-weight: var(--grampsjs-font-weight-heading);
-    font-size: var(--grampsjs-h3-font-size, 18px);
+    font-size: var(--grampsjs-h3-font-size, var(--grampsjs-font-size-lg));
     margin-top: var(--grampsjs-h3-margin-top, 40px);
     margin-bottom: var(--grampsjs-h3-margin-bottom, 30px);
     margin-inline: var(--grampsjs-block-inset, 0);
   }
 
   h4 {
-    font-size: 16px;
+    font-size: var(--grampsjs-font-size-md);
   }
 
   h4.label {
     font-family: var(--grampsjs-body-font-family);
-    font-size: 16px;
+    font-size: var(--grampsjs-font-size-md);
   }
 
   b,
@@ -162,7 +162,7 @@ export const sharedStyles = css`
   }
 
   dt {
-    font-size: 14px;
+    font-size: var(--grampsjs-font-size-sm);
     color: var(--grampsjs-text-secondary-color);
     font-weight: var(--grampsjs-font-weight-body);
     margin-bottom: 0.2em;
@@ -189,7 +189,7 @@ export const sharedStyles = css`
   .avatar.skeleton {
     width: 44px;
     height: 44px;
-    border-radius: 22px;
+    border-radius: 50%;
   }
 
   grampsjs-icon.inline {
@@ -245,7 +245,7 @@ export const sharedStyles = css`
       var(--grampsjs-color-skeleton-base) 33%
     );
     opacity: 0.8;
-    border-radius: 3px;
+    border-radius: var(--grampsjs-radius-xs);
     background-size: 200% 100%;
     animation: 1.5s shine linear infinite;
   }
@@ -265,14 +265,14 @@ export const sharedStyles = css`
 
   .card {
     padding: 1em 1em;
-    border-radius: 16px;
+    border-radius: var(--grampsjs-radius-lg);
     background-color: var(--grampsjs-color-shade-230);
   }
 
   .alert {
     background-color: var(--grampsjs-alert-background-color);
     border-left: 4px solid var(--grampsjs-alert-border-color);
-    border-radius: 5px;
+    border-radius: var(--grampsjs-radius-xs);
     padding: 0.8em 1em;
     color: var(--grampsjs-body-font-color);
     margin: 1.5em 0;
@@ -331,7 +331,7 @@ export const sharedStyles = css`
   .monospace {
     font-family: var(--grampsjs-mono-font-family);
     border: 1px solid var(--grampsjs-body-font-color-15);
-    border-radius: 5px;
+    border-radius: var(--grampsjs-radius-xs);
     background-color: var(--grampsjs-body-font-color-5);
     padding: 0.3em;
     font-size: 0.9em;
@@ -363,7 +363,7 @@ export const sharedStyles = css`
 
   @media (max-width: 768px) {
     :host {
-      font-size: 16px;
+      font-size: var(--grampsjs-font-size-md);
       --md-list-item-leading-space: 8px;
       --md-list-item-trailing-space: 8px;
       --mdc-list-side-padding: 8px;
@@ -374,19 +374,19 @@ export const sharedStyles = css`
     }
 
     h1 {
-      font-size: 24px;
+      font-size: var(--grampsjs-font-size-xl);
     }
 
     h2 {
-      font-size: 24px;
+      font-size: var(--grampsjs-font-size-xl);
     }
 
     h3 {
-      font-size: 20px;
+      font-size: var(--grampsjs-font-size-lg);
     }
 
     h4 {
-      font-size: 18px;
+      font-size: var(--grampsjs-font-size-lg);
     }
   }
 

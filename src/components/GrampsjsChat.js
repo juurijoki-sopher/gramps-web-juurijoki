@@ -72,7 +72,7 @@ class GrampsjsChat extends GrampsjsAppStateMixin(LitElement) {
           justify-content: center;
           height: 24px;
           width: 48px;
-          font-size: 24px;
+          font-size: var(--grampsjs-font-size-xl);
         }
 
         .dot {

@@ -101,7 +101,7 @@ export class GrampsjsChromosomeBrowser extends GrampsjsAppStateMixin(
         div#legend {
           flex: 0 1 auto;
           padding: 0;
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: var(--grampsjs-font-weight-body);
         }
 
@@ -134,7 +134,7 @@ export class GrampsjsChromosomeBrowser extends GrampsjsAppStateMixin(
         }
 
         #legend ul li.hovered {
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background-color: var(--grampsjs-color-shade-230);
         }
 
@@ -163,7 +163,7 @@ export class GrampsjsChromosomeBrowser extends GrampsjsAppStateMixin(
           height: 11px;
           box-sizing: border-box;
           border: 1px solid;
-          border-radius: 3px;
+          border-radius: var(--grampsjs-radius-xs);
           margin-right: 8px;
         }
 

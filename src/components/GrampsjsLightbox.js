@@ -63,7 +63,7 @@ class GrampsjsLightbox extends LitElement {
 
         #description-container {
           font-family: var(--grampsjs-heading-font-family);
-          font-size: 22px;
+          font-size: var(--grampsjs-font-size-xl);
           line-height: 30px;
           font-weight: 400;
           flex: 1;
@@ -138,7 +138,7 @@ class GrampsjsLightbox extends LitElement {
           #description-container {
             flex: 1;
             font-family: var(--grampsjs-body-font-family);
-            font-size: 16px;
+            font-size: var(--grampsjs-font-size-md);
             line-height: 24px;
             font-weight: 450;
             padding: 12px 16px 0;

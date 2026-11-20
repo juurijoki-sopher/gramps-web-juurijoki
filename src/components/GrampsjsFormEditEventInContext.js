@@ -65,7 +65,7 @@ class GrampsjsFormEditEventInContext extends GrampsjsNewEventMixin(
       css`
         .event-box {
           background-color: var(--md-sys-color-surface-container-highest);
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
           padding: 16px;
           margin-bottom: 24px;
         }
