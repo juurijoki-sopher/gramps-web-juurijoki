@@ -10,7 +10,6 @@ import '@material/web/progress/circular-progress.js'
 import '@material/web/progress/linear-progress.js'
 import {
   mdiArrowLeft,
-  mdiCheck,
   mdiChevronRight,
   mdiClose,
   mdiDelete,
@@ -212,6 +211,51 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
 
         .save-done-icon {
           animation: save-complete 3s ease-out forwards;
+        }
+
+        /* Draw the win: the circle is drawn first, then the tick (470 ms
+           in all). Both strokes use pathLength 1, so a dash offset of 1
+           hides them and 0 shows them in full. */
+        .save-done-icon svg {
+          width: 24px;
+          height: 24px;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        .save-done-icon .tick-circle,
+        .save-done-icon .tick-mark {
+          stroke-dasharray: 1;
+          stroke-dashoffset: 1;
+          animation: draw-stroke 270ms var(--grampsjs-motion-ease-out, ease-out)
+            forwards;
+        }
+
+        .save-done-icon .tick-circle {
+          /* start at the top, not at three o'clock */
+          transform: rotate(-90deg);
+          transform-origin: center;
+        }
+
+        .save-done-icon .tick-mark {
+          animation-delay: 200ms;
+        }
+
+        @keyframes draw-stroke {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .save-done-icon .tick-circle,
+          .save-done-icon .tick-mark {
+            animation: none;
+            stroke-dashoffset: 0;
+          }
         }
 
         md-linear-progress {
@@ -429,12 +473,14 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
           class="action-icon-wrapper save-done-icon"
           id="button-saved"
         >
-          <grampsjs-icon
-            path="${mdiCheck}"
-            color="currentColor"
-            height="20"
-            width="20"
-          ></grampsjs-icon>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle class="tick-circle" cx="12" cy="12" r="9" pathLength="1" />
+            <path
+              class="tick-mark"
+              d="M8 12.5l2.7 2.7 5.3-5.7"
+              pathLength="1"
+            />
+          </svg>
         </span>
         <grampsjs-tooltip for="button-saved" .appState="${this.appState}"
           >${this._('Saved')}</grampsjs-tooltip
