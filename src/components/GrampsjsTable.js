@@ -420,7 +420,11 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
             ${this._sortedRows().map(
               ({item, index}) => html`
                 <tr
-                  class="${this._selectedIndices.has(index) ? 'selected' : ''}"
+                  class="${classMap({
+                    selected: this._selectedIndices.has(index),
+                    // a linked card is pressed like a button (narrow layout)
+                    pressable: this.linked && !this._isWide,
+                  })}"
                   @click="${e => this._handleRowClick(e, index)}"
                   @keydown="${clickKeyHandler}"
                   tabindex="${this.linked ? '0' : '-1'}"

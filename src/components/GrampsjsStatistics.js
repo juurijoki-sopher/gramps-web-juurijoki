@@ -9,6 +9,7 @@ import {sharedStyles} from '../SharedStyles.js'
 import {objectIconPath} from '../util.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 import './GrampsjsIcon.js'
+import './GrampsjsRollingNumber.js'
 
 // [key in the object counts, icon, list path, label]
 const TYPES = [
@@ -109,7 +110,7 @@ export class GrampsjsStatistics extends GrampsjsAppStateMixin(LitElement) {
   }
 
   render() {
-    const format = this._numberFormat()
+    const lang = (this.appState?.i18n?.lang || '').replace('_', '-')
     return html`
       <h3>${this._('Statistics')}</h3>
       <table>
@@ -127,22 +128,17 @@ export class GrampsjsStatistics extends GrampsjsAppStateMixin(LitElement) {
                   ${this._(label)}
                 </a>
               </td>
-              <td class="number">${format.format(this.data[key])}</td>
+              <td class="number">
+                <grampsjs-rolling-number
+                  .value="${this.data[key]}"
+                  lang="${lang}"
+                ></grampsjs-rolling-number>
+              </td>
             </tr>
           `
         )}
       </table>
     `
-  }
-
-  // Gramps language codes such as pt_BR become the BCP 47 tag pt-BR
-  _numberFormat() {
-    const lang = (this.appState?.i18n?.lang || '').replace('_', '-')
-    try {
-      return new Intl.NumberFormat(lang || undefined)
-    } catch {
-      return new Intl.NumberFormat()
-    }
   }
 }
 

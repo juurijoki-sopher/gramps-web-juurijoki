@@ -13,6 +13,17 @@ mkdir -p /data/home /data/grampsdb /data/users /data/media /data/indexdir \
     /data/thumbnail_cache /data/cache/request_cache \
     /data/cache/persistent_cache /data/cache/reports /data/cache/export
 
+# Gramps addons that come with the image, such as FilterRules for the
+# relationship chart, go to the user plugins folder on the volume. They are
+# replaced on every start, so a new image brings its own versions along.
+PLUGINS="$GRAMPSHOME/gramps/gramps${GRAMPS_VERSION:-60}/plugins"
+mkdir -p "$PLUGINS"
+for addon in /opt/gramps-addons/*; do
+    [ -d "$addon" ] || continue
+    rm -rf "$PLUGINS/$(basename "$addon")"
+    cp -r "$addon" "$PLUGINS/"
+done
+
 # Without an explicit key, generate one once and keep it on the volume so
 # that logins survive redeploys (upstream stores it in non-persistent /app)
 if [ -z "$GRAMPSWEB_SECRET_KEY" ]; then

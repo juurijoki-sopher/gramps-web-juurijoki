@@ -6,9 +6,65 @@ body {
   background-color: var(--md-sys-color-background);
 }
 
+/* Motion: the timing of the app's small animations. Durations collapse
+   when the user asks the system for reduced motion. */
+:root {
+  /* a damped spring that overshoots by 8% and settles in its duration */
+  --grampsjs-motion-spring: linear(
+    0,
+    0.04,
+    0.139,
+    0.271,
+    0.417,
+    0.561,
+    0.693,
+    0.807,
+    0.9,
+    0.971,
+    1.023,
+    1.056,
+    1.076,
+    1.083,
+    1.082,
+    1.075,
+    1.065,
+    1.053,
+    1.041,
+    1.029,
+    1.019,
+    1.011,
+    1.004,
+    0.999,
+    1
+  );
+  --grampsjs-motion-spring-duration: 600ms;
+  /* fast, then slow */
+  --grampsjs-motion-ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --grampsjs-motion-press-duration: 100ms;
+  --grampsjs-motion-expand-duration: 350ms;
+  --grampsjs-motion-slide-duration: 200ms;
+  --grampsjs-motion-roll-duration: 800ms;
+  --grampsjs-motion-roll-stagger: 100ms;
+  /* lets sections animate to and from their natural height */
+  interpolate-size: allow-keywords;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --grampsjs-motion-spring-duration: 0.01ms;
+    --grampsjs-motion-press-duration: 0.01ms;
+    --grampsjs-motion-expand-duration: 0.01ms;
+    --grampsjs-motion-slide-duration: 0.01ms;
+    --grampsjs-motion-roll-duration: 0.01ms;
+    --grampsjs-motion-roll-stagger: 0ms;
+  }
+}
+
 /* An element that gets focus or is scrolled to stays clear of the sticky
    app bar and the bottom navigation bar (WCAG 2.4.11) */
 html {
+  /* the app's own pull to refresh replaces the browser's page reload */
+  overscroll-behavior-y: contain;
   scroll-padding-top: 64px;
   scroll-padding-bottom: var(--grampsjs-bottom-nav-height, 0px);
 }

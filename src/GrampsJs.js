@@ -1,7 +1,7 @@
 import '@material/web/progress/linear-progress.js'
 import './dialogBackdrop.js'
 import '@material/web/button/filled-button.js'
-import {mdiLogout} from '@mdi/js'
+import {mdiLogout, mdiRefresh} from '@mdi/js'
 import {LitElement, css, html} from 'lit'
 import {installMediaQueryWatcher} from 'pwa-helpers/media-query.js'
 import {installRouter} from 'pwa-helpers/router.js'
@@ -59,6 +59,8 @@ import {
   DRAWER_RAIL,
 } from './components/GrampsjsNavDrawer.js'
 import {BOTTOM_NAV_HEIGHT} from './components/GrampsjsBottomNav.js'
+import {PullToRefreshController, PULL_THRESHOLD} from './pullToRefresh.js'
+
 import './components/GrampsjsPages.js'
 import './components/GrampsjsTabBar.js'
 import './components/GrampsjsSnackbar.js'
@@ -71,6 +73,18 @@ import '@material/web/dialog/dialog.js'
 import {sharedStyles} from './SharedStyles.js'
 import {applyScheme, DEFAULT_PRIMARY, DEFAULT_SECONDARY} from './theme.js'
 import {handleOIDCCallback, handleOIDCComplete} from './oidc.js'
+
+// pages that pan or draw with a finger, where pulling down must not refresh
+const NO_PULL_PAGES = [
+  'map',
+  'tree',
+  'timeline',
+  'dna-chromosome',
+  'ydna',
+  'chat',
+  'login',
+  'firstrun',
+]
 
 const MINIMUM_API_VERSION = '3.17.0'
 
@@ -103,6 +117,14 @@ export class GrampsJs extends LitElement {
     this._saveCompleteTimer = null
     // {page, pageId, title} reported by a view whose title comes from its data
     this._pageTitle = null
+    this._pullToRefresh = new PullToRefreshController(this, {
+      isEnabled: () =>
+        this._drawerMode === DRAWER_MODAL &&
+        !this._drawerOpen &&
+        !NO_PULL_PAGES.includes(this.appState?.path?.page),
+      // views refetch their data on db:changed
+      onRefresh: () => window.dispatchEvent(new CustomEvent('db:changed')),
+    })
     this.loadingState = LOADING_STATE_INITIAL
     this._homePersonDetails = {}
     this._homePersonMissing = false
@@ -173,6 +195,66 @@ export class GrampsJs extends LitElement {
 
         .page[active] {
           display: block;
+        }
+
+        /* Resist the pull: the indicator comes down from under the app bar
+           with the pull, turns with it, and springs back when let go */
+        .visually-hidden {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
+        }
+
+        .pull-indicator {
+          position: fixed;
+          top: var(--grampsjs-app-bar-height);
+          left: 50%;
+          z-index: 4;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: var(--md-sys-color-surface-container-high);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+          color: var(--md-sys-color-primary);
+          pointer-events: none;
+          translate: -50% calc(var(--pull, 0px) - 48px);
+          opacity: var(--pull-progress, 0);
+          transition: translate var(--grampsjs-motion-spring-duration, 0ms)
+              var(--grampsjs-motion-spring, ease),
+            opacity var(--grampsjs-motion-slide-duration, 0ms) ease-out;
+        }
+
+        .pull-indicator.pulling {
+          transition: none;
+        }
+
+        .pull-indicator grampsjs-icon {
+          rotate: calc(var(--pull-progress, 0) * 270deg);
+        }
+
+        .pull-indicator.refreshing grampsjs-icon {
+          animation: pull-spin 800ms linear infinite;
+        }
+
+        @keyframes pull-spin {
+          from {
+            rotate: 0deg;
+          }
+          to {
+            rotate: 360deg;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .pull-indicator.refreshing grampsjs-icon {
+            animation: none;
+          }
         }
 
         md-linear-progress {
@@ -594,6 +676,7 @@ export class GrampsJs extends LitElement {
           </main>
         </div>
       </div>
+      ${showBottomNav ? this._renderPullIndicator() : ''}
       ${showBottomNav
         ? html`<grampsjs-bottom-nav
             .appState="${this.appState}"
@@ -613,6 +696,26 @@ export class GrampsJs extends LitElement {
     const collapsed =
       this.appState.settings.drawerCollapsed ?? screenSize === 'medium'
     return collapsed ? DRAWER_RAIL : DRAWER_EXPANDED
+  }
+
+  _renderPullIndicator() {
+    const {distance, pulling, refreshing} = this._pullToRefresh
+    const progress = Math.min(1, distance / PULL_THRESHOLD)
+    return html`<div
+        class="pull-indicator ${pulling ? 'pulling' : ''} ${refreshing
+          ? 'refreshing'
+          : ''}"
+        style="--pull: ${distance}px; --pull-progress: ${progress}"
+        aria-hidden="true"
+      >
+        <grampsjs-icon
+          path="${mdiRefresh}"
+          color="currentColor"
+        ></grampsjs-icon>
+      </div>
+      <span class="visually-hidden" role="status"
+        >${refreshing ? this._('Loading...') : ''}</span
+      >`
   }
 
   // Fixed elements, such as the add buttons and the snackbar, and views
