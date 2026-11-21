@@ -52,14 +52,12 @@ html {
   --grampsjs-space-6: 32px;
   --grampsjs-space-7: 48px;
   --grampsjs-space-8: 64px;
-  /* Display face for page titles (h1, h2): EB Garamond, an old style
-     serif that suits archives and family history. It has a single weight
-     and a small x-height, hence the regular weight and the larger size.
-     For Inter everywhere, set the family to var(--grampsjs-heading-font-family),
-     the weight to var(--grampsjs-font-weight-heading) and the scale to 1. */
-  --grampsjs-display-font-family: 'EB Garamond x', 'Inter var', serif;
-  --grampsjs-display-font-weight: 400;
-  --grampsjs-display-font-scale: 1.2;
+  /* Face of the page titles (h1, h2: the tree's name, an object's name):
+     Inter, as the rest of the app. A display face such as a serif can be
+     set here; adjust the weight and the scale to its x-height. */
+  --grampsjs-display-font-family: 'Inter var', 'Gramps Symbols', sans-serif;
+  --grampsjs-display-font-weight: var(--grampsjs-font-weight-heading);
+  --grampsjs-display-font-scale: 1;
   /* End design tokens */
   color: var(--md-sys-color-on-surface);
   /* Web Awesome color token overrides.
