@@ -62,15 +62,24 @@ export const sharedStyles = css`
     color: var(--grampsjs-color-shade-40);
   }
 
+  /* page titles (the tree's name, an object's name) in the display face:
+     see --grampsjs-display-font-family in global.css */
+  h1,
+  h2 {
+    font-family: var(--grampsjs-display-font-family);
+    font-weight: var(--grampsjs-display-font-weight);
+  }
+
   h1 {
-    font-weight: var(--grampsjs-font-weight-heading);
-    font-family: var(--grampsjs-heading-font-family);
-    font-size: var(--grampsjs-font-size-3xl);
+    font-size: calc(
+      var(--grampsjs-font-size-3xl) * var(--grampsjs-display-font-scale)
+    );
   }
 
   h2 {
-    font-weight: var(--grampsjs-font-weight-heading);
-    font-size: var(--grampsjs-font-size-2xl);
+    font-size: calc(
+      var(--grampsjs-font-size-2xl) * var(--grampsjs-display-font-scale)
+    );
     margin-top: 10px;
     margin-bottom: 30px;
   }
@@ -374,11 +383,15 @@ export const sharedStyles = css`
     }
 
     h1 {
-      font-size: var(--grampsjs-font-size-xl);
+      font-size: calc(
+        var(--grampsjs-font-size-xl) * var(--grampsjs-display-font-scale)
+      );
     }
 
     h2 {
-      font-size: var(--grampsjs-font-size-xl);
+      font-size: calc(
+        var(--grampsjs-font-size-xl) * var(--grampsjs-display-font-scale)
+      );
     }
 
     h3 {

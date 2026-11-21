@@ -1,6 +1,6 @@
 /*
-The number of objects of each type in the tree, as a table whose rows lead
-to the lists
+The number of objects of each type in the tree, as tiles that lead to the
+lists
 */
 
 import {LitElement, html, css} from 'lit'
@@ -32,66 +32,61 @@ export class GrampsjsStatistics extends GrampsjsAppStateMixin(LitElement) {
           display: block;
         }
 
-        table {
-          width: 100%;
-          margin: 0 0 8px 0;
-          border-collapse: collapse;
+        /* one tile per object type: the number first, large, as it is
+           what the panel is about, and the type below it */
+        .tiles {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          gap: var(--grampsjs-space-2);
+          margin: 0 var(--grampsjs-space-2) var(--grampsjs-space-2);
         }
 
-        tr {
-          position: relative;
-        }
-
-        tr:hover td {
-          background-color: var(--grampsjs-body-font-color-5);
-        }
-
-        td {
-          padding: 8px 16px;
-        }
-
-        td:first-child {
-          border-radius: 8px 0 0 8px;
-        }
-
-        td:last-child {
-          border-radius: 0 8px 8px 0;
-        }
-
-        td.label a,
-        td.label a:link,
-        td.label a:visited,
-        td.label a:hover {
+        a.tile,
+        a.tile:link,
+        a.tile:visited {
           display: flex;
-          align-items: center;
-          gap: 12px;
+          flex-direction: column;
+          gap: var(--grampsjs-space-1);
+          padding: var(--grampsjs-space-3);
+          border-radius: var(--grampsjs-radius-sm);
+          background-color: var(--md-sys-color-surface);
           color: var(--grampsjs-body-font-color);
           text-decoration: none;
           outline: none;
+          transition: background-color 100ms ease-out;
         }
 
-        /* the link covers the whole row */
-        td.label a::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: var(--grampsjs-radius-sm);
+        a.tile:hover {
+          background-color: var(
+            --grampsjs-row-hover-color,
+            var(--grampsjs-body-font-color-5)
+          );
+          text-decoration: none;
         }
 
-        td.label a:focus-visible::after {
+        a.tile:focus-visible {
           outline: 2px solid var(--md-sys-color-primary);
-          outline-offset: -2px;
+          outline-offset: 2px;
         }
 
-        td.label grampsjs-icon {
-          flex: none;
+        .number {
+          font-size: var(--grampsjs-font-size-xl);
+          font-weight: var(--grampsjs-font-weight-medium);
+          font-variant-numeric: tabular-nums;
+          line-height: 1.2;
+          color: var(--grampsjs-on-tonal-color);
+        }
+
+        .label {
+          display: flex;
+          align-items: center;
+          gap: var(--grampsjs-space-2);
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--grampsjs-text-secondary-color);
         }
 
-        td.number {
-          text-align: right;
-          font-weight: var(--grampsjs-font-weight-medium);
-          font-variant-numeric: tabular-nums;
+        .label grampsjs-icon {
+          flex: none;
         }
       `,
     ]
@@ -112,26 +107,24 @@ export class GrampsjsStatistics extends GrampsjsAppStateMixin(LitElement) {
     const format = this._numberFormat()
     return html`
       <h3>${this._('Statistics')}</h3>
-      <table>
+      <div class="tiles">
         ${TYPES.filter(([key]) => key in this.data).map(
           ([key, icon, path, label]) => html`
-            <tr>
-              <td class="label">
-                <a href="/${path}">
-                  <grampsjs-icon
-                    path="${objectIconPath[icon]}"
-                    color="currentColor"
-                    height="20"
-                    width="20"
-                  ></grampsjs-icon>
-                  ${this._(label)}
-                </a>
-              </td>
-              <td class="number">${format.format(this.data[key])}</td>
-            </tr>
+            <a class="tile" href="/${path}">
+              <span class="number">${format.format(this.data[key])}</span>
+              <span class="label">
+                <grampsjs-icon
+                  path="${objectIconPath[icon]}"
+                  color="currentColor"
+                  height="16"
+                  width="16"
+                ></grampsjs-icon>
+                ${this._(label)}
+              </span>
+            </a>
           `
         )}
-      </table>
+      </div>
     `
   }
 
