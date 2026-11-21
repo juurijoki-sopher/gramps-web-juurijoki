@@ -118,6 +118,7 @@ class GrampsjsBottomNav extends GrampsjsAppStateMixin(LitElement) {
     const [outline, filled = outline] = icons
     return html`
       <a
+        class="pressable"
         id="bottom-nav-${id}"
         href="${href}"
         aria-current="${selected ? 'page' : 'false'}"
@@ -140,6 +141,7 @@ class GrampsjsBottomNav extends GrampsjsAppStateMixin(LitElement) {
       <nav aria-label="${this._('Menu')}">
         ${BOTTOM_NAV_ITEMS.map(item => this._item(item))}
         <button
+          class="pressable"
           id="bottom-nav-menu"
           type="button"
           aria-haspopup="true"

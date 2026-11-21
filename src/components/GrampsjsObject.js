@@ -317,6 +317,25 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           font-size: var(--grampsjs-font-size-xl);
         }
 
+        /* Fast, then slow: the content opens and closes to its natural
+           height with an ease-out (browsers without ::details-content or
+           interpolate-size open it at once). The clip ends halfway, so
+           menus inside an open section are not cut off. */
+        details.section::details-content {
+          block-size: 0;
+          overflow: clip;
+          transition: block-size var(--grampsjs-motion-expand-duration, 0ms)
+              var(--grampsjs-motion-ease-out, ease-out),
+            content-visibility var(--grampsjs-motion-expand-duration, 0ms)
+              allow-discrete,
+            overflow var(--grampsjs-motion-expand-duration, 0ms) allow-discrete;
+        }
+
+        details.section[open]::details-content {
+          block-size: auto;
+          overflow: visible;
+        }
+
         details.section[open] > summary h3 {
           margin-bottom: 1rem;
           padding-bottom: 8px;
@@ -355,8 +374,13 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
             border: 1px solid var(--grampsjs-divider-strong-color);
           }
 
+          /* the opening animation keeps a closed section's content at
+             zero height: print opens it to its full height */
           details.section::details-content {
-            content-visibility: visible;
+            content-visibility: visible !important;
+            block-size: auto !important;
+            overflow: visible !important;
+            transition: none !important;
           }
 
           details.section:not([open]) > summary h3 {
@@ -557,6 +581,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
     this._objectIcon = ''
     this._showReferences = true
     this._sectionObserver = null
+    this._renderedSections = new Set()
     this._currentVisibleSection = ''
     this._wide = false
     this._resizeObserver = new ResizeObserver(entries => {
@@ -759,7 +784,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
                   >
                 </h3>
               </summary>
-              ${this._isSectionOpen(key) || this._printing
+              ${this._shouldRenderSection(key) || this._printing
                 ? this.renderSectionContent(key)
                 : ''}
             </details>
@@ -786,6 +811,15 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
   // Whether a section is open: as the user last left it on this device, or
   // else open unless it is one of the less used ones
+  // A section's content is rendered once it has been open, so that closing
+  // it animates the content away instead of an empty box
+  _shouldRenderSection(key) {
+    if (this._isSectionOpen(key)) {
+      this._renderedSections.add(key)
+    }
+    return this._renderedSections.has(key)
+  }
+
   _isSectionOpen(key) {
     const saved = this.appState?.settings?.openSections?.[key]
     if (typeof saved === 'boolean') return saved
