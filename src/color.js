@@ -75,7 +75,7 @@ export function hex12ToHex6(hex) {
 }
 
 /* Return a hex6 color suitable for a color picker input */
-export function colorForPicker(color, defaultColor = '#1f77b4') {
+export function colorForPicker(color, defaultColor = '#0e6170') {
   if (!color) return defaultColor
   if (color.length > 7) return hex12ToHex6(color) ?? defaultColor
   return color

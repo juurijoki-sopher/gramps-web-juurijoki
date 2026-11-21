@@ -60,7 +60,7 @@ export class GrampsjsTagsManager extends GrampsjsTableBase {
     this._dialogMode = null
     this._editingTag = null
     this._editName = ''
-    this._editColor = '#1f77b4'
+    this._editColor = '#0e6170'
   }
 
   render() {
@@ -142,7 +142,7 @@ export class GrampsjsTagsManager extends GrampsjsTableBase {
             <wa-color-picker
               format="hex"
               value="${this._editColor}"
-              swatches="#1f77b4;#ff7f0e;#2ca02c;#d62728;#9467bd;#8c564b;#e377c2;#7f7f7f;#bcbd22;#17becf"
+              swatches="#0e6170;#a9502c;#4f7a26;#a0730f;#7b3f6e;#3f5d99;#a33a3a;#2a7565;#75654f;#5f6b70"
               @change="${this._handleColorChange}"
             ></wa-color-picker>
           </div>
@@ -182,7 +182,7 @@ export class GrampsjsTagsManager extends GrampsjsTableBase {
 
   openCreate() {
     this._editName = ''
-    this._editColor = '#1f77b4'
+    this._editColor = '#0e6170'
     this._editingTag = null
     this._dialogMode = 'create'
   }
