@@ -28,6 +28,17 @@ ENV GRAMPSHOME=/data/home \
     CELERY_CONCURRENCY=2
 
 COPY --from=frontend /src/dist /app/static
+
+# Gramps addon FilterRules: its DegreesOfSeparation rule is what the
+# relationship chart asks the API for, and Gramps Web API does not ship it
+# (its devcontainer installs it the same way). The archive is the gramps60
+# build from github.com/gramps-project/addons, kept in this repository so the
+# build does not change with the addons' master branch. start.sh copies it to
+# the user plugins folder, which is on the volume.
+COPY railway/addons/FilterRules.addon.tgz /tmp/FilterRules.addon.tgz
+RUN mkdir -p /opt/gramps-addons \
+    && tar -xzf /tmp/FilterRules.addon.tgz -C /opt/gramps-addons \
+    && rm /tmp/FilterRules.addon.tgz
 COPY railway/start.sh /railway-start.sh
 RUN chmod +x /railway-start.sh
 

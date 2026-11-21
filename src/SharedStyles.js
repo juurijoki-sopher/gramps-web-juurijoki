@@ -1,6 +1,38 @@
 import {css} from 'lit'
 
 export const sharedStyles = css`
+  /* Press: a control sinks to 95% while pressed and springs back when
+     released. The pressed state uses the short ease-out, the release the
+     spring with its slight overshoot. */
+  md-filled-button,
+  md-outlined-button,
+  md-text-button,
+  md-filled-tonal-button,
+  md-fab,
+  md-icon-button,
+  md-assist-chip,
+  md-filter-chip,
+  .pressable {
+    transition: scale var(--grampsjs-motion-spring-duration, 0ms)
+      var(--grampsjs-motion-spring, ease);
+  }
+
+  :is(
+      md-filled-button,
+      md-outlined-button,
+      md-text-button,
+      md-filled-tonal-button,
+      md-fab,
+      md-icon-button,
+      md-assist-chip,
+      md-filter-chip,
+      .pressable
+    ):not([disabled]):active {
+    scale: 0.95;
+    transition: scale var(--grampsjs-motion-press-duration, 0ms)
+      var(--grampsjs-motion-ease-out, ease-out);
+  }
+
   :host {
     line-height: 1.6;
     --grampsjs-body-font-family: 'Inter var', 'Gramps Symbols', sans-serif;
@@ -469,15 +501,26 @@ export const reorderableStyles = css`
     -webkit-touch-callout: none;
   }
 
+  /* Lift, then make room: the dragged item grows to 105% (the scale
+     property, so it adds to the controller's transform) and the others
+     slide out of its way */
+  .reorderable > * {
+    transition: scale var(--grampsjs-motion-spring-duration, 0ms)
+        var(--grampsjs-motion-spring, ease),
+      box-shadow var(--grampsjs-motion-slide-duration, 0ms) ease-out;
+  }
+
   .reorderable > [dragging] {
     position: relative;
     z-index: 1;
     cursor: grabbing;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    scale: 1.05;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
   }
 
   .reorderable > [drag-shift] {
-    transition: transform 0.15s ease;
+    transition: transform var(--grampsjs-motion-slide-duration, 0ms)
+      var(--grampsjs-motion-ease-out, ease-out);
   }
 `
 
