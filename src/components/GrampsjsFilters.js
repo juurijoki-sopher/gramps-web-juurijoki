@@ -553,6 +553,11 @@ export class GrampsjsFilters extends GrampsjsAppStateMixin(LitElement) {
     })
   }
 
+  // Removes all filters, as the filter-off button does
+  clearAll() {
+    this._handleFilterOff()
+  }
+
   _handleFilterOff() {
     this._pills = []
     this._tree = null

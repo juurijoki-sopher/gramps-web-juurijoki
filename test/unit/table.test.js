@@ -162,3 +162,20 @@ describe('grampsjs-table narrow card layout', () => {
     expect(el.shadowRoot.querySelector('td.row-title')).toBeNull()
   })
 })
+
+describe('grampsjs-table empty fields', () => {
+  const emptyData = [['Smith', '', 'b']]
+
+  it('marks the cells that have no value', async () => {
+    const el = await mount({data: emptyData})
+    const cells = [...el.shadowRoot.querySelectorAll('tbody td')]
+    const marked = cells.map(td => td.classList.contains('no-value'))
+    expect(marked).toEqual([false, true, false])
+  })
+
+  it('does not mark cells while loading', async () => {
+    const el = await mount({data: emptyData, loading: true})
+    const cells = [...el.shadowRoot.querySelectorAll('tbody td')]
+    expect(cells.some(td => td.classList.contains('no-value'))).toBe(false)
+  })
+})
