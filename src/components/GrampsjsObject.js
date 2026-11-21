@@ -358,21 +358,6 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           }
         }
 
-        /* an opened section's content fades in and slides down a little;
-           nothing is clipped, so menus inside a section stay whole */
-        @media (prefers-reduced-motion: no-preference) {
-          details.section[open] > :not(summary) {
-            animation: section-open 180ms ease-out;
-          }
-
-          @keyframes section-open {
-            from {
-              opacity: 0;
-              transform: translateY(-4px);
-            }
-          }
-        }
-
         /* print: every section with its content, also the closed ones,
            in a plain frame, without the table of contents and the
            controls of the screen */
