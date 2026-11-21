@@ -19,7 +19,7 @@ export class GrampsjsViewNewFamily extends GrampsjsViewNewObject {
       css`
         .child-slot-wrapper {
           border: 1px solid var(--md-sys-color-outline-variant, #ccc);
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           padding: 1em 1.25em;
           margin-bottom: 1em;
         }

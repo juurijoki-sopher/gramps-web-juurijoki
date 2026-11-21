@@ -163,7 +163,7 @@ export class GrampsjsNoteContent extends LitElement {
         a.inline-image img {
           max-width: 100%;
           max-height: var(--inline-media-max-height);
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
         }
 
         .inline-image-icon {

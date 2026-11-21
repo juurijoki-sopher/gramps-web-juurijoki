@@ -22,14 +22,14 @@ export class GrampsjsPlaceBox extends GrampsjsConnectedComponent {
 
         h2 {
           font-weight: 500;
-          font-size: 22px;
+          font-size: var(--grampsjs-font-size-xl);
           margin-top: 10px;
           margin-bottom: 0;
         }
 
         h3 {
           font-weight: 400;
-          font-size: 18px;
+          font-size: var(--grampsjs-font-size-lg);
           margin-top: 24px;
           margin-bottom: 7px;
         }
@@ -37,11 +37,11 @@ export class GrampsjsPlaceBox extends GrampsjsConnectedComponent {
         h4 {
           margin-top: 2px;
           font-weight: var(--grampsjs-font-weight-body);
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         :host {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         .right {
@@ -61,7 +61,7 @@ export class GrampsjsPlaceBox extends GrampsjsConnectedComponent {
           display: flex;
           align-items: center;
           gap: 4px;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           color: var(--md-sys-color-on-surface-variant);
           margin-top: 4px;
         }

@@ -24,11 +24,11 @@ export class GrampsjsFilterChip extends GrampsjsAppStateMixin(LitElement) {
         .chip {
           display: inline-flex;
           align-items: center;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           font-weight: 400;
           font-family: var(--grampsjs-body-font-family);
           padding: 6px 14px;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           margin: 5px 5px;
           background-color: var(--mdc-theme-primary);
           color: var(--mdc-theme-on-primary);

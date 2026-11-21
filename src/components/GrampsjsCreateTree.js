@@ -34,7 +34,7 @@ class GrampsjsCreateTree extends GrampsjsAppStateMixin(LitElement) {
 
         h2 {
           color: var(--mdc-theme-primary);
-          font-size: 32px;
+          font-size: var(--grampsjs-font-size-2xl);
           font-weight: 600;
         }
 

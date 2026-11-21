@@ -63,10 +63,10 @@ export class GrampsjsViewAdminSettings extends GrampsjsView {
         }
 
         .danger-zone {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           padding: 0 1.4em;
           border: 1px solid var(--grampsjs-alert-error-font-color);
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
         }
 
         .danger-zone-row {
@@ -118,7 +118,7 @@ export class GrampsjsViewAdminSettings extends GrampsjsView {
         }
 
         .small {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         .color-pickers {
@@ -135,7 +135,7 @@ export class GrampsjsViewAdminSettings extends GrampsjsView {
         }
 
         .color-label {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           min-width: 8em;
         }
 

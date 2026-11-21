@@ -15,7 +15,7 @@ class GrampsjsRect extends LitElement {
         .rect {
           --rect-border-width: 2px;
           box-sizing: border-box;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           border: var(--rect-border-width) solid
             var(--grampsjs-rect-border-color);
           box-shadow: 0 0 1px 1px var(--grampsjs-rect-border-shadow-color);
@@ -82,12 +82,12 @@ class GrampsjsRect extends LitElement {
           gap: 4px;
           height: 20px;
           padding: 0 8px;
-          border-radius: 10px;
+          border-radius: var(--grampsjs-radius-sm);
           background-color: var(--grampsjs-rect-label-background-color);
           -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
           color: var(--grampsjs-rect-label-color);
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           line-height: 16px;
           cursor: pointer;
         }

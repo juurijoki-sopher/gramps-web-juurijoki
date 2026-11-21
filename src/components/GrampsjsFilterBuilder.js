@@ -171,12 +171,12 @@ export class GrampsjsFilterBuilder extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .rule-name {
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: 500;
         }
 
         .rule-description {
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           color: var(--md-sys-color-on-surface-variant);
         }
 
@@ -201,7 +201,7 @@ export class GrampsjsFilterBuilder extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .empty {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--md-sys-color-on-surface-variant);
           margin: 8px 0;
         }
@@ -246,7 +246,7 @@ export class GrampsjsFilterBuilder extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .category {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: 500;
           color: var(--mdc-theme-primary);
         }
@@ -271,12 +271,12 @@ export class GrampsjsFilterBuilder extends GrampsjsAppStateMixin(LitElement) {
 
         .panel-title {
           flex: 1;
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: 500;
         }
 
         .hint {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--md-sys-color-on-surface-variant);
           margin: 0 0 12px 0;
         }

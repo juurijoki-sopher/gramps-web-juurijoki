@@ -68,13 +68,13 @@ export class GrampsjsViewDashboard extends GrampsjsView {
           /* lists bring their own 16px inset, which the title and other
              content match, so all start 24px from the panel's edge */
           padding: 20px 8px 12px 8px;
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           background-color: var(--grampsjs-panel-color);
           --grampsjs-h3-margin-top: 0;
           --grampsjs-h3-margin-bottom: 12px;
           --grampsjs-block-inset: 16px;
           /* panel titles: smaller than the page's section headings */
-          --grampsjs-h3-font-size: 16px;
+          --grampsjs-h3-font-size: var(--grampsjs-font-size-md);
           /* lists inside show the panel through */
           --md-list-container-color: transparent;
           --md-list-item-container-color: transparent;

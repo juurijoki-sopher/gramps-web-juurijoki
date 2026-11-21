@@ -108,10 +108,10 @@ export class GrampsjsParticipants extends GrampsjsEditableList {
           gap: 4px;
           padding: 4px 8px;
           border: none;
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
           background: none;
           font: inherit;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--grampsjs-body-font-color-60);
           cursor: pointer;
         }

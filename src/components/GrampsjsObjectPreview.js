@@ -86,7 +86,7 @@ export class GrampsjsObjectPreview extends GrampsjsAppStateMixin(LitElement) {
         background: var(--md-sys-color-surface);
         color: var(--md-sys-color-on-surface);
         border: 1px solid var(--md-sys-color-outline-variant);
-        border-radius: 12px;
+        border-radius: var(--grampsjs-radius-md);
         box-shadow: 0 8px 24px var(--grampsjs-body-font-color-10),
           0 2px 8px var(--grampsjs-body-font-color-10);
         box-sizing: border-box;

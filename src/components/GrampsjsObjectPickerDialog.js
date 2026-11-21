@@ -102,7 +102,7 @@ class GrampsjsObjectPickerDialog extends GrampsjsAppStateMixin(LitElement) {
           padding: 10px 12px 10px 9px;
           border-left: 3px solid transparent;
           cursor: pointer;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           line-height: 1.3;
           color: var(--md-sys-color-on-surface-variant);
           user-select: none;

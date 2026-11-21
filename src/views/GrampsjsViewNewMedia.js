@@ -23,7 +23,7 @@ export class GrampsjsViewNewMedia extends GrampsjsNewMediaMixin(
       css`
         .file-entry {
           border: 1px solid var(--grampsjs-body-font-color-20);
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           padding: 16px;
           margin-bottom: 24px;
           position: relative;
@@ -45,7 +45,7 @@ export class GrampsjsViewNewMedia extends GrampsjsNewMediaMixin(
           justify-content: center;
           background: var(--mdc-theme-surface, #fff);
           border: 1px solid var(--grampsjs-body-font-color-25);
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           overflow: hidden;
         }
 

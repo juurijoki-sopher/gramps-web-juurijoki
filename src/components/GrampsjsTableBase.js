@@ -9,7 +9,7 @@ export class GrampsjsTableBase extends GrampsjsAppStateMixin(LitElement) {
       sharedStyles,
       css`
         table {
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: var(--grampsjs-font-weight-body);
           color: var(--grampsjs-body-font-color-87);
           font-variant-numeric: tabular-nums;
@@ -19,7 +19,7 @@ export class GrampsjsTableBase extends GrampsjsAppStateMixin(LitElement) {
         }
 
         th {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--grampsjs-text-secondary-color);
           font-weight: 400;
         }
@@ -78,11 +78,11 @@ export class GrampsjsTableBase extends GrampsjsAppStateMixin(LitElement) {
 
         @media (max-width: 768px) {
           table {
-            font-size: 14px;
+            font-size: var(--grampsjs-font-size-sm);
           }
 
           th {
-            font-size: 12px;
+            font-size: var(--grampsjs-font-size-2xs);
           }
 
           th,

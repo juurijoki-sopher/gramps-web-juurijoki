@@ -34,7 +34,7 @@ export class GrampsjsTagChips extends LitElement {
         gap: 4px;
         height: 24px;
         padding: 0 8px;
-        border-radius: 8px;
+        border-radius: var(--grampsjs-radius-sm);
         background-color: color-mix(
           in srgb,
           var(--tag-color) 14%,
@@ -42,7 +42,7 @@ export class GrampsjsTagChips extends LitElement {
         );
         color: var(--tag-color);
         font-family: var(--grampsjs-body-font-family);
-        font-size: 12px;
+        font-size: var(--grampsjs-font-size-2xs);
         font-weight: 500;
         line-height: 24px;
         white-space: nowrap;
@@ -53,7 +53,7 @@ export class GrampsjsTagChips extends LitElement {
         height: 20px;
         line-height: 20px;
         padding: 0 6px;
-        border-radius: 6px;
+        border-radius: var(--grampsjs-radius-xs);
       }
 
       .name {

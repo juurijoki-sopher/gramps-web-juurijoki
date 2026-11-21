@@ -52,11 +52,11 @@ class GrampsjsNotificationMenu extends GrampsjsAppStateMixin(LitElement) {
           min-width: 18px;
           height: 18px;
           padding: 0 4px;
-          border-radius: 9px;
+          border-radius: var(--grampsjs-radius-full);
           box-sizing: border-box;
           background-color: var(--md-sys-color-error);
           color: var(--md-sys-color-on-error);
-          font-size: 11px;
+          font-size: var(--grampsjs-font-size-2xs);
           font-weight: 700;
           line-height: 18px;
           text-align: center;

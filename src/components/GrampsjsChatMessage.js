@@ -65,7 +65,7 @@ class GrampsjsChatMessage extends GrampsjsAppStateMixin(LitElement) {
       css`
         .container {
           margin: 15px 0;
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           line-height: 26px;
           font-weight: var(--grampsjs-font-weight-body);
           clear: right;
@@ -96,7 +96,7 @@ class GrampsjsChatMessage extends GrampsjsAppStateMixin(LitElement) {
           background-color: var(--grampsjs-color-shade-230);
           color: var(--grampsjs-body-font-color);
           padding: 10px 20px;
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
           float: right;
           max-width: 70%;
           margin-right: 10px;
@@ -107,7 +107,7 @@ class GrampsjsChatMessage extends GrampsjsAppStateMixin(LitElement) {
           margin-left: auto;
           margin-right: auto;
           width: fit-content;
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
           border: 0;
         }
 
@@ -151,14 +151,14 @@ class GrampsjsChatMessage extends GrampsjsAppStateMixin(LitElement) {
           font-family: monospace;
           background: var(--grampsjs-color-shade-230);
           padding: 0.1em 0.3em;
-          border-radius: 3px;
+          border-radius: var(--grampsjs-radius-xs);
           font-size: 0.9em;
         }
 
         .slot-wrap pre {
           background: var(--grampsjs-color-shade-230);
           padding: 0.6em 0.8em;
-          border-radius: 6px;
+          border-radius: var(--grampsjs-radius-xs);
           overflow-x: auto;
           margin: 0.4em 0;
         }
@@ -202,7 +202,7 @@ class GrampsjsChatMessage extends GrampsjsAppStateMixin(LitElement) {
           height: 120px;
           max-width: 100%;
           object-fit: contain;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           display: block;
         }
 

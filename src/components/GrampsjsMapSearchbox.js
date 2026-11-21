@@ -54,7 +54,7 @@ class GrampsjsMapSearchbox extends GrampsjsAppStateMixin(LitElement) {
 
         #searchbar {
           background-color: var(--md-sys-color-surface-container-high);
-          border-radius: 9999px;
+          border-radius: var(--grampsjs-radius-full);
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
             0 1px 2px rgba(0, 0, 0, 0.08);
           display: flex;
@@ -70,7 +70,7 @@ class GrampsjsMapSearchbox extends GrampsjsAppStateMixin(LitElement) {
           border: none;
           background: transparent;
           outline: none;
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-family: inherit;
           color: var(--md-sys-color-on-surface);
           caret-color: var(--md-sys-color-primary);
@@ -122,9 +122,9 @@ class GrampsjsMapSearchbox extends GrampsjsAppStateMixin(LitElement) {
           display: inline-flex;
           align-items: center;
           gap: 4px;
-          border-radius: 9999px;
+          border-radius: var(--grampsjs-radius-full);
           padding: 6px 14px;
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           font-weight: 500;
           font-family: inherit;
           cursor: pointer;
@@ -161,7 +161,7 @@ class GrampsjsMapSearchbox extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .chip-close {
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           line-height: 1;
           margin-left: 2px;
           opacity: 0.7;
@@ -169,14 +169,14 @@ class GrampsjsMapSearchbox extends GrampsjsAppStateMixin(LitElement) {
 
         #panel {
           background-color: var(--md-sys-color-surface-container-high);
-          border-radius: 18px;
+          border-radius: var(--grampsjs-radius-lg);
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
             0 1px 2px rgba(0, 0, 0, 0.08);
           overflow-x: hidden;
           overflow-y: auto;
           scrollbar-width: thin;
           max-height: calc(100vh - 240px);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           line-height: 20px;
         }
 

@@ -118,7 +118,7 @@ export class GrampsjsViewRevisions extends GrampsjsStaleDataMixin(
 
         h3.day {
           font-family: var(--grampsjs-body-font-family);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: var(--grampsjs-font-weight-medium);
           color: var(--grampsjs-body-font-color-60);
           margin: 16px 0 4px 0;
@@ -154,7 +154,7 @@ export class GrampsjsViewRevisions extends GrampsjsStaleDataMixin(
           right: -8px;
           top: -6px;
           color: var(--grampsjs-color-icon);
-          font-size: 11px;
+          font-size: var(--grampsjs-font-size-2xs);
           min-width: 14px;
           height: 14px;
           padding: 0 2px;
@@ -162,7 +162,7 @@ export class GrampsjsViewRevisions extends GrampsjsStaleDataMixin(
           line-height: 14px;
           font-weight: 600;
           background-color: var(--grampsjs-color-icon-background);
-          border-radius: 100px;
+          border-radius: var(--grampsjs-radius-full);
           text-align: center;
         }
       `,

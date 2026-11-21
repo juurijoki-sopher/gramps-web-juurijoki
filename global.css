@@ -77,6 +77,38 @@ html {
 }
 
 :root {
+  /* Design tokens. Components use these instead of their own values, so
+     that all pages share one type scale, one set of corners and one
+     spacing grid.
+     Type scale: the body text is 17px; one step up or down per level of
+     the hierarchy. */
+  --grampsjs-font-size-2xs: 12px; /* badges, captions, bottom bar labels */
+  --grampsjs-font-size-xs: 13px; /* helper text, chips, map controls */
+  --grampsjs-font-size-sm: 14px; /* labels, secondary text, menus */
+  --grampsjs-font-size-md: 16px; /* table cells, tabs, small headings */
+  --grampsjs-font-size-body: 17px; /* content text */
+  --grampsjs-font-size-lg: 20px; /* section headings, card titles */
+  --grampsjs-font-size-xl: 24px; /* box and dialog titles */
+  --grampsjs-font-size-2xl: 30px; /* page headings */
+  --grampsjs-font-size-3xl: 36px; /* the main heading of a page */
+  --grampsjs-font-size-display: 60px; /* the blog's hero heading */
+  /* Corners: small controls, fields and menus, cards and panels, floating
+     panels, and pills */
+  --grampsjs-radius-xs: 4px;
+  --grampsjs-radius-sm: 8px;
+  --grampsjs-radius-md: 12px;
+  --grampsjs-radius-lg: 16px;
+  --grampsjs-radius-full: 9999px;
+  /* Spacing on a 4px grid, for new code */
+  --grampsjs-space-1: 4px;
+  --grampsjs-space-2: 8px;
+  --grampsjs-space-3: 12px;
+  --grampsjs-space-4: 16px;
+  --grampsjs-space-5: 24px;
+  --grampsjs-space-6: 32px;
+  --grampsjs-space-7: 48px;
+  --grampsjs-space-8: 64px;
+  /* End design tokens */
   color: var(--md-sys-color-on-surface);
   /* Web Awesome color token overrides.
      default.css (loaded in index.html) defines --wa-* tokens inside @layer wa-theme,

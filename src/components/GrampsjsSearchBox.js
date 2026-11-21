@@ -51,7 +51,7 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
           box-sizing: border-box;
           height: 40px;
           padding: 0 16px 0 12px;
-          border-radius: 20px;
+          border-radius: var(--grampsjs-radius-lg);
           background-color: var(--grampsjs-field-color);
           color: var(--md-sys-color-on-surface-variant);
         }
@@ -68,7 +68,7 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
           outline: none;
           background: none;
           font: inherit;
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           color: var(--md-sys-color-on-surface);
         }
 
@@ -92,7 +92,7 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
           max-height: min(70vh, 600px);
           overflow-y: auto;
           padding: 4px 0;
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           background-color: var(--grampsjs-popover-color);
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12),
             0 1px 3px rgba(0, 0, 0, 0.08);
@@ -125,7 +125,7 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
           height: 32px;
           padding: 0;
           border: none;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           background: none;
           color: var(--grampsjs-text-secondary-color);
           cursor: pointer;
@@ -151,9 +151,9 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
         a.all:visited {
           display: block;
           padding: 10px 16px;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           margin: 0 4px;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: var(--grampsjs-font-weight-medium);
           color: var(--grampsjs-on-tonal-color);
           text-decoration: none;

@@ -10,14 +10,14 @@ export class GrampsjsButtonGroup extends GrampsjsAppStateMixin(LitElement) {
       sharedStyles,
       css`
         #button-container {
-          --mdc-typography-button-font-size: 12px;
+          --mdc-typography-button-font-size: var(--grampsjs-font-size-2xs);
           margin: 12px 0;
         }
 
         #button-container div {
           border: 1px solid var(--mdc-theme-primary);
           opacity: 0.9;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           display: inline-block;
           padding: 4px;
         }

@@ -62,7 +62,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
 
         table:not(.wide) tbody tr {
           border-top: none;
-          border-radius: 12px;
+          border-radius: var(--grampsjs-radius-md);
           background-color: var(--grampsjs-panel-color);
           padding: 12px 4px;
           margin-bottom: 8px;
@@ -71,7 +71,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
         /* the row's name, at the top of the card (serial position) */
         tbody td.row-title {
           grid-column: 1 / -1;
-          font-size: 17px;
+          font-size: var(--grampsjs-font-size-body);
           font-weight: 500;
           color: var(--grampsjs-body-font-color-87);
         }
@@ -92,7 +92,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           padding: 0 10px;
           border: none;
           position: relative;
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         table:not(.wide) tbody td {
@@ -103,7 +103,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           content: attr(data-label);
           display: block;
           margin-bottom: 1px;
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           line-height: 1.3;
           color: var(--grampsjs-text-secondary-color);
           font-weight: 400;
@@ -152,7 +152,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
         table.wide thead th {
           text-align: left;
           padding: 14px 16px;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--grampsjs-text-secondary-color);
           font-weight: 500;
           vertical-align: middle;
@@ -172,7 +172,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           margin: -4px -6px;
           padding: 4px 6px;
           border: none;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background: none;
           color: inherit;
           font: inherit;
@@ -216,7 +216,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           display: table-cell;
           padding: 12px 16px;
           border: none;
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         tbody td > .cell-content {
@@ -299,7 +299,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           align-items: center;
           gap: 8px;
           padding: 4px 4px 4px 8px;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--grampsjs-text-secondary-color);
         }
 

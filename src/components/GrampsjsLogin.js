@@ -56,11 +56,11 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
           height: 56px;
           padding: 20px 16px 8px;
           border: 1px solid var(--md-sys-color-outline);
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background: transparent;
           color: var(--md-sys-color-on-surface);
           font-family: var(--grampsjs-body-font-family);
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: 400;
           box-sizing: border-box;
           outline: none;
@@ -86,7 +86,7 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
           top: 50%;
           transform: translateY(-50%);
           color: var(--md-sys-color-on-surface-variant);
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: 400;
           line-height: 1;
           padding: 0 4px;
@@ -101,7 +101,7 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
         .text-field-wrapper input:focus ~ label,
         .text-field-wrapper input:not(:placeholder-shown) ~ label {
           top: 0;
-          font-size: 12px;
+          font-size: var(--grampsjs-font-size-2xs);
           background: var(--md-sys-color-background);
         }
 

@@ -21,7 +21,7 @@ export class GrampsjsMediaStatus extends GrampsjsConnectedComponent {
       sharedStyles,
       css`
         :host {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           line-height: 28px;
         }
 

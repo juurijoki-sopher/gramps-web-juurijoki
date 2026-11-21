@@ -65,9 +65,9 @@ export class GrampsjsTimeline extends GrampsjsAppStateMixin(LitElement) {
           left: 50%;
           transform: translateX(-50%);
           padding: 6px 14px;
-          border-radius: 16px;
+          border-radius: var(--grampsjs-radius-lg);
           background-color: var(--grampsjs-color-shade-230);
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           color: var(--grampsjs-text-secondary-color);
           pointer-events: none;
           white-space: nowrap;

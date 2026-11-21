@@ -306,7 +306,7 @@ export class GrampsJs extends LitElement {
 
         .shortcut-content dt span {
           font-family: var(--grampsjs-mono-font-family);
-          font-size: 13px;
+          font-size: var(--grampsjs-font-size-xs);
           font-weight: 700;
           display: inline-block;
           min-width: 0.75em;
@@ -314,7 +314,7 @@ export class GrampsJs extends LitElement {
           text-align: center;
           border: 1px solid var(--grampsjs-body-font-color-20);
           color: var(--grampsjs-text-secondary-color);
-          border-radius: 6px;
+          border-radius: var(--grampsjs-radius-xs);
         }
 
         .shortcut-content dd {

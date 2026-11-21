@@ -54,12 +54,12 @@ class GrampsjsFirstRun extends GrampsjsAppStateMixin(LitElement) {
         }
 
         h2 {
-          font-size: 32px;
+          font-size: var(--grampsjs-font-size-2xl);
           font-weight: 600;
         }
 
         h3 {
-          font-size: 24px;
+          font-size: var(--grampsjs-font-size-xl);
         }
 
         p {

@@ -100,7 +100,7 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
           margin: 0 8px 0 24px;
           white-space: nowrap;
           font-family: var(--grampsjs-heading-font-family);
-          font-size: 18px;
+          font-size: var(--grampsjs-font-size-lg);
           font-weight: var(--grampsjs-font-weight-heading);
           color: var(--grampsjs-top-app-bar-font-color);
         }
@@ -119,7 +119,7 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .title .tree {
-          font-size: 15px;
+          font-size: var(--grampsjs-font-size-md);
           color: var(--md-sys-color-on-surface-variant);
         }
 

@@ -29,7 +29,7 @@ export class GrampsjsObjectForm extends GrampsjsAppStateMixin(LitElement) {
 
         h3.label {
           font-family: var(--grampsjs-body-font-family);
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
           font-weight: 500;
           margin-top: 1em;
           margin-bottom: 0;

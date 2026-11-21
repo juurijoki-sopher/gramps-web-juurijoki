@@ -20,7 +20,7 @@ export class GrampsjsTags extends GrampsjsAppStateMixin(LitElement) {
       css`
         h4 {
           font-weight: 400;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-family: var(--grampsjs-heading-font-family);
           color: var(--grampsjs-text-secondary-color);
           margin-top: 15px;
@@ -40,7 +40,7 @@ export class GrampsjsTags extends GrampsjsAppStateMixin(LitElement) {
         /* tonal: a light tint of the tag colour, label in the tag colour */
         md-input-chip,
         md-assist-chip {
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           background-color: color-mix(
             in srgb,
             var(--tag-color) 14%,

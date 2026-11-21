@@ -22,20 +22,20 @@ export class GrampsjsPersonBox extends GrampsjsConnectedComponent {
 
         h2 {
           font-weight: 500;
-          font-size: 22px;
+          font-size: var(--grampsjs-font-size-xl);
           margin-top: 10px;
           margin-bottom: 0;
         }
 
         h3 {
           font-weight: 400;
-          font-size: 18px;
+          font-size: var(--grampsjs-font-size-lg);
           margin-top: 24px;
           margin-bottom: 7px;
         }
 
         :host {
-          font-size: 16px;
+          font-size: var(--grampsjs-font-size-md);
         }
 
         .right {
@@ -52,7 +52,7 @@ export class GrampsjsPersonBox extends GrampsjsConnectedComponent {
         }
 
         .dates {
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           color: var(--md-sys-color-on-surface-variant);
           margin-top: 6px;
         }

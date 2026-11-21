@@ -15,7 +15,7 @@ export class GrampsjsBlogPostPreview extends GrampsjsAppStateMixin(LitElement) {
       css`
         h3 {
           font-family: var(--grampsjs-heading-font-family);
-          font-size: 20px;
+          font-size: var(--grampsjs-font-size-lg);
           margin-bottom: 8px;
           font-weight: var(--grampsjs-font-weight-heading);
           margin-top: 0;
@@ -31,7 +31,7 @@ export class GrampsjsBlogPostPreview extends GrampsjsAppStateMixin(LitElement) {
 
         #note {
           flex-grow: 1;
-          font-size: 17px;
+          font-size: var(--grampsjs-font-size-body);
           font-weight: var(--grampsjs-font-weight-body);
           color: var(--grampsjs-body-font-color);
           line-height: 1.45em;
@@ -39,7 +39,7 @@ export class GrampsjsBlogPostPreview extends GrampsjsAppStateMixin(LitElement) {
 
         #date {
           color: var(--grampsjs-text-secondary-color);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           letter-spacing: 0.02em;
           margin: 12px 0 0 0;
           font-weight: var(--grampsjs-font-weight-body);

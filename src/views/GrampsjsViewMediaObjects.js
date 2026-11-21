@@ -74,7 +74,7 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
         .tile {
           position: relative;
           cursor: pointer;
-          border-radius: 6px;
+          border-radius: var(--grampsjs-radius-xs);
           overflow: hidden;
           aspect-ratio: 1;
         }
@@ -100,7 +100,7 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
 
         .tile.selected grampsjs-img {
           transform: scale(0.88);
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           overflow: hidden;
         }
 
@@ -109,7 +109,7 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
           top: 6px;
           left: 6px;
           display: flex;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           background-color: var(--grampsjs-color-shade-255);
           pointer-events: none;
         }
@@ -166,7 +166,7 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
           flex-shrink: 0;
           width: 88px;
           height: 88px;
-          border-radius: 4px;
+          border-radius: var(--grampsjs-radius-xs);
           overflow: hidden;
         }
 
@@ -202,7 +202,7 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
 
         .media-list-meta {
           color: var(--grampsjs-text-secondary-color);
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;

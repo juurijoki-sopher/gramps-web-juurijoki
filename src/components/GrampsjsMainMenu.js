@@ -143,10 +143,10 @@ class GrampsjsMainMenu extends GrampsjsAppStateMixin(LitElement) {
           gap: 16px;
           height: 40px;
           padding: 0 12px;
-          border-radius: 8px;
+          border-radius: var(--grampsjs-radius-sm);
           color: var(--md-sys-color-on-surface);
           text-decoration: none;
-          font-size: 14px;
+          font-size: var(--grampsjs-font-size-sm);
           font-weight: var(--grampsjs-font-weight-medium);
           outline: none;
           white-space: nowrap;

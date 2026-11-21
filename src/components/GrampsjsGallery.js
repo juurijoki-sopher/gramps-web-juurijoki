@@ -41,7 +41,7 @@ export class GrampsjsGallery extends GrampsjsAppStateMixin(LitElement) {
 
         .tile {
           cursor: pointer;
-          border-radius: 6px;
+          border-radius: var(--grampsjs-radius-xs);
           overflow: hidden;
           aspect-ratio: 1;
           position: relative;
