@@ -331,7 +331,9 @@ describe('GrampsjsTasks', () => {
     const el = await mount({data})
     el._localFilters = [{name: 'Priority', values: ['High']}]
     await el.updateComplete
-    expect($(el, '.empty').textContent).toBe('None')
+    expect($(el, 'grampsjs-empty-state').message).toBe(
+      'No results match the filters.'
+    )
   })
 
   it('sorts with the selected order', async () => {
@@ -426,12 +428,12 @@ describe('GrampsjsTasks', () => {
 
   it('says so when there are no tasks', async () => {
     const el = await mount({data: []})
-    expect($(el, '.empty').textContent).toBe('None')
+    expect($(el, 'grampsjs-empty-state').message).toBe('No tasks yet.')
   })
 
   it('shows nothing while the first list loads', async () => {
     const el = await mount({data: [], loading: true})
-    expect($(el, '.empty')).toBeNull()
+    expect($(el, 'grampsjs-empty-state')).toBeNull()
   })
 })
 

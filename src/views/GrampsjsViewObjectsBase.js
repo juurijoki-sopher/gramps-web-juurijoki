@@ -5,6 +5,8 @@ Base view for lists of Gramps objects, e.g. people, events, ...
 import {html, css} from 'lit'
 import {
   mdiPlus,
+  mdiFilterRemoveOutline,
+  mdiInboxOutline,
   mdiCog,
   mdiCheckboxMultipleOutline,
   mdiLock,
@@ -14,6 +16,7 @@ import {
 import '@material/web/fab/fab.js'
 import '@material/web/iconbutton/icon-button.js'
 import '@material/web/button/outlined-button.js'
+import '@material/web/button/filled-tonal-button.js'
 import '@material/web/button/filled-button.js'
 import '@material/web/dialog/dialog.js'
 import '@material/web/button/text-button.js'
@@ -33,6 +36,7 @@ import '../components/GrampsjsPagination.js'
 import '../components/GrampsjsFilterChip.js'
 import '../components/GrampsjsFilters.js'
 import '../components/GrampsjsGetStarted.js'
+import '../components/GrampsjsEmptyState.js'
 import {GrampsjsStaleDataMixin} from '../mixins/GrampsjsStaleDataMixin.js'
 
 import {apiVersionAtLeast, fireEvent, treeIsEmpty} from '../util.js'
@@ -306,6 +310,8 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
         ? this._renderGetStarted()
         : this.altView
         ? this.renderAltView()
+        : this._isEmpty
+        ? this._renderEmpty()
         : html`
             <grampsjs-table
               serverSort
@@ -329,7 +335,7 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
               @selection:changed="${this._handleSelectionChanged}"
             ></grampsjs-table>
           `}
-      ${this._showGetStarted ? '' : this._renderPagination()}
+      ${this._showGetStarted || this._isEmpty ? '' : this._renderPagination()}
       ${this.canAdd ? this.renderFab() : ''} ${this._renderColumnPickerDialog()}
     `
   }
@@ -344,6 +350,49 @@ export class GrampsjsViewObjectsBase extends GrampsjsStaleDataMixin(
   // objects, such as families, which need edit permission too.
   get _showGetStarted() {
     return this.appState.permissions.canAdd && treeIsEmpty(this.appState.dbInfo)
+  }
+
+  // The list has loaded and has no rows
+  get _isEmpty() {
+    return !this.loading && !this.error && this._totalCount === 0
+  }
+
+  get _hasFilters() {
+    const filters = this._filters
+    return (
+      (filters?.filters?.length ?? 0) > 0 ||
+      (filters?.localFilters?.length ?? 0) > 0
+    )
+  }
+
+  // An empty list says why it is empty and offers the way on: clearing the
+  // filters, or adding the first object
+  _renderEmpty() {
+    if (this._hasFilters) {
+      return html`<grampsjs-empty-state
+        .icon="${mdiFilterRemoveOutline}"
+        message="${this._('No results match the filters.')}"
+      >
+        <md-outlined-button @click="${() => this._filters?.clearAll()}">
+          ${this._('Clear all filters')}
+        </md-outlined-button>
+      </grampsjs-empty-state>`
+    }
+    return html`<grampsjs-empty-state
+      .icon="${mdiInboxOutline}"
+      message="${this._('Nothing here yet.')}"
+    >
+      ${this.canAdd
+        ? html`<md-filled-tonal-button @click="${this._handleClickAdd}">
+            <grampsjs-icon
+              slot="icon"
+              .path="${mdiPlus}"
+              color="currentColor"
+            ></grampsjs-icon>
+            ${this._('Add')}
+          </md-filled-tonal-button>`
+        : ''}
+    </grampsjs-empty-state>`
   }
 
   _renderGetStarted() {

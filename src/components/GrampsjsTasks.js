@@ -4,7 +4,11 @@ The list of tasks with its filters and bulk actions
 
 import {html, css, LitElement, nothing} from 'lit'
 import {classMap} from 'lit/directives/class-map.js'
-import {mdiSort} from '@mdi/js'
+import {
+  mdiSort,
+  mdiFilterRemoveOutline,
+  mdiClipboardCheckOutline,
+} from '@mdi/js'
 
 import '@material/web/checkbox/checkbox'
 import '@material/web/iconbutton/icon-button'
@@ -15,6 +19,7 @@ import '@material/web/select/filled-select'
 import '@material/web/select/select-option'
 
 import './GrampsjsFilters.js'
+import './GrampsjsEmptyState.js'
 import './GrampsjsTagChips.js'
 import './GrampsjsIcon.js'
 import './GrampsjsTooltip.js'
@@ -183,11 +188,6 @@ class GrampsjsTasks extends GrampsjsAppStateMixin(LitElement) {
           --md-filled-select-text-field-top-space: 0px;
           --md-filled-select-text-field-bottom-space: 0px;
         }
-
-        .empty {
-          margin-top: 32px;
-          color: var(--grampsjs-text-secondary-color);
-        }
       `,
     ]
   }
@@ -262,14 +262,35 @@ class GrampsjsTasks extends GrampsjsAppStateMixin(LitElement) {
       >
         <div slot="trailing" class="sort-control">${this._renderSort()}</div>
       </grampsjs-filters>
-      ${this._canEdit ? this._renderBatchToolbar() : ''}
+      ${this._canEdit && this._tasks.length > 0
+        ? this._renderBatchToolbar()
+        : ''}
       ${this._tasks.length === 0 && !this.loading
-        ? html`<p class="empty">${this._('None')}</p>`
+        ? this._renderEmpty()
         : html`<div class="tasks-list">
             ${this._tasks.map(task => this._renderTask(task))}
           </div>`}
       ${this._canEdit ? this._renderStatusMenu() : ''}
     `
+  }
+
+  // Says why the list is empty: the filters, or no tasks at all
+  _renderEmpty() {
+    const filters = this.renderRoot.querySelector('grampsjs-filters')
+    if (this._localFilters.length > 0 || (filters?.filters?.length ?? 0) > 0) {
+      return html`<grampsjs-empty-state
+        .icon="${mdiFilterRemoveOutline}"
+        message="${this._('No results match the filters.')}"
+      >
+        <md-outlined-button @click="${() => filters?.clearAll()}">
+          ${this._('Clear all filters')}
+        </md-outlined-button>
+      </grampsjs-empty-state>`
+    }
+    return html`<grampsjs-empty-state
+      .icon="${mdiClipboardCheckOutline}"
+      message="${this._('No tasks yet.')}"
+    ></grampsjs-empty-state>`
   }
 
   _renderSort() {

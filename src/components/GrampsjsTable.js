@@ -86,6 +86,12 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           display: none;
         }
 
+        /* a card leaves out the fields that have no value: a label with
+           nothing under it is noise. The wide table keeps its columns. */
+        table:not(.wide) tbody td.no-value {
+          display: none;
+        }
+
         tbody td {
           text-align: left;
           display: block;
@@ -449,6 +455,14 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
                                 this._isEmpty(value),
                               'role-meta':
                                 this.columns[colIndex].role === 'meta',
+                              'no-value':
+                                !this.loading &&
+                                this._isEmpty(
+                                  this._formatValue(
+                                    this.columns[colIndex],
+                                    value
+                                  )
+                                ),
                             })}"
                             data-label="${this._colLabel(
                               this.columns[colIndex].name
