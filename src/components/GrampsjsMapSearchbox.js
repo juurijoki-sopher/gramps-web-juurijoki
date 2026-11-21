@@ -64,6 +64,13 @@ class GrampsjsMapSearchbox extends GrampsjsAppStateMixin(LitElement) {
           gap: 4px;
         }
 
+        /* the field has no frame of its own: the bar shows the keyboard
+           focus (WCAG 2.4.7) */
+        #searchbar:has(#searchfield:focus-visible) {
+          outline: var(--grampsjs-focus-ring);
+          outline-offset: 2px;
+        }
+
         #searchfield {
           flex: 1;
           min-width: 0;
@@ -214,7 +221,7 @@ class GrampsjsMapSearchbox extends GrampsjsAppStateMixin(LitElement) {
           display: none;
         }
 
-        @media (max-width: 512px) {
+        @media (max-width: 599px) {
           #container {
             left: 12px;
             right: 12px;

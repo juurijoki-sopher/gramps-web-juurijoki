@@ -97,7 +97,7 @@ export class GrampsjsDnaMatch extends GrampsjsAppStateMixin(LitElement) {
           margin-top: 12px;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 599px) {
           .estimate .bar {
             display: none;
           }

@@ -42,6 +42,47 @@ export class GrampsjsViewObject extends GrampsjsView {
         :host {
         }
 
+        /* the shape of an object page while it loads: the name, a line
+           under it, the buttons and two sections */
+        .object-skeleton {
+          display: flex;
+          flex-direction: column;
+          gap: var(--grampsjs-space-4);
+          margin-top: var(--grampsjs-space-2);
+        }
+
+        .object-skeleton .title {
+          width: min(420px, 70%);
+          height: 36px;
+        }
+
+        .object-skeleton .line {
+          width: min(240px, 45%);
+          height: 18px;
+        }
+
+        .object-skeleton .pills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: var(--grampsjs-space-3);
+          margin-bottom: var(--grampsjs-space-5);
+        }
+
+        .object-skeleton .pill {
+          width: 128px;
+          height: 40px;
+          border-radius: var(--grampsjs-radius-full);
+        }
+
+        .object-skeleton .panel {
+          height: 180px;
+          border-radius: var(--grampsjs-radius-md);
+        }
+
+        .object-skeleton .panel + .panel {
+          height: 260px;
+        }
+
         md-fab {
           position: fixed;
           bottom: calc(32px + var(--grampsjs-bottom-nav-height, 0px));
@@ -104,7 +145,7 @@ export class GrampsjsViewObject extends GrampsjsView {
   renderContent() {
     if (Object.keys(this._data).length === 0) {
       if (this.loading) {
-        return html``
+        return this._renderSkeleton()
       }
       return html``
     }
@@ -112,6 +153,27 @@ export class GrampsjsViewObject extends GrampsjsView {
       ${this.renderElement()}
       ${this.canEdit && !this.edit ? this.renderFab() : ''}
       ${this.editDialogContent}
+    `
+  }
+
+  _renderSkeleton() {
+    return html`
+      <div
+        class="object-skeleton"
+        role="status"
+        aria-busy="true"
+        aria-label="${this._('Loading...')}"
+      >
+        <span class="skeleton title"></span>
+        <span class="skeleton line"></span>
+        <div class="pills">
+          <span class="skeleton pill"></span>
+          <span class="skeleton pill"></span>
+          <span class="skeleton pill"></span>
+        </div>
+        <div class="skeleton panel"></div>
+        <div class="skeleton panel"></div>
+      </div>
     `
   }
 

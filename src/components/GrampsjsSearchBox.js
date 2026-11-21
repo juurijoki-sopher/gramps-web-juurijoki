@@ -57,7 +57,7 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
         }
 
         form:focus-within {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: -2px;
         }
 
@@ -142,7 +142,7 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .types button:focus-visible {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: -2px;
         }
 
@@ -166,7 +166,7 @@ export class GrampsjsSearchBox extends GrampsjsAppStateMixin(LitElement) {
         }
 
         a.all:focus-visible {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: -2px;
         }
       `,

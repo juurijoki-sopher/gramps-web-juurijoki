@@ -60,6 +60,8 @@ test/                      # Unit tests (minimal coverage currently)
 
 `global.css` defines the type scale (`--grampsjs-font-size-2xs` … `-3xl`, `-display`), the corners (`--grampsjs-radius-xs`, `-sm`, `-md`, `-lg`, `-full`) and a 4px spacing grid (`--grampsjs-space-1` … `-8`). New CSS should use these variables instead of pixel values, e.g. `font-size: var(--grampsjs-font-size-sm)`. Relative sizes (`em`) for text inside a component are fine.
 
+Media queries use the breakpoints listed in `global.css`: `max-width: 599px` / `min-width: 600px` (phone), `max-width: 768px` / `min-width: 769px` (tablet) and `min-width: 1200px` (wide).
+
 ### Naming
 
 All component files and classes use the `Grampsjs` prefix with lowercase `js` (e.g. `GrampsjsPersonCard`, not `GrampsJsPersonCard`). A handful of older files use `GrampsJs` — these are legacy and should not be followed.

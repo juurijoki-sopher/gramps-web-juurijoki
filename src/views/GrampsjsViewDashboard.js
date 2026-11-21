@@ -135,7 +135,7 @@ export class GrampsjsViewDashboard extends GrampsjsView {
         }
 
         /* narrow screens: the title first, the image below it */
-        @media screen and (max-width: 600px) {
+        @media screen and (max-width: 599px) {
           .welcome,
           .welcome.no-image {
             grid-template-columns: minmax(0, 1fr);

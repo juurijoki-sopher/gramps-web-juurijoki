@@ -53,7 +53,7 @@ class GrampsjsRect extends LitElement {
         }
 
         .rect:focus-visible {
-          outline: 2px solid var(--mdc-theme-secondary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: 2px;
         }
 

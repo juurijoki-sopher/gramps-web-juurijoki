@@ -313,6 +313,15 @@ export const sharedStyles = css`
     animation: 1.5s shine linear infinite;
   }
 
+  /* the shine moves; a user who asks for less motion gets a still
+     placeholder */
+  @media (prefers-reduced-motion: reduce) {
+    span.skeleton,
+    div.skeleton {
+      animation: none;
+    }
+  }
+
   .card {
     padding: 1em 1em;
     border-radius: var(--grampsjs-radius-lg);

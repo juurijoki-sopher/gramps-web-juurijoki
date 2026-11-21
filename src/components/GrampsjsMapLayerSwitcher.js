@@ -222,7 +222,7 @@ class GrampsjsMapLayerSwitcher extends GrampsjsAppStateMixin(LitElement) {
           --md-switch-pressed-handle-width: 18px;
         }
 
-        @media (max-width: 512px) {
+        @media (max-width: 599px) {
           #panel {
             position: fixed;
             left: 8px;

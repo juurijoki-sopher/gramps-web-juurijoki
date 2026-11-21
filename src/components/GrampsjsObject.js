@@ -304,7 +304,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
         }
 
         details.section > summary:focus-visible {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: 2px;
         }
 
@@ -355,6 +355,21 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
         @media (prefers-reduced-motion: reduce) {
           .section-chevron {
             transition: none;
+          }
+        }
+
+        /* an opened section's content fades in and slides down a little;
+           nothing is clipped, so menus inside a section stay whole */
+        @media (prefers-reduced-motion: no-preference) {
+          details.section[open] > :not(summary) {
+            animation: section-open 180ms ease-out;
+          }
+
+          @keyframes section-open {
+            from {
+              opacity: 0;
+              transform: translateY(-4px);
+            }
           }
         }
 

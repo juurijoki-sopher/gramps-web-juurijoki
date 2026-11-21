@@ -91,7 +91,7 @@ export class GrampsjsTagChips extends LitElement {
         flex-wrap: wrap;
       }
 
-      @media (max-width: 600px) {
+      @media (max-width: 599px) {
         :host(:not([expanded])) .chips {
           display: none;
         }

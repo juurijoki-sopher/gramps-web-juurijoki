@@ -145,7 +145,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
         }
 
         table.linked tbody tr:focus-visible {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: -2px;
         }
 
@@ -186,7 +186,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
         }
 
         th .sort-header:focus-visible {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
         }
 
         th .sort-header svg {

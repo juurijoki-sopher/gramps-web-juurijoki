@@ -52,7 +52,7 @@ export class GrampsjsViewBlog extends GrampsjsStaleDataMixin(GrampsjsView) {
 
         .post:focus-visible {
           background-color: var(--grampsjs-body-font-color-5);
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: -2px;
         }
 

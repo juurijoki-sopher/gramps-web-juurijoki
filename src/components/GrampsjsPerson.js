@@ -103,7 +103,7 @@ export class GrampsjsPerson extends GrampsjsObject {
         }
 
         .profile-picture-placeholder:focus-visible {
-          outline: 2px solid var(--mdc-theme-secondary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: 4px;
         }
 

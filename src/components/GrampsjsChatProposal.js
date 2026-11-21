@@ -147,7 +147,7 @@ class GrampsjsChatProposal extends GrampsjsAppStateMixin(LitElement) {
           color: var(--grampsjs-text-secondary-color);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 599px) {
           .rows {
             grid-template-columns: minmax(0, 1fr);
             row-gap: 0;
