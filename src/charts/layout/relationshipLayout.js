@@ -1,4 +1,5 @@
 import {Graphviz} from '@hpcc-js/wasm'
+import {continuationDirections} from '../continuation.js'
 import {familyMarkerPosition} from '../familyMarker.js'
 import {routeLinks} from './orthogonalRoutes.js'
 
@@ -487,6 +488,7 @@ function readLayout(output, model, graph, rootHandle, options) {
         kind: 'person',
         handle,
         person: graph.person(handle),
+        continuation: continuationDirections(graph, handle),
         x: left + cardX(i, options),
         y,
       }
@@ -731,7 +733,9 @@ let graphvizLoading
 // origin.
 //
 // Each node has a unique `key`, a `kind` and its centre `x`, `y`. A `person`
-// node has the person's `handle` and `person` object; each person has one.
+// node has the person's `handle` and `person` object and `continuation`, the
+// directions in which that person has relatives who were not fetched; each
+// person has one.
 // A `family` node has its `family`, whose marker is drawn relative to it. It
 // lies in the gap between the cards of its two partners, unless they are not
 // next to each other: then its marker lies below the outer partner's card,

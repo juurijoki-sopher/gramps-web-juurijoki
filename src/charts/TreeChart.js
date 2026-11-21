@@ -6,6 +6,11 @@ import {
 } from './chartButton.js'
 import {ChartCanvas, place} from './ChartCanvas.js'
 import {roundedPath, sameX} from './connectors.js'
+import {
+  continuationSide,
+  includeTabBounds,
+  updateContinuationTabs,
+} from './continuationTab.js'
 import {treeLayoutDefaults} from './layout/treeLayout.js'
 
 const {boxWidth, boxHeight} = treeLayoutDefaults
@@ -67,12 +72,11 @@ function withSharedParts(links, vertical) {
   })
 }
 
-// The chevron buttons beyond cards: the root person's menu button and the
-// buttons that expand branches. Their gap to the card, in pixels.
+// The root person's menu button. Its gap to the card, in pixels.
 const buttonGap = 8
 
-// Returns the position of a button on `side` of the card, relative to its
-// centre, which keeps a gap to the visible edge of the card: the colour
+// Returns the position of the menu button on `side` of the card, relative to
+// its centre, which keeps a gap to the visible edge of the card: the colour
 // stripe reaches 4px past the box on the left
 function buttonPosition(side) {
   const distance = buttonGap + buttonRadius
@@ -84,29 +88,16 @@ function buttonPosition(side) {
   }[side]
 }
 
-// Returns the buttons of a node, each with its `kind`, 'menu' or 'expand',
-// and the `side` of the card it is on and points to. A branch grows towards
-// the ancestors or the descendants, in columns or in rows.
+// The root person's menu button, on `menuSide` of the card, when the chart
+// is interactive and shows the menu
 function nodeButtons(
   node,
-  {interactive, childrenTriangle = false, menuSide = 'left'},
-  vertical
+  {interactive, childrenTriangle = false, menuSide = 'left'}
 ) {
-  if (!interactive) {
+  if (!interactive || !childrenTriangle || node.generation !== 0) {
     return []
   }
-  const buttons = []
-  if (childrenTriangle && node.generation === 0) {
-    buttons.push({kind: 'menu', side: menuSide})
-  }
-  if (node.expandable) {
-    const side = {
-      ancestors: vertical ? 'top' : 'right',
-      descendants: vertical ? 'bottom' : 'left',
-    }[node.expandable]
-    buttons.push({kind: 'expand', side})
-  }
-  return buttons
+  return [{kind: 'menu', side: menuSide}]
 }
 
 // Returns keys that stay the same for a person across layouts with different
@@ -146,9 +137,10 @@ function assignKey(keys, node, key) {
 // button labelled `triangleLabel` that opens the menu of relatives, on the
 // `menuSide` of the card: 'left', 'right', 'top' or 'bottom'.
 //
-// A node that is `expandable` gets a button labelled with `expandLabels` for
-// its direction, on the side where its branch grows. The button fires
-// `pedigree:expand-branch` with the node's `handle` and `direction`.
+// A node that is `expandable` gets a tab labelled with `expandLabels` for
+// its direction, on the side where its branch grows. The tab fires
+// `pedigree:expand-branch` with the node's `handle` and `direction`. The
+// mark stays when the chart is not interactive, as in an export.
 //
 // When a layout runs the other way than the previous one, in rows instead of
 // columns or back, the links fade out and in.
@@ -176,15 +168,26 @@ export class TreeChart extends ChartCanvas {
     const previousKeys = this._keys
     this._keys = joinKeys(layout)
     this._root = layout.nodes.find(node => node.generation === 0)
-    // The bounds include the buttons, which lie outside the layout
+    // The bounds include the menu button and the continuation tabs, which
+    // lie outside the layout
     const bounds = {...layout.bounds}
     for (const node of layout.nodes) {
-      for (const {side} of nodeButtons(node, options, vertical)) {
+      for (const {side} of nodeButtons(node, options)) {
         const [dx, dy] = buttonPosition(side)
         bounds.xMin = Math.min(bounds.xMin, node.x + dx - buttonRadius)
         bounds.xMax = Math.max(bounds.xMax, node.x + dx + buttonRadius)
         bounds.yMin = Math.min(bounds.yMin, node.y + dy - buttonRadius)
         bounds.yMax = Math.max(bounds.yMax, node.y + dy + buttonRadius)
+      }
+      if (node.expandable) {
+        includeTabBounds(
+          bounds,
+          node.x,
+          node.y,
+          continuationSide(node.expandable, vertical),
+          boxWidth,
+          boxHeight
+        )
       }
     }
     return {
@@ -274,42 +277,46 @@ export class TreeChart extends ChartCanvas {
 
   drawExtras(nodes, options) {
     this._updateButtons(nodes, options)
+    this._updateContinuation(nodes, options)
   }
 
-  // A button is a chevron pointing away from the card
+  // The root person's menu button is a chevron pointing away from the card
   _updateButtons(nodes, options) {
-    const {triangleLabel = '', expandLabels = {}, palette} = options
-    function activate(e, {kind, node}) {
-      if (kind === 'menu') {
-        fireEvent(this, 'pedigree:show-children', {})
-      } else {
-        fireEvent(this, 'pedigree:expand-branch', {
-          handle: node.handle,
-          direction: node.expandable,
-        })
-      }
+    const {triangleLabel = '', palette} = options
+    function activate() {
+      fireEvent(this, 'pedigree:show-children', {})
     }
     const buttons = nodes
       .selectChildren('.chart-button')
       .data(
-        node =>
-          nodeButtons(node, options, this._vertical).map(button => ({
-            ...button,
-            node,
-          })),
+        node => nodeButtons(node, options).map(button => ({...button, node})),
         ({kind}) => kind
       )
       .join(enter => enterChartButtons(enter, activate))
-      .attr('class', ({kind}) =>
-        kind === 'menu'
-          ? 'chart-button children-triangle'
-          : 'chart-button expand-button'
-      )
-      .attr('id', ({kind}) => (kind === 'menu' ? 'triangle-children' : null))
+      .attr('class', 'chart-button children-triangle')
+      .attr('id', 'triangle-children')
       .attr('transform', ({side}) => `translate(${buttonPosition(side)})`)
-      .attr('aria-label', ({kind, node}) =>
-        kind === 'menu' ? triangleLabel : expandLabels[node.expandable]
-      )
+      .attr('aria-label', triangleLabel)
     styleChartButtons(buttons, palette, ({side}) => side)
+  }
+
+  // A tab on a card whose branch continues beyond the chart
+  _updateContinuation(nodes, options) {
+    const {expandLabels = {}, palette, interactive} = options
+    updateContinuationTabs(nodes, {
+      directions: node => (node.expandable ? [node.expandable] : []),
+      vertical: this._vertical,
+      interactive,
+      palette,
+      boxWidth,
+      boxHeight,
+      label: direction => expandLabels[direction],
+      activate(event, {node}) {
+        fireEvent(this, 'pedigree:expand-branch', {
+          handle: node.handle,
+          direction: node.expandable,
+        })
+      },
+    })
   }
 }
