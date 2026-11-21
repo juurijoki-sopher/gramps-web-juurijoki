@@ -132,7 +132,7 @@ describe('colorToCss', () => {
 
 describe('colorForPicker', () => {
   it('returns hex6 color as-is', () => {
-    expect(colorForPicker('#1f77b4')).to.equal('#1f77b4')
+    expect(colorForPicker('#0e6170')).to.equal('#0e6170')
   })
 
   it('converts hex12 to hex6', () => {
@@ -140,7 +140,7 @@ describe('colorForPicker', () => {
   })
 
   it('returns default for null', () => {
-    expect(colorForPicker(null)).to.equal('#1f77b4')
+    expect(colorForPicker(null)).to.equal('#0e6170')
   })
 
   it('respects custom default color', () => {

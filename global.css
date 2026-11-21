@@ -123,7 +123,8 @@ html {
   --grampsjs-alert-warn-border-color: rgba(251, 192, 45, 0.7);
   --grampsjs-alert-warn-font-color: #f9a825;
   --grampsjs-alert-success-font-color: #41ad49;
-  --grampsjs-task-open: #007bff;
+  /* the main colour: 7:1 on white in the light theme */
+  --grampsjs-task-open: var(--md-sys-color-primary);
   --grampsjs-task-progress: #ff9800;
   --grampsjs-task-done-solid: rgb(65, 173, 73);
   --grampsjs-task-done: color-mix(
@@ -141,7 +142,7 @@ html {
     var(--md-sys-color-primary) 32%,
     transparent
   );
-  --grampsjs-connection-chart-person-box: #e6e6e6;
+  --grampsjs-connection-chart-person-box: var(--grampsjs-chart-person-box);
   --grampsjs-chart-person-box: rgb(230, 230, 230);
   --grampsjs-chart-link: rgb(153, 153, 153);
   --grampsjs-editable-list-hover-background-color: color-mix(
@@ -197,8 +198,9 @@ html {
   );
   --grampsjs-drawer-selected-color: var(--grampsjs-tonal-color);
   /* keep light tag colors such as yellow readable on light surfaces (see
-     tagColorToCss); the dark theme lifts the limit */
-  --grampsjs-tag-lightness-max: 0.55;
+     tagColorToCss): at 0.48, the tag's text has a contrast of at least
+     4.5:1 on its chip's tint (WCAG 1.4.3); the dark theme lifts the limit */
+  --grampsjs-tag-lightness-max: 0.48;
   /* menus: compact rows and a soft shadow */
   --md-menu-item-one-line-container-height: 44px;
   --md-menu-item-label-text-size: 14px;
@@ -259,6 +261,20 @@ html {
   --grampsjs-palette-sand: #f6eee5;
   --grampsjs-drawer-background-color: var(--grampsjs-palette-mist);
   --grampsjs-row-hover-color: var(--grampsjs-palette-sand);
+  /* charts: person boxes on mist, and lines in a petrol grey that keeps
+     3:1 on white (WCAG 1.4.11; the plain grey #999 had 2.85:1) */
+  --grampsjs-chart-person-box: var(--grampsjs-palette-mist);
+  --grampsjs-chart-link: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 30%,
+    rgb(150, 150, 150)
+  );
+  /* status colours that read on white: success green 5.13:1 (the shared
+     #41ad49 had 2.88:1) and an ochre for tasks in progress 4.24:1 (orange
+     #ff9800 had 2.16:1) */
+  --grampsjs-alert-success-font-color: #2e7d32;
+  --grampsjs-task-done-solid: #2e7d32;
+  --grampsjs-task-progress: #a0730f;
   /* the shared amber reads on dark surfaces only: 1.78:1 on the light
      warning background, this ochre 5.34:1 (WCAG 1.4.3) */
   --grampsjs-alert-warn-font-color: #8a5a00;
@@ -368,7 +384,11 @@ html {
   --grampsjs-color-shade-220: rgb(35, 35, 35);
   --grampsjs-color-shade-230: rgb(25, 25, 25);
   --grampsjs-color-shade-240: rgb(15, 15, 15);
-  --grampsjs-chart-person-box: rgb(48, 48, 48);
+  --grampsjs-chart-person-box: color-mix(
+    in srgb,
+    var(--md-sys-color-primary) 12%,
+    rgb(44, 44, 44)
+  );
   --grampsjs-chart-link: rgb(117, 117, 117);
   --grampsjs-color-shade-255: rgb(0, 0, 0);
   --grampsjs-color-monospace: rgba(255, 100, 100, 0.85);

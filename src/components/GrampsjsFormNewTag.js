@@ -83,7 +83,7 @@ class GrampsjsFormNewTag extends GrampsjsObjectForm {
     this.searchRes = []
     this._selectedTag = ''
     this._tagName = ''
-    this._tagColor = '#1f77b4'
+    this._tagColor = '#0e6170'
     this._loading = true
     // Non-reactive guard flag; not in properties to avoid triggering re-renders
     this._saving = false
@@ -102,7 +102,7 @@ class GrampsjsFormNewTag extends GrampsjsObjectForm {
           id="color"
           format="hex"
           value="${this._tagColor}"
-          swatches="#1f77b4;#ff7f0e;#2ca02c;#d62728;#9467bd;#8c564b;#e377c2;#7f7f7f;#bcbd22;#17becf"
+          swatches="#0e6170;#a9502c;#4f7a26;#a0730f;#7b3f6e;#3f5d99;#a33a3a;#2a7565;#75654f;#5f6b70"
           @change="${this._handleColor}"
         ></wa-color-picker>
       </div>
