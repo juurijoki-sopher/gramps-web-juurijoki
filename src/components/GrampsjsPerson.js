@@ -62,6 +62,14 @@ export class GrampsjsPerson extends GrampsjsObject {
           }
         }
 
+        /* print leaves out background colours: the letters alone would
+           only repeat the name */
+        @media print {
+          .initials {
+            display: none;
+          }
+        }
+
         .profile-picture-actions {
           position: relative;
         }

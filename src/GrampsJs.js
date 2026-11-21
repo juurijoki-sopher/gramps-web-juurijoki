@@ -723,22 +723,33 @@ export class GrampsJs extends LitElement {
     this._applyColorScheme()
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     mediaQuery.addEventListener('change', () => this._applyColorScheme())
+    // Paper is light, and browsers leave out background colours when they
+    // print: the dark theme would print light text on white. The page is
+    // printed in the light theme and returns to the user's theme after.
+    const printQuery = window.matchMedia('print')
+    this._printing = printQuery.matches
+    const setPrinting = printing => {
+      if (this._printing === printing) return
+      this._printing = printing
+      this._applyColorScheme()
+    }
+    window.addEventListener('beforeprint', () => setPrinting(true))
+    window.addEventListener('afterprint', () => setPrinting(false))
+    printQuery.addEventListener('change', e => setPrinting(e.matches))
+    if (this._printing) this._applyColorScheme()
   }
 
   _applyColorScheme() {
     const treeConfig = getTreeConfig()
+    const theme = this._printing ? 'light' : this.appState.settings.theme
     try {
       applyScheme(
         treeConfig[TREE_CONFIG_PRIMARY_COLOR] || DEFAULT_PRIMARY,
         treeConfig[TREE_CONFIG_SECONDARY_COLOR] || DEFAULT_SECONDARY,
-        this.appState.settings.theme
+        theme
       )
     } catch {
-      applyScheme(
-        DEFAULT_PRIMARY,
-        DEFAULT_SECONDARY,
-        this.appState.settings.theme
-      )
+      applyScheme(DEFAULT_PRIMARY, DEFAULT_SECONDARY, theme)
     }
   }
 
