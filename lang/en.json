@@ -612,5 +612,10 @@
   "The sender address is not an e-mail address.": "The sender address is not an e-mail address.",
   "Give the port and the sender address with the server.": "Give the port and the sender address with the server.",
   "No e-mail server has been set.": "No e-mail server has been set.",
-  "Your account has no e-mail address.": "Your account has no e-mail address."
+  "Your account has no e-mail address.": "Your account has no e-mail address.",
+  "Research status": "Research status",
+  "Proposed event": "Proposed event",
+  "Proposed date": "Proposed date",
+  "Proposed place": "Proposed place",
+  "Record URL": "Record URL"
 }
