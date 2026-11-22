@@ -523,5 +523,19 @@
   "%s of %s": "%s of %s",
   "No results match the filters.": "No results match the filters.",
   "Nothing here yet.": "Nothing here yet.",
-  "No tasks yet.": "No tasks yet."
+  "No tasks yet.": "No tasks yet.",
+  "filtering failed": "filtering failed",
+  "loading failed": "loading failed",
+  "saving failed": "saving failed",
+  "updating failed": "updating failed",
+  "deleting failed": "deleting failed",
+  "invalid request": "invalid request",
+  "not signed in": "not signed in",
+  "no permission": "no permission",
+  "not found": "not found",
+  "conflict with another change": "conflict with another change",
+  "invalid data": "invalid data",
+  "too many requests": "too many requests",
+  "server error": "server error",
+  "no connection to the server": "no connection to the server"
 }

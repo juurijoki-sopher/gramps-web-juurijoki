@@ -60,6 +60,7 @@ import {
 } from './components/GrampsjsNavDrawer.js'
 import {BOTTOM_NAV_HEIGHT} from './components/GrampsjsBottomNav.js'
 import {PullToRefreshController, PULL_THRESHOLD} from './pullToRefresh.js'
+import {describeApiError, recentApiError} from './apiErrors.js'
 
 import './components/GrampsjsPages.js'
 import './components/GrampsjsTabBar.js'
@@ -1169,8 +1170,39 @@ export class GrampsJs extends LitElement {
   }
 
   _handleError(e) {
-    const {message, silent = false, source = 'api', detail = {}} = e.detail
-    this.appState.addNotification({type: 'error', message, source, detail})
+    const {
+      message: rawMessage,
+      silent = false,
+      source = 'api',
+      detail = {},
+    } = e.detail
+    // An API error names what failed and why ("People: filtering failed –
+    // not found (404)"). Most components send the message only, so the
+    // request is the one that just failed with that message.
+    const request =
+      source === 'api'
+        ? (detail.endpoint ? detail : null) ?? recentApiError(rawMessage)
+        : null
+    const message = request
+      ? describeApiError(rawMessage, request, (s, ...a) => this._(s, ...a))
+      : rawMessage
+    const fullDetail = request
+      ? {
+          ...detail,
+          request: {
+            method: request.method,
+            endpoint: request.endpoint,
+            status: request.status,
+          },
+          serverMessage: rawMessage,
+        }
+      : detail
+    this.appState.addNotification({
+      type: 'error',
+      message,
+      source,
+      detail: fullDetail,
+    })
     if (!silent) {
       this._showMessage(`${this._('Error')}: ${message}`, {
         action: {

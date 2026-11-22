@@ -10,6 +10,7 @@ import {
   updateTaskStatus,
 } from './api.js'
 import {getCurrentTheme} from './theme.js'
+import {rememberApiError} from './apiErrors.js'
 import {fireEvent, makeHandle} from './util.js'
 import {
   getTaskLabel,
@@ -219,6 +220,14 @@ export function getInitialAppState() {
     }
   }
 
+  // Keeps the request of a failed call, so its error can name what failed
+  function rememberFailure(result) {
+    if (result && 'error' in result) {
+      rememberApiError(result.error, result.errorDetail)
+    }
+    return result
+  }
+
   function addNotification({
     type = 'error',
     message = '',
@@ -314,14 +323,16 @@ export function getInitialAppState() {
     // `background: true` keeps the request out of the progress indicator.
     apiGet: (endpoint, {background = false, ...options} = {}) => {
       if (background) {
-        return apiGet(auth, endpoint, options)
+        return apiGet(auth, endpoint, options).then(rememberFailure)
       }
       activeGetCount += 1
       notifyCounters()
-      return apiGet(auth, endpoint, options).finally(() => {
-        activeGetCount = Math.max(0, activeGetCount - 1)
-        notifyCounters()
-      })
+      return apiGet(auth, endpoint, options)
+        .then(rememberFailure)
+        .finally(() => {
+          activeGetCount = Math.max(0, activeGetCount - 1)
+          notifyCounters()
+        })
     },
     apiPost: (endpoint, payload, options = {}) => {
       const {saving: isSave = true} = options
@@ -330,9 +341,9 @@ export function getInitialAppState() {
         activeSaveCount += 1
         notifyCounters()
       }
-      return apiPutPostDelete(auth, 'POST', endpoint, payload, options).then(
-        result => (isSave ? completeSave(result) : result)
-      )
+      return apiPutPostDelete(auth, 'POST', endpoint, payload, options)
+        .then(rememberFailure)
+        .then(result => (isSave ? completeSave(result) : result))
     },
     apiPut: (endpoint, payload, options = {}) => {
       const {saving: isSave = true} = options
@@ -341,9 +352,9 @@ export function getInitialAppState() {
         activeSaveCount += 1
         notifyCounters()
       }
-      return apiPutPostDelete(auth, 'PUT', endpoint, payload, options).then(
-        result => (isSave ? completeSave(result) : result)
-      )
+      return apiPutPostDelete(auth, 'PUT', endpoint, payload, options)
+        .then(rememberFailure)
+        .then(result => (isSave ? completeSave(result) : result))
     },
     apiDelete: (endpoint, options = {}) => {
       const {saving: isSave = true} = options
@@ -358,7 +369,9 @@ export function getInitialAppState() {
         endpoint,
         options.payload ?? {},
         options
-      ).then(result => (isSave ? completeSave(result) : result))
+      )
+        .then(rememberFailure)
+        .then(result => (isSave ? completeSave(result) : result))
     },
     refreshTokenIfNeeded: (force = false) => auth.getValidAccessToken(force),
     signout: () => auth.signout(),

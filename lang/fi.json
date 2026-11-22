@@ -549,5 +549,19 @@
     "%s of %s": "%s / %s",
     "No results match the filters.": "Suodattimia vastaavia tuloksia ei löytynyt.",
     "Nothing here yet.": "Täällä ei ole vielä mitään.",
-    "No tasks yet.": "Ei vielä tehtäviä."
+    "No tasks yet.": "Ei vielä tehtäviä.",
+    "filtering failed": "suodatus epäonnistui",
+    "loading failed": "haku epäonnistui",
+    "saving failed": "tallennus epäonnistui",
+    "updating failed": "päivitys epäonnistui",
+    "deleting failed": "poisto epäonnistui",
+    "invalid request": "virheellinen pyyntö",
+    "not signed in": "ei kirjautunut sisään",
+    "no permission": "ei oikeuksia",
+    "not found": "ei löytynyt",
+    "conflict with another change": "ristiriita toisen muutoksen kanssa",
+    "invalid data": "virheelliset tiedot",
+    "too many requests": "liian monta pyyntöä",
+    "server error": "palvelinvirhe",
+    "no connection to the server": "ei yhteyttä palvelimeen"
 }
