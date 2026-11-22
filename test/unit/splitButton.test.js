@@ -5,6 +5,7 @@ import '../../src/components/GrampsjsSplitButton.js'
 import {
   primaryAddItem,
   otherAddItems,
+  labelledAddAction,
   ADD_MENU_ITEMS,
 } from '../../src/components/GrampsjsAddMenu.js'
 
@@ -87,5 +88,11 @@ describe('Add menu last-used type', () => {
 
   it('falls back to Person for an unknown last type', () => {
     expect(primaryAddItem(ADD_MENU_ITEMS, 'Not a type')[0]).toBe('Person')
+  })
+
+  it('keeps Add and the object type in one language', () => {
+    const strings = {Add: 'Lisää', Person: 'Henkilö'}
+    const _ = s => strings[s] ?? s
+    expect(labelledAddAction(_, 'Person')).toBe('Lisää Henkilö')
   })
 })
