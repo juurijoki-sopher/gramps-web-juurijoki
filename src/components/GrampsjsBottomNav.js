@@ -40,7 +40,14 @@ class GrampsjsBottomNav extends GrampsjsAppStateMixin(LitElement) {
           z-index: 5;
           display: block;
           background-color: var(--grampsjs-drawer-background-color);
-          border-top: 1px solid var(--grampsjs-divider-color);
+          border-top: 1px solid var(--grampsjs-drawer-divider-color);
+          /* the bar's own colours: light on the light theme's petrol */
+          --md-sys-color-on-surface: var(--grampsjs-drawer-on-color);
+          --md-sys-color-on-surface-variant: var(
+            --grampsjs-drawer-on-variant-color
+          );
+          --md-sys-color-primary: var(--grampsjs-drawer-accent-color);
+          --md-focus-ring-color: var(--grampsjs-drawer-on-color);
           padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 

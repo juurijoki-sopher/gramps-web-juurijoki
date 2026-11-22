@@ -279,6 +279,12 @@ html {
     var(--md-sys-color-on-surface)
   );
   --grampsjs-drawer-selected-color: var(--grampsjs-tonal-color);
+  /* text, icons and lines in the drawer and the bottom bar; the light theme
+     turns them light on its dark petrol drawer */
+  --grampsjs-drawer-on-color: var(--md-sys-color-on-surface);
+  --grampsjs-drawer-on-variant-color: var(--md-sys-color-on-surface-variant);
+  --grampsjs-drawer-accent-color: var(--md-sys-color-primary);
+  --grampsjs-drawer-divider-color: var(--grampsjs-divider-color);
   /* keep light tag colors such as yellow readable on light surfaces (see
      tagColorToCss): at 0.48, the tag's text has a contrast of at least
      4.5:1 on its chip's tint (WCAG 1.4.3); the dark theme lifts the limit */
@@ -332,18 +338,26 @@ html {
 
 :root[data-theme='light'] {
   /* The site's colour chart, four colours:
-     - petrol (#0E6170): the main colour, set in theme.js (DEFAULT_PRIMARY);
-       buttons, the selected navigation item, progress bars
+     - petrol (#0A4F5C): the main colour, set in theme.js (DEFAULT_PRIMARY);
+       buttons, progress bars, and the drawer and bottom bar, which carry
+       light text on it
      - copper (#A9502C): the accent, set in theme.js (DEFAULT_SECONDARY);
        links, add and edit actions
-     - mist: light petrol surface for the drawer, bottom bar and panels
+     - mist: light petrol surface for panels and chart boxes
      - sand: light copper surface for hovered rows
      The page, views and app bar share #F3F3F3 (theme.js LIGHT_BACKGROUND).
      All text colours keep a contrast of at least 4.5:1 on mist, sand and
-     the canvas. */
-  --grampsjs-palette-mist: #e8f1f2;
+     the canvas, and the drawer's text on petrol. */
+  --grampsjs-palette-mist: #dce7e8;
   --grampsjs-palette-sand: #f6eee5;
-  --grampsjs-drawer-background-color: var(--grampsjs-palette-mist);
+  --grampsjs-drawer-background-color: var(--md-sys-color-primary);
+  --grampsjs-drawer-on-color: #ffffff;
+  --grampsjs-drawer-on-variant-color: rgba(255, 255, 255, 0.85);
+  --grampsjs-drawer-accent-color: #ffffff;
+  --grampsjs-drawer-divider-color: rgba(255, 255, 255, 0.2);
+  --grampsjs-drawer-selected-color: rgba(255, 255, 255, 0.2);
+  --grampsjs-drawer-selected-font-color: #ffffff;
+  --grampsjs-panel-color: var(--grampsjs-palette-mist);
   --grampsjs-row-hover-color: var(--grampsjs-palette-sand);
   /* charts: person boxes on mist, and lines in a petrol grey that keeps
      3:1 on white (WCAG 1.4.11; the plain grey #999 had 2.85:1) */
@@ -362,10 +376,11 @@ html {
   /* the shared amber reads on dark surfaces only: 1.78:1 on the light
      warning background, this ochre 5.34:1 (WCAG 1.4.3) */
   --grampsjs-alert-warn-font-color: #8a5a00;
-  /* the selected item's pill must stand out from the mist surface */
+  /* tonal elements, such as the date circles and the search field, must
+     stand out from the mist panels */
   --grampsjs-tonal-color: color-mix(
     in srgb,
-    var(--md-sys-color-primary) 22%,
+    var(--md-sys-color-primary) 28%,
     var(--md-sys-color-surface)
   );
   --grampsjs-top-app-bar-background-color: var(--md-sys-color-surface);
