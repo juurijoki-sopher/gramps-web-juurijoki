@@ -106,6 +106,16 @@ export class GrampsjsViewTree extends GrampsjsStaleDataMixin(GrampsjsView) {
       iconButtonColorStyles,
       listAvatarStyles,
       css`
+        /* print the chart only, without the controls around it */
+        @media print {
+          #tabs,
+          #controls,
+          #selected-person,
+          .chart-hint {
+            display: none !important;
+          }
+        }
+
         .with-margin {
           margin: 25px 40px;
         }

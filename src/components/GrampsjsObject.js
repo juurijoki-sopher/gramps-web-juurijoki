@@ -358,6 +358,42 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           }
         }
 
+        /* print: every section with its content, also the closed ones,
+           in a plain frame, without the table of contents and the
+           controls of the screen */
+        @media print {
+          .profile > .actions,
+          .toc,
+          .toc-button,
+          .section-chevron {
+            display: none !important;
+          }
+
+          details.section {
+            background-color: transparent;
+            border: 1px solid var(--grampsjs-divider-strong-color);
+          }
+
+          /* the opening animation keeps a closed section's content at
+             zero height: print opens it to its full height */
+          details.section::details-content {
+            content-visibility: visible !important;
+            block-size: auto !important;
+            overflow: visible !important;
+            transition: none !important;
+          }
+
+          details.section:not([open]) > summary h3 {
+            margin-bottom: 1rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--grampsjs-divider-color);
+          }
+
+          details.section > summary h3 {
+            break-after: avoid;
+          }
+        }
+
         .section * {
           min-width: 0;
           max-width: 100%;
@@ -517,12 +553,26 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
       _objectIcon: {type: String},
       _showReferences: {type: Boolean},
       _wide: {type: Boolean},
+      // true while the page is printed: closed sections render their
+      // content too, so that the print has all of it
+      _printing: {type: Boolean},
     }
   }
 
   constructor() {
     super()
     this.data = {}
+    this._printQuery = window.matchMedia?.('print')
+    this._printing = this._printQuery?.matches ?? false
+    this._boundPrintStart = () => {
+      this._printing = true
+    }
+    this._boundPrintEnd = () => {
+      this._printing = false
+    }
+    this._boundPrintChange = e => {
+      this._printing = e.matches
+    }
     this.edit = false
     this.preview = false
     this.actions = ''
@@ -541,12 +591,18 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
   connectedCallback() {
     super.connectedCallback()
+    window.addEventListener('beforeprint', this._boundPrintStart)
+    window.addEventListener('afterprint', this._boundPrintEnd)
+    this._printQuery?.addEventListener?.('change', this._boundPrintChange)
     this._resizeObserver.observe(this)
     this._setupIntersectionObserver()
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
+    window.removeEventListener('beforeprint', this._boundPrintStart)
+    window.removeEventListener('afterprint', this._boundPrintEnd)
+    this._printQuery?.removeEventListener?.('change', this._boundPrintChange)
     this._resizeObserver.disconnect()
     this._teardownIntersectionObserver()
   }
@@ -728,7 +784,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
                   >
                 </h3>
               </summary>
-              ${this._shouldRenderSection(key)
+              ${this._shouldRenderSection(key) || this._printing
                 ? this.renderSectionContent(key)
                 : ''}
             </details>

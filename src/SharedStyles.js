@@ -62,6 +62,15 @@ export const sharedStyles = css`
     --mdc-list-side-padding: 16px;
   }
 
+  /* print the content, not the controls: the floating action buttons
+     and the rows of action buttons under an object's name */
+  @media print {
+    md-fab,
+    p.button-list {
+      display: none !important;
+    }
+  }
+
   /* the hover layer follows the corners */
   md-list-item {
     border-radius: var(--grampsjs-radius-sm);
