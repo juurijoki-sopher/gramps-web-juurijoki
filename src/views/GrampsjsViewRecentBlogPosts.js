@@ -21,12 +21,19 @@ export class GrampsjsViewRecentBlogPosts extends GrampsjsConnectedComponent {
     ]
   }
 
+  // A tree without blog posts shows no blog panel: the attribute lets the
+  // dashboard hide the panel around this element
+  updated(changed) {
+    super.updated?.(changed)
+    this.toggleAttribute(
+      'empty',
+      !this.loading && !this.error && !this._data?.data?.length
+    )
+  }
+
   renderContent() {
     if (!this._data?.data?.length) {
-      return html`
-        <h3>${this._('Latest Blog Post')}</h3>
-        <p>${this._('None')}.</p>
-      `
+      return ''
     }
     return html`
       <h3>${this._('Latest Blog Post')}</h3>

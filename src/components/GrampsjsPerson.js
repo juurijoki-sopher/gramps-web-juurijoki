@@ -21,7 +21,12 @@ import './GrampsjsImg.js'
 import './GrampsjsEditGender.js'
 import './GrampsjsPersonRelationship.js'
 import './GrampsjsFormExternalSearch.js'
-import {fireEvent, objectIconPath, menuSelectionHandler} from '../util.js'
+import {
+  fireEvent,
+  objectIconPath,
+  menuSelectionHandler,
+  sexColor,
+} from '../util.js'
 
 export class GrampsjsPerson extends GrampsjsObject {
   static get styles() {
@@ -29,6 +34,34 @@ export class GrampsjsPerson extends GrampsjsObject {
       super.styles,
       buttonColorStyles,
       css`
+        /* a person without a picture: their initials in a circle tinted
+           with the gender colour, as the person boxes of the tree are */
+        .initials {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          background-color: color-mix(
+            in srgb,
+            var(--sex-color) 30%,
+            var(--md-sys-color-surface)
+          );
+          font-family: var(--grampsjs-display-font-family);
+          font-size: var(--grampsjs-font-size-3xl);
+          color: var(--grampsjs-body-font-color);
+          user-select: none;
+        }
+
+        /* on narrow screens the name comes first, without a placeholder
+           above it */
+        @container (max-width: 599px) {
+          .initials {
+            display: none;
+          }
+        }
+
         .profile-picture-actions {
           position: relative;
         }
@@ -126,12 +159,33 @@ export class GrampsjsPerson extends GrampsjsObject {
     this._showRelatedEvents = false
   }
 
+  _renderInitials() {
+    const profile = this.data?.profile ?? {}
+    const initials = [profile.name_given, profile.name_surname]
+      .map(name => (name || '').trim().charAt(0))
+      .join('')
+      .toUpperCase()
+    if (!initials) {
+      return html``
+    }
+    return html`<div
+      class="initials"
+      aria-hidden="true"
+      style="--sex-color: ${sexColor[profile.sex] ?? sexColor.U}"
+    >
+      ${initials}
+    </div>`
+  }
+
   renderPicture() {
     if (this.data?.media_list?.length) {
       return super.renderPicture()
     }
-    if (!this.edit || this.preview) {
+    if (this.preview) {
       return html``
+    }
+    if (!this.edit) {
+      return this._renderInitials()
     }
     return html`
       <div class="profile-picture-actions">

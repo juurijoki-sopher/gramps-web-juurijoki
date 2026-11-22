@@ -80,8 +80,10 @@ export class GrampsjsViewDashboard extends GrampsjsView {
           --md-list-item-container-color: transparent;
         }
 
-        /* a block that failed to load renders nothing; so does its panel */
-        .column > div:has(> [error]) {
+        /* a block that failed to load, or the blog without posts, renders
+           nothing; so does its panel */
+        .column > div:has(> [error]),
+        .column > div:has(> [empty]) {
           display: none;
         }
 
@@ -275,17 +277,6 @@ export class GrampsjsViewDashboard extends GrampsjsView {
                 </div>
               `
             : ''}
-          ${this._treeIsEmpty
-            ? ''
-            : html`
-                <div>
-                  <grampsjs-view-recently-changed
-                    id="recently-changed"
-                    .appState="${this.appState}"
-                  >
-                  </grampsjs-view-recently-changed>
-                </div>
-              `}
         </div>
         <div class="column">
           ${this._treeIsEmpty
@@ -305,6 +296,13 @@ export class GrampsjsViewDashboard extends GrampsjsView {
                     .appState="${this.appState}"
                   >
                   </grampsjs-statistics>
+                </div>
+                <div>
+                  <grampsjs-view-recently-changed
+                    id="recently-changed"
+                    .appState="${this.appState}"
+                  >
+                  </grampsjs-view-recently-changed>
                 </div>
               `}
         </div>

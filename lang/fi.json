@@ -546,5 +546,8 @@
     "Media files are imported separately, under %s.": "Mediatiedostot tuodaan erikseen kohdassa %s.",
     "Save": "Tallenna",
     "Associated people": "Liittyvät henkilöt",
-    "%s of %s": "%s / %s"
+    "%s of %s": "%s / %s",
+    "No results match the filters.": "Suodattimia vastaavia tuloksia ei löytynyt.",
+    "Nothing here yet.": "Täällä ei ole vielä mitään.",
+    "No tasks yet.": "Ei vielä tehtäviä."
 }

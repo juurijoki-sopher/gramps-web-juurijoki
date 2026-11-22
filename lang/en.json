@@ -520,5 +520,8 @@
   "Media files are imported separately, under %s.": "Media files are imported separately, under %s.",
   "Save": "Save",
   "Associated people": "Associated people",
-  "%s of %s": "%s of %s"
+  "%s of %s": "%s of %s",
+  "No results match the filters.": "No results match the filters.",
+  "Nothing here yet.": "Nothing here yet.",
+  "No tasks yet.": "No tasks yet."
 }
