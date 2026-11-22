@@ -44,7 +44,7 @@ if [ "$1" != "run" ]; then
     exec /docker-entrypoint.sh /railway-start.sh run
 fi
 
-celery -A gramps_webapi.celery worker --loglevel=INFO \
+celery --workdir /opt/juurijoki -A juurijoki.celery worker --loglevel=INFO \
     --concurrency="${CELERY_CONCURRENCY:-2}" &
 CELERY_PID=$!
 

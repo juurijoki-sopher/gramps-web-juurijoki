@@ -13,6 +13,7 @@ import '../components/GrampsjsRelogin.js'
 import '../components/GrampsjsTaskProgressIndicator.js'
 import '../components/GrampsjsTreeQuotas.js'
 import '../components/GrampsjsHelpButton.js'
+import '../components/GrampsjsEmailSettings.js'
 
 import {fireEvent, makeHandle} from '../util.js'
 import {dispatchErrorMessage} from '../taskResponse.js'
@@ -585,6 +586,21 @@ export class GrampsjsViewAdminSettings extends GrampsjsView {
           @tag:delete="${this._handleTagDelete}"
         ></grampsjs-tags-manager>
       </grampsjs-collapsible-section>
+
+      ${this.appState.permissions.canEditSettings
+        ? html`
+            <grampsjs-collapsible-section
+              heading="${this._('E-mail (SMTP)')}"
+              description="${this._(
+                'The account that sends invitations and password reset links'
+              )}"
+            >
+              <grampsjs-email-settings
+                .appState="${this.appState}"
+              ></grampsjs-email-settings>
+            </grampsjs-collapsible-section>
+          `
+        : ''}
 
       <grampsjs-collapsible-section
         heading="${this._('Backups')}"

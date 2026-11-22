@@ -527,15 +527,46 @@ export function cleanOldDrafts() {
   }
 }
 
-export async function apiResetPassword(username) {
+// Sets a password with the one-time token of an invitation or reset link.
+// Returns the response's status and the server's message, if any.
+export async function apiSetPasswordWithToken(token, password) {
+  try {
+    const resp = await fetch(`${__APIHOST__}/api/users/-/password/reset/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({new_password: password}),
+    })
+    let message = ''
+    try {
+      const json = await resp.json()
+      message = json?.error?.message || json?.message || json?.msg || ''
+    } catch (error) {
+      // no JSON body
+    }
+    return {status: resp.status, message}
+  } catch (error) {
+    return {status: 0, message: error.message}
+  }
+}
+
+// Asks for a password reset link by e-mail, written in `lang` (fi or en).
+// The Juurijoki endpoint links to the frontend's /set-password page.
+export async function apiResetPassword(username, lang = 'en') {
   try {
     const resp = await fetch(
-      `${__APIHOST__}/api/users/${username}/password/reset/trigger/`,
+      `${__APIHOST__}/api/juurijoki/password-reset/${encodeURIComponent(
+        username
+      )}/`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language': lang,
         },
+        body: JSON.stringify({lang}),
       }
     )
     let resJson
@@ -547,19 +578,16 @@ export async function apiResetPassword(username) {
     if (resp.status === 404) {
       throw new Error('User not found or user has no e-mail address.')
     }
-    if (resp.status === 500) {
-      throw new Error(
-        'The server encountered an error while trying to send the e-mail.'
-      )
-    }
     if (resp.status !== 201 && resp.status !== 202) {
-      throw new Error(
+      const error = new Error(
         resJson?.error?.message || resp.statusText || `Error ${resp.status}`
       )
+      error.status = resp.status
+      throw error
     }
     return {}
   } catch (error) {
-    return {error: error.message}
+    return {error: error.message, status: error.status ?? 0}
   }
 }
 

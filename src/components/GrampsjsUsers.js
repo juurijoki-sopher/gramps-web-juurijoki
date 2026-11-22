@@ -12,7 +12,9 @@ import {
   mdiAccountMultiplePlus,
   mdiAccountPlus,
   mdiDeleteForever,
+  mdiContentCopy,
   mdiDownload,
+  mdiEmailArrowRight,
   mdiFilterOff,
   mdiLinkVariant,
   mdiPencil,
@@ -47,6 +49,21 @@ export class GrampsjsUsers extends GrampsjsTableBase {
         .toolbar {
           display: flex;
           align-items: center;
+        }
+
+        .invite-url {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .invite-url md-filled-text-field {
+          flex: 1;
+        }
+
+        .invite .hint {
+          color: var(--grampsjs-text-secondary-color);
+          font-size: var(--grampsjs-font-size-sm);
         }
 
         .unlinked {
@@ -157,6 +174,22 @@ export class GrampsjsUsers extends GrampsjsTableBase {
               <td>${this._(userRoles[obj.role])}</td>
               <td>${obj.account_source || this._('Password')}</td>
               <td>
+                <md-icon-button
+                  class="edit"
+                  aria-label="${this._('Invitation link')}"
+                  @click="${() => fireEvent(this, 'user:invited', obj.name)}"
+                  id="button-invite-${index}"
+                >
+                  <grampsjs-icon
+                    path="${mdiEmailArrowRight}"
+                    height="20"
+                    width="20"
+                    color="var(--mdc-theme-secondary)"
+                  ></grampsjs-icon>
+                </md-icon-button>
+                <grampsjs-tooltip for="button-invite-${index}">
+                  ${this._('Invitation link')}
+                </grampsjs-tooltip>
                 <md-icon-button
                   class="edit"
                   aria-label="${this._('Edit user')}"
@@ -300,6 +333,89 @@ export class GrampsjsUsers extends GrampsjsTableBase {
           `
         : ''}
     `
+  }
+
+  // the invitation link for a new or existing user, from the API
+  showInvite(username, invite) {
+    this.dialogContent = this._inviteDialog(username, invite)
+  }
+
+  _inviteDialog(username, invite) {
+    const expires = new Date(invite.expires).toLocaleString(
+      this.appState?.i18n?.lang || undefined,
+      {dateStyle: 'medium', timeStyle: 'short'}
+    )
+    let emailNote = this._(
+      'The server cannot send e-mail, so send the link to the user yourself.'
+    )
+    if (invite.email_sent) {
+      emailNote = this._('The link was also sent to the user by e-mail.')
+    } else if (invite.email_error) {
+      emailNote = `${this._(invite.email_error)} ${this._(
+        'Send the link to the user yourself.'
+      )}`
+    }
+    return html`
+      <md-dialog open @cancel="${e => e.preventDefault()}">
+        <span slot="headline"
+          >${this._('Invitation link')} &ndash; ${username}</span
+        >
+        <div slot="content" class="invite">
+          <p>
+            ${this._(
+              'With this link, the user sets their own password. It works once and is valid until %s.',
+              expires
+            )}
+          </p>
+          <p>${this._('Username: ')} <strong>${username}</strong></p>
+          <div class="invite-url">
+            <md-filled-text-field
+              readonly
+              id="invite-url"
+              label="${this._('Invitation link')}"
+              .value="${invite.url}"
+              @focus="${e => e.target.select()}"
+            ></md-filled-text-field>
+            <md-icon-button
+              aria-label="${this._('Copy')}"
+              @click="${() => this._copyInvite(invite.url)}"
+            >
+              <grampsjs-icon
+                path="${mdiContentCopy}"
+                color="var(--mdc-theme-secondary)"
+              ></grampsjs-icon>
+            </md-icon-button>
+          </div>
+          <p class="hint">${emailNote}</p>
+          <p class="hint">
+            ${this._(
+              'Share the link only with this user: whoever opens it can set the password.'
+            )}
+          </p>
+        </div>
+        <div slot="actions">
+          <md-filled-button
+            @click="${() => {
+              this.dialogContent = ''
+            }}"
+          >
+            ${this._('Close')}
+          </md-filled-button>
+        </div>
+      </md-dialog>
+    `
+  }
+
+  async _copyInvite(url) {
+    try {
+      await navigator.clipboard.writeText(url)
+      fireEvent(this, 'grampsjs:notification', {message: this._('Copied')})
+    } catch (e) {
+      // no clipboard access: the field is selected for copying by hand
+      const field = this.renderRoot.querySelector('#invite-url')
+      field?.focus()
+      field?.select()
+    }
   }
 
   _handleLinkClick(username) {

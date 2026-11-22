@@ -2,6 +2,9 @@
 
 from gramps_webapi.wsgi import app
 
-from .userlinks import init_app
+from . import email_settings, invites, password_reset, userlinks
 
-init_app(app)
+userlinks.init_app(app)
+invites.init_app(app)
+email_settings.init_app(app)
+password_reset.init_app(app)
