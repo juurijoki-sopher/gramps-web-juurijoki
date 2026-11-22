@@ -15,11 +15,11 @@ afterEach(() => {
 })
 
 describe('applyColors light canvas', () => {
-  it('uses off-white for the page and white for raised surfaces', () => {
+  it('uses off-white for the page and views, white for dialogs', () => {
     applyColors(DEFAULT_PRIMARY, DEFAULT_SECONDARY, false)
     expect(token('--md-sys-color-background')).toBe(LIGHT_BACKGROUND)
-    expect(token('--md-sys-color-surface')).toBe('#ffffff')
-    expect(token('--md-sys-color-surface-container-low')).toBe('#ffffff')
+    expect(token('--md-sys-color-surface')).toBe(LIGHT_BACKGROUND)
+    expect(token('--md-sys-color-surface-container-low')).toBe(LIGHT_BACKGROUND)
     expect(token('--md-sys-color-surface-container-high')).toBe('#ffffff')
   })
 
