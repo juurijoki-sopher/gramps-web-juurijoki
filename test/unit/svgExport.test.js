@@ -7,7 +7,10 @@ import {layoutAncestors} from '../../src/charts/layout/treeLayout.js'
 import {layoutRelationships} from '../../src/charts/layout/relationshipLayout.js'
 import {layoutFan} from '../../src/charts/layout/fanLayout.js'
 import {exportPalette} from '../../src/charts/palette.js'
-import {chartSvgDocument} from '../../src/charts/svgExport.js'
+import {
+  chartSvgDocument,
+  svgDocumentToPngBlob,
+} from '../../src/charts/svgExport.js'
 
 const family = (handle, father, mother, children) => ({
   handle,
@@ -227,5 +230,47 @@ describe('chartSvgDocument of a fan chart', () => {
       [xMin - 20, yMin - 20, xMax - xMin + 40, yMax - yMin + 40].join(' ')
     )
     expect(svg.querySelector('#legend')).toBeNull()
+  })
+})
+
+describe('svgDocumentToPngBlob', () => {
+  it('draws the SVG onto a PNG blob', async () => {
+    class FakeImage {
+      constructor() {
+        this.width = 0
+        this.height = 0
+        this.naturalWidth = 0
+        this.naturalHeight = 0
+        this._src = ''
+      }
+
+      get src() {
+        return this._src
+      }
+
+      set src(value) {
+        this._src = value
+        this.width = 12
+        this.height = 8
+        this.naturalWidth = 12
+        this.naturalHeight = 8
+        queueMicrotask(() => this.onload?.())
+      }
+    }
+    vi.stubGlobal('Image', FakeImage)
+    const drawImage = vi.fn()
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      drawImage,
+    })
+    vi.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation(cb =>
+      cb(new Blob(['png'], {type: 'image/png'}))
+    )
+    const blob = await svgDocumentToPngBlob(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8"></svg>'
+    )
+    expect(blob.type).toBe('image/png')
+    expect(drawImage).toHaveBeenCalled()
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
   })
 })

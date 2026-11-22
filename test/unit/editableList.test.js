@@ -144,3 +144,39 @@ describe('selection after reordering', () => {
     expect(list._selectedIndex).to.equal(-1)
   })
 })
+
+describe('add and share actions', () => {
+  it('combines add and share into a split button', async () => {
+    const list = new TestEditableList()
+    list.appState = {i18n: {lang: 'en', strings: {}}}
+    list.edit = true
+    list.hasAdd = true
+    list.hasShare = true
+    list.data = [A]
+    document.body.append(list)
+    await list.updateComplete
+    await list.updateComplete
+    expect(
+      list.shadowRoot.querySelector('grampsjs-add-or-link-button')
+    ).not.toBeNull()
+    list.remove()
+  })
+
+  it('keeps a single add icon when there is nothing to share', async () => {
+    const list = new TestEditableList()
+    list.appState = {i18n: {lang: 'en', strings: {}}}
+    list.edit = true
+    list.hasAdd = true
+    list.hasShare = false
+    list.data = [A]
+    document.body.append(list)
+    await list.updateComplete
+    expect(
+      list.shadowRoot.querySelector('grampsjs-add-or-link-button')
+    ).toBeNull()
+    expect(
+      list.shadowRoot.querySelectorAll('md-icon-button').length
+    ).toBeGreaterThan(0)
+    list.remove()
+  })
+})

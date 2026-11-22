@@ -23,6 +23,8 @@ import {
 } from '../SharedStyles.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 import {DragReorderController} from '../dragReorderController.js'
+import './GrampsjsAddOrLinkButton.js'
+import './GrampsjsIcon.js'
 
 export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
   static get styles() {
@@ -168,26 +170,39 @@ export class GrampsjsEditableList extends GrampsjsAppStateMixin(LitElement) {
 
   _renderActionBtns() {
     return html`
-      ${this.hasShare
+      ${this.hasShare && this.hasAdd
         ? html`
-            <md-icon-button class="edit" @click="${this._handleShare}">
-              <grampsjs-icon
-                path="${mdiLinkPlus}"
-                color="var(--mdc-theme-secondary)"
-              ></grampsjs-icon>
-            </md-icon-button>
+            <grampsjs-add-or-link-button
+              variant="icon"
+              addLabel="${this._('Create new')}"
+              linkLabel="${this._('Select existing')}"
+              .appState="${this.appState}"
+              @add-or-link:add="${this._handleAdd}"
+              @add-or-link:link="${this._handleShare}"
+            ></grampsjs-add-or-link-button>
           `
-        : ''}
-      ${this.hasAdd
-        ? html`
-            <md-icon-button class="edit" @click="${this._handleAdd}">
-              <grampsjs-icon
-                path="${mdiPlus}"
-                color="var(--mdc-theme-secondary)"
-              ></grampsjs-icon>
-            </md-icon-button>
-          `
-        : ''}
+        : html`
+            ${this.hasShare
+              ? html`
+                  <md-icon-button class="edit" @click="${this._handleShare}">
+                    <grampsjs-icon
+                      path="${mdiLinkPlus}"
+                      color="var(--mdc-theme-secondary)"
+                    ></grampsjs-icon>
+                  </md-icon-button>
+                `
+              : ''}
+            ${this.hasAdd
+              ? html`
+                  <md-icon-button class="edit" @click="${this._handleAdd}">
+                    <grampsjs-icon
+                      path="${mdiPlus}"
+                      color="var(--mdc-theme-secondary)"
+                    ></grampsjs-icon>
+                  </md-icon-button>
+                `
+              : ''}
+          `}
       ${this.hasEdit
         ? html`
             <md-icon-button
