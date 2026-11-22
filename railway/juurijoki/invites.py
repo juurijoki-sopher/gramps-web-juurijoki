@@ -3,7 +3,8 @@
 Whoever adds a user does not give them a password. The account is created
 with a random password nobody sees, and the user gets a link to set their
 own: POST /api/juurijoki/invites/<user_name>/ returns the link, and sends it
-by e-mail as well when the server has an e-mail account configured.
+by e-mail as well, in Finnish and English, when the server has an e-mail
+account configured.
 
 The link carries the API's own password reset token, valid for 7 days
 instead of the hour of a "forgot password" link. Like that one, it works
@@ -59,16 +60,32 @@ def invite_url(token):
     return f"{base_url}/set-password?token={token}"
 
 
-def _email_body(full_name, user_name, url):
-    greeting = f"Hei {full_name}," if full_name else "Hei,"
+# Both languages in every invitation: the recipient's language is not known
+# when it is sent. The page the link opens follows their browser.
+INVITE_SUBJECT = "Kutsu sukupuuhun / Invitation to the family tree"
+
+
+def invite_email_body(full_name, user_name, url):
+    """The invitation in Finnish, then in English, with the link in each."""
+    fi_greeting = f"Hei {full_name}," if full_name else "Hei,"
+    en_greeting = f"Hello {full_name}," if full_name else "Hello,"
     return (
-        f"{greeting}\n\n"
+        "(In English below)\n\n"
+        f"{fi_greeting}\n\n"
         "sinulle on luotu käyttäjätunnus sukupuuhun.\n\n"
         f"Käyttäjätunnus: {user_name}\n\n"
         "Aseta oma salasanasi tästä linkistä:\n"
         f"{url}\n\n"
         "Linkki on voimassa 7 vuorokautta ja toimii vain kerran. "
-        "Jos se ehtii vanhentua, pyydä uusi linkki ylläpitäjältä.\n"
+        "Jos se ehtii vanhentua, pyydä uusi linkki ylläpitäjältä.\n\n"
+        "----------------------------------------\n\n"
+        f"{en_greeting}\n\n"
+        "a user account has been created for you in the family tree.\n\n"
+        f"User name: {user_name}\n\n"
+        "Set your own password with this link:\n"
+        f"{url}\n\n"
+        "The link is valid for 7 days and works only once. "
+        "If it expires, ask the administrator for a new link.\n"
     )
 
 
@@ -109,8 +126,10 @@ def _create_invite(user_name):
         else:
             try:
                 send_email(
-                    subject="Kutsu sukupuuhun: aseta salasanasi",
-                    body=_email_body(details.get("full_name"), user_name, url),
+                    subject=INVITE_SUBJECT,
+                    body=invite_email_body(
+                        details.get("full_name"), user_name, url
+                    ),
                     to=[email],
                 )
                 email_sent = True
