@@ -56,7 +56,7 @@ def email_configured():
 
 def invite_url(token):
     base_url = (get_config("BASE_URL") or "").rstrip("/")
-    return f"{base_url}/set-password?jwt={token}"
+    return f"{base_url}/set-password?token={token}"
 
 
 def _email_body(full_name, user_name, url):

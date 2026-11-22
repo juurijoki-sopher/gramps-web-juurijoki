@@ -18,7 +18,15 @@ import {
   apiOIDCLogin,
 } from '../api.js'
 import {fireEvent} from '../util.js'
+import {passwordPageLang, pwText} from '../passwordPages.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
+
+// What to tell after a failed reset request, by the response's status
+export function resetErrorText(status) {
+  if (status === 429) return 'Too many attempts. Wait a moment and try again.'
+  if (status === 0) return 'No connection to the server. Try again.'
+  return 'The e-mail could not be sent. Try again later or contact the administrator.'
+}
 
 class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
   static get styles() {
@@ -159,6 +167,11 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
           font-size: 0.85em;
           margin-top: 0.75em;
           margin-bottom: 1.5em;
+        }
+
+        .reset-hint {
+          color: var(--grampsjs-text-secondary-color);
+          font-size: var(--grampsjs-font-size-sm);
         }
 
         p.success {
@@ -358,7 +371,7 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
                     @click="${() => {
                       this.resetpw = true
                     }}"
-                    >${this._('Lost password?')}</span
+                    >${pwText(passwordPageLang(), 'Lost your password?')}</span
                   >
                 </p>
               `}
@@ -399,15 +412,23 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
   }
 
   _renderResetPw() {
+    // Finnish or English, by the browser (see passwordPages.js)
+    const lang = passwordPageLang()
+    const t = text => pwText(lang, text)
     return html`
-      <div id="login-container">
+      <div id="login-container" lang="${lang}">
         <form
           id="login-form"
           @submit="${this._resetPw}"
           @keydown="${this._handleFormKeydown}"
         >
-          <h2>${this._('reset password')}</h2>
+          <h2>${t('Lost your password?')}</h2>
           <div id="inner-form">
+            <p class="reset-hint">
+              ${t(
+                'Enter your username. A link to set a new password will be sent to the e-mail address of the account.'
+              )}
+            </p>
             <div class="text-field-wrapper">
               <input
                 id="username"
@@ -417,10 +438,10 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
                 autocapitalize="off"
                 placeholder=" "
               />
-              <label for="username">${this._('Username')}</label>
+              <label for="username">${t('Username')}</label>
             </div>
             <md-filled-button type="submit" style="width: 100%;">
-              ${this._('reset password')}
+              ${t('Send the link')}
             </md-filled-button>
           </div>
           <p class="success" id="reset-success" style="display:none;">
@@ -429,7 +450,9 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
               color="currentColor"
             ></grampsjs-icon
             ><br />
-            ${this._('A password reset link has been sent by e-mail.')}
+            ${t(
+              'If the user name exists and has an e-mail address, a link to set a new password has been sent to it. The link is valid for an hour.'
+            )}
           </p>
           <p class="reset-link">
             <span
@@ -437,7 +460,7 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
               @click="${() => {
                 this.resetpw = false
               }}"
-              >${this._('Back to login')}</span
+              >${t('Back to login')}</span
             >
           </p>
         </form>
@@ -488,16 +511,17 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
     e?.preventDefault()
     e?.stopPropagation()
 
+    const lang = passwordPageLang()
     const userField = this.shadowRoot.getElementById('username')
     if (userField.value === '') {
-      this._showError('Username must not be empty.')
+      this._showError(pwText(lang, 'Enter your username.'))
       return
     }
-    const res = await apiResetPassword(userField.value)
+    const res = await apiResetPassword(userField.value, lang)
     const innerForm = this.shadowRoot.getElementById('inner-form')
     const divSuccess = this.shadowRoot.getElementById('reset-success')
     if ('error' in res) {
-      this._showError(res.error)
+      this._showError(pwText(lang, resetErrorText(res.status), res.error))
     } else {
       divSuccess.style.display = 'block'
       innerForm.style.display = 'none'

@@ -542,7 +542,7 @@ export async function apiSetPasswordWithToken(token, password) {
     let message = ''
     try {
       const json = await resp.json()
-      message = json?.error?.message || json?.msg || ''
+      message = json?.error?.message || json?.message || json?.msg || ''
     } catch (error) {
       // no JSON body
     }
@@ -552,15 +552,21 @@ export async function apiSetPasswordWithToken(token, password) {
   }
 }
 
-export async function apiResetPassword(username) {
+// Asks for a password reset link by e-mail, written in `lang` (fi or en).
+// The Juurijoki endpoint links to the frontend's /set-password page.
+export async function apiResetPassword(username, lang = 'en') {
   try {
     const resp = await fetch(
-      `${__APIHOST__}/api/users/${username}/password/reset/trigger/`,
+      `${__APIHOST__}/api/juurijoki/password-reset/${encodeURIComponent(
+        username
+      )}/`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language': lang,
         },
+        body: JSON.stringify({lang}),
       }
     )
     let resJson
@@ -572,19 +578,16 @@ export async function apiResetPassword(username) {
     if (resp.status === 404) {
       throw new Error('User not found or user has no e-mail address.')
     }
-    if (resp.status === 500) {
-      throw new Error(
-        'The server encountered an error while trying to send the e-mail.'
-      )
-    }
     if (resp.status !== 201 && resp.status !== 202) {
-      throw new Error(
+      const error = new Error(
         resJson?.error?.message || resp.statusText || `Error ${resp.status}`
       )
+      error.status = resp.status
+      throw error
     }
     return {}
   } catch (error) {
-    return {error: error.message}
+    return {error: error.message, status: error.status ?? 0}
   }
 }
 

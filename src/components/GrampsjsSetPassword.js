@@ -1,5 +1,5 @@
 /*
-The page an invitation link opens (/set-password?jwt=...): a new user sets
+The page an invitation or reset link opens (/set-password?token=...): a new user sets
 their own password. The link carries a one-time password reset token.
 */
 import {html, css, LitElement} from 'lit'
@@ -9,6 +9,7 @@ import '@material/web/textfield/filled-text-field.js'
 
 import {sharedStyles} from '../SharedStyles.js'
 import {apiSetPasswordWithToken} from '../api.js'
+import {passwordPageLang, pwText} from '../passwordPages.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 
 export const MIN_PASSWORD_LENGTH = 8
@@ -22,8 +23,8 @@ export function setPasswordError(status, message = '') {
   if ([401, 403, 422].includes(status)) {
     return 'This link is not valid. Ask for a new link.'
   }
-  if (!status) return 'no connection to the server'
-  return 'server error'
+  if (!status) return 'No connection to the server. Try again.'
+  return 'Something went wrong on the server. Try again later.'
 }
 
 // Why a password cannot be used, or '' if it can
@@ -92,44 +93,66 @@ class GrampsjsSetPassword extends GrampsjsAppStateMixin(LitElement) {
     this._error = ''
     this._done = false
     this._busy = false
+    this._lang = passwordPageLang()
+    this._reset =
+      new URLSearchParams(window.location.search).get('reason') === 'reset'
   }
 
+  // Finnish or English, by the browser (see passwordPages.js)
+  _t(text, ...args) {
+    return pwText(this._lang, text, ...args)
+  }
+
+  get _title() {
+    const reason = new URLSearchParams(window.location.search).get('reason')
+    return this._t(
+      reason === 'reset' || this._reset
+        ? 'Set a new password'
+        : 'Set your password'
+    )
+  }
+
+  // "token", not "jwt": the API checks a "jwt" parameter on every request,
+  // so an expired one would fail the page itself before it could explain
   get _token() {
-    return new URLSearchParams(window.location.search).get('jwt') || ''
+    const params = new URLSearchParams(window.location.search)
+    return params.get('token') || params.get('jwt') || ''
   }
 
   render() {
     if (this._done) {
-      return html`<div id="container">
+      return html`<div id="container" lang="${this._lang}">
         <form>
-          <h2>${this._('Set your password')}</h2>
-          <p>${this._('Your password has been set. You can now log in.')}</p>
-          <md-filled-button href="/login">${this._('login')}</md-filled-button>
+          <h2>${this._title}</h2>
+          <p>${this._t('Your password has been set. You can now log in.')}</p>
+          <md-filled-button href="/login"
+            >${this._t('Log in')}</md-filled-button
+          >
         </form>
       </div>`
     }
     if (!this._token) {
-      return html`<div id="container">
+      return html`<div id="container" lang="${this._lang}">
         <form>
-          <h2>${this._('Set your password')}</h2>
+          <h2>${this._title}</h2>
           <p class="error">
-            ${this._('This link is not valid. Ask for a new link.')}
+            ${this._t('This link is not valid. Ask for a new link.')}
           </p>
         </form>
       </div>`
     }
     return html`
-      <div id="container">
+      <div id="container" lang="${this._lang}">
         <form @submit="${this._submit}" novalidate>
-          <h2>${this._('Set your password')}</h2>
+          <h2>${this._title}</h2>
           <p class="hint">
-            ${this._('Choose a password of at least 8 characters.')}
+            ${this._t('Choose a password of at least 8 characters.')}
           </p>
           <md-filled-text-field
             id="password"
             type="password"
             autocomplete="new-password"
-            label="${this._('New password')}"
+            label="${this._t('New password')}"
             .value="${this._password}"
             @input="${e => {
               this._password = e.target.value
@@ -139,17 +162,17 @@ class GrampsjsSetPassword extends GrampsjsAppStateMixin(LitElement) {
             id="password2"
             type="password"
             autocomplete="new-password"
-            label="${this._('Repeat the password')}"
+            label="${this._t('Repeat the password')}"
             .value="${this._repeated}"
             @input="${e => {
               this._repeated = e.target.value
             }}"
           ></md-filled-text-field>
           ${this._error
-            ? html`<p class="error" role="alert">${this._(this._error)}</p>`
+            ? html`<p class="error" role="alert">${this._t(this._error)}</p>`
             : ''}
           <md-filled-button type="submit" ?disabled="${this._busy}">
-            ${this._('Set password')}
+            ${this._t('Set password')}
           </md-filled-button>
         </form>
       </div>

@@ -43,7 +43,9 @@ describe('setPasswordError', () => {
   })
 
   it('tells a lost connection from a server error', () => {
-    expect(setPasswordError(0)).toBe('no connection to the server')
-    expect(setPasswordError(500)).toBe('server error')
+    expect(setPasswordError(0)).toBe('No connection to the server. Try again.')
+    expect(setPasswordError(500)).toBe(
+      'Something went wrong on the server. Try again later.'
+    )
   })
 })
