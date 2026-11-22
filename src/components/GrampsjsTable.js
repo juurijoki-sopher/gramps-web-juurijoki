@@ -166,7 +166,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           position: sticky;
           top: var(--grampsjs-app-bar-height, 64px);
           z-index: 1;
-          background-color: var(--md-sys-color-background);
+          background-color: var(--md-sys-color-surface);
           /* Collapsed borders don't move with stuck cells */
           box-shadow: inset 0 -1px 0 var(--grampsjs-body-font-color-20);
         }
