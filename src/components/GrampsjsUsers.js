@@ -14,12 +14,14 @@ import {
   mdiDeleteForever,
   mdiDownload,
   mdiFilterOff,
+  mdiLinkVariant,
   mdiPencil,
 } from '@mdi/js'
 
 import {GrampsjsTableBase} from './GrampsjsTableBase.js'
 import {userRoles} from './GrampsjsFormUser.js'
 import {fireEvent} from '../util.js'
+import './GrampsjsFormSelectObjectList.js'
 
 import './GrampsjsTooltip.js'
 import './GrampsjsIcon.js'
@@ -45,6 +47,11 @@ export class GrampsjsUsers extends GrampsjsTableBase {
         .toolbar {
           display: flex;
           align-items: center;
+        }
+
+        .unlinked {
+          color: var(--grampsjs-text-secondary-color);
+          font-style: italic;
         }
 
         md-filled-text-field {
@@ -79,6 +86,13 @@ export class GrampsjsUsers extends GrampsjsTableBase {
     return {
       dialogContent: {type: String},
       ismulti: {type: Boolean},
+      // user name -> handle of the person the account belongs to
+      links: {type: Object},
+      // person handle -> {name, grampsId}, or null if no longer in the tree
+      people: {type: Object},
+      // administrators may add users without a person and change links
+      isAdmin: {type: Boolean},
+      _linkHandle: {type: String},
       _downloadUrl: {type: String},
       _userData: {type: Array},
       _filterText: {type: String},
@@ -90,6 +104,10 @@ export class GrampsjsUsers extends GrampsjsTableBase {
     super()
     this.dialogContent = ''
     this.ismulti = false
+    this.links = {}
+    this.people = {}
+    this.isAdmin = false
+    this._linkHandle = ''
     this._downloadUrl = ''
     this._userData = []
     this._filterText = ''
@@ -123,6 +141,7 @@ export class GrampsjsUsers extends GrampsjsTableBase {
             <th>${this._('Username: ').replace(':', '')}</th>
             <th>${this._('Full Name')}</th>
             <th>${this._('E-mail')}</th>
+            <th>${this._('Person')}</th>
             <th>${this._('Role')}</th>
             <th>${this._('Account Source')}</th>
             <th></th>
@@ -134,6 +153,7 @@ export class GrampsjsUsers extends GrampsjsTableBase {
               <td>${obj.name}</td>
               <td>${obj.full_name}</td>
               <td>${obj.email}</td>
+              <td>${this._renderPerson(obj.name, index)}</td>
               <td>${this._(userRoles[obj.role])}</td>
               <td>${obj.account_source || this._('Password')}</td>
               <td>
@@ -238,6 +258,103 @@ export class GrampsjsUsers extends GrampsjsTableBase {
     this._filterRole = ALL_ROLES
   }
 
+  _renderPerson(username, index) {
+    const handle = this.links[username]
+    let label = html`<span class="unlinked">${this._('Not linked')}</span>`
+    if (handle) {
+      const person = this.people[handle]
+      if (person === null) {
+        label = html`<span class="unlinked"
+          >${this._('Person deleted from the tree')}</span
+        >`
+      } else if (person) {
+        label = html`<a href="${person.href}">${person.name}</a>`
+      } else {
+        label = html`<span>…</span>`
+      }
+    }
+    // owners link accounts that have no person; changing a link is for
+    // administrators
+    const canLink = !handle || this.isAdmin
+    const action = handle ? 'Change the linked person' : 'Link to a person'
+    return html`
+      ${label}
+      ${canLink
+        ? html`
+            <md-icon-button
+              class="edit"
+              aria-label="${this._(action)}"
+              id="button-link-${index}"
+              @click="${() => this._handleLinkClick(username)}"
+            >
+              <grampsjs-icon
+                path="${mdiLinkVariant}"
+                height="20"
+                width="20"
+                color="var(--mdc-theme-secondary)"
+              ></grampsjs-icon>
+            </md-icon-button>
+            <grampsjs-tooltip for="button-link-${index}">
+              ${this._(action)}
+            </grampsjs-tooltip>
+          `
+        : ''}
+    `
+  }
+
+  _handleLinkClick(username) {
+    this._linkHandle = ''
+    this.dialogContent = this._linkDialog(username)
+  }
+
+  _linkDialog(username) {
+    return html`
+      <md-dialog open @cancel="${e => e.preventDefault()}">
+        <span slot="headline"
+          >${this._('Link to a person')} &ndash; ${username}</span
+        >
+        <div slot="content">
+          <grampsjs-form-select-object-list
+            fixedMenuPosition
+            style="min-height: 300px;"
+            objectType="person"
+            .appState="${this.appState}"
+            id="link-person"
+            label="${this._('Person in the tree')}"
+            @formdata:changed="${this._handleLinkPersonChanged}"
+          ></grampsjs-form-select-object-list>
+        </div>
+        <div slot="actions">
+          <md-text-button
+            @click="${() => {
+              this.dialogContent = ''
+            }}"
+          >
+            ${this._('Cancel')}
+          </md-text-button>
+          <md-filled-button @click="${() => this._handleLinkSave(username)}">
+            ${this._('_Save')}
+          </md-filled-button>
+        </div>
+      </md-dialog>
+    `
+  }
+
+  _handleLinkPersonChanged(e) {
+    e.stopPropagation()
+    if (e.composedPath()[0].id !== 'link-person-list') return
+    this._linkHandle = e.detail.data[0] || ''
+  }
+
+  _handleLinkSave(username) {
+    if (!this._linkHandle) return
+    fireEvent(this, 'user:linked', {
+      name: username,
+      person_handle: this._linkHandle,
+    })
+    this.dialogContent = ''
+  }
+
   _renderButtons() {
     return html`
       <p class="toolbar">
@@ -256,20 +373,24 @@ export class GrampsjsUsers extends GrampsjsTableBase {
           ${this._('Add a new user')}
         </grampsjs-tooltip>
 
-        <md-icon-button
-          class="edit"
-          aria-label="${this._('Import user accounts')}"
-          id="button-import"
-          @click="${this._handleImportClick}"
-        >
-          <grampsjs-icon
-            path="${mdiAccountMultiplePlus}"
-            color="var(--mdc-theme-secondary)"
-          ></grampsjs-icon>
-        </md-icon-button>
-        <grampsjs-tooltip for="button-import">
-          ${this._('Import user accounts')}
-        </grampsjs-tooltip>
+        ${this.isAdmin
+          ? html`
+              <md-icon-button
+                class="edit"
+                aria-label="${this._('Import user accounts')}"
+                id="button-import"
+                @click="${this._handleImportClick}"
+              >
+                <grampsjs-icon
+                  path="${mdiAccountMultiplePlus}"
+                  color="var(--mdc-theme-secondary)"
+                ></grampsjs-icon>
+              </md-icon-button>
+              <grampsjs-tooltip for="button-import">
+                ${this._('Import user accounts')}
+              </grampsjs-tooltip>
+            `
+          : ''}
 
         <md-icon-button
           class="edit"
@@ -467,6 +588,7 @@ export class GrampsjsUsers extends GrampsjsTableBase {
         <div slot="content">
           <grampsjs-form-user
             newUser
+            .requirePerson="${!this.isAdmin}"
             .appState="${this.appState}"
             ?ismulti="${this.ismulti}"
           ></grampsjs-form-user>
@@ -490,6 +612,14 @@ export class GrampsjsUsers extends GrampsjsTableBase {
   _handleSave() {
     const form = this.shadowRoot.querySelector('grampsjs-form-user')
     if (form !== null) {
+      if (!form.hasRequiredPerson) {
+        fireEvent(this, 'grampsjs:error', {
+          message: this._(
+            'A user must be a person in the tree. Select the person first.'
+          ),
+        })
+        return
+      }
       const existingUser = this.data
         .map(user => user.name)
         .includes(form.data.name)

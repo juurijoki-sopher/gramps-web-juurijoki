@@ -12,13 +12,35 @@ const fi = {
   'filtering failed': 'suodatus epäonnistui',
   'loading failed': 'haku epäonnistui',
   'saving failed': 'tallennus epäonnistui',
+  'updating failed': 'päivitys epäonnistui',
   'not found': 'ei löytynyt',
   'server error': 'palvelinvirhe',
   'no connection to the server': 'ei yhteyttä palvelimeen',
+  Users: 'Käyttäjät',
+  'conflict with another change': 'ristiriita toisen muutoksen kanssa',
+  'The person is already linked to another user.':
+    'Henkilö on jo liitetty toiseen käyttäjään.',
 }
 const _ = s => fi[s] ?? s
 
 describe('describeApiError', () => {
+  it("translates the server's own message when it is a known string", () => {
+    const detail = {
+      method: 'PUT',
+      endpoint: '/api/juurijoki/user-links/anna/',
+      status: 409,
+    }
+    expect(
+      describeApiError(
+        'The person is already linked to another user.',
+        detail,
+        _
+      )
+    ).toBe(
+      'Käyttäjät: päivitys epäonnistui – ristiriita toisen muutoksen kanssa: Henkilö on jo liitetty toiseen käyttäjään. (409)'
+    )
+  })
+
   it('names a filtered people request that the server did not find', () => {
     const detail = {
       method: 'GET',

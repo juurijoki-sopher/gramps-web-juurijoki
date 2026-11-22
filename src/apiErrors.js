@@ -32,6 +32,8 @@ const RESOURCE_LABELS = {
   chat: 'Assistant',
   dna: 'DNA',
   trees: 'Tree Information',
+  // this site's own additions, such as the links of users to people
+  juurijoki: 'Users',
 }
 
 // What the request did, by its method; a GET with a filter filters
@@ -134,7 +136,7 @@ export function describeApiError(message, errorDetail, _) {
   // the server's own message, unless it only repeats the reason
   const extra =
     message && !STANDARD_MESSAGES.has(String(message).toLowerCase())
-      ? message
+      ? _(message)
       : ''
   const why = [reason, extra].filter(Boolean).join(': ')
   const code = status ? ` (${status})` : ''

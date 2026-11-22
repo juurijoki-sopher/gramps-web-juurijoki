@@ -569,5 +569,18 @@
   "Download PNG": "Download PNG",
   "Copy Gramps ID": "Copy Gramps ID",
   "Copied": "Copied",
-  "Share": "Share"
+  "Share": "Share",
+  "Person in the tree": "Person in the tree",
+  "Not linked": "Not linked",
+  "Person deleted from the tree": "Person deleted from the tree",
+  "Link to a person": "Link to a person",
+  "Change the linked person": "Change the linked person",
+  "A user must be a person in the tree. Select the person first.": "A user must be a person in the tree. Select the person first.",
+  "As an administrator, you can also add a user without a person, such as a test or technical account.": "As an administrator, you can also add a user without a person, such as a test or technical account.",
+  "A user must be linked to a person in the tree.": "A user must be linked to a person in the tree.",
+  "The person was not found in the tree.": "The person was not found in the tree.",
+  "The person is already linked to another user.": "The person is already linked to another user.",
+  "Only administrators can import user accounts.": "Only administrators can import user accounts.",
+  "Link the user to a person in the tree before giving a role.": "Link the user to a person in the tree before giving a role.",
+  "Only administrators can change or remove a link.": "Only administrators can change or remove a link."
 }
