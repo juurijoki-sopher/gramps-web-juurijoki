@@ -308,6 +308,7 @@ export function getInitialAppState() {
       canUseChat: false,
       canUpgradeTree: false,
       canEditTree: false,
+      canEditSettings: false,
       canManageBackups: false,
       canViewOtherTree: false,
     },
@@ -453,6 +454,8 @@ export function appStateUpdatePermissions(appState) {
     canUseChat: rawPermissions.includes('UseChat'),
     canUpgradeTree: rawPermissions.includes('UpgradeSchema'),
     canEditTree: rawPermissions.includes('EditTree'),
+    // server settings such as the e-mail account: administrators only
+    canEditSettings: rawPermissions.includes('EditSettings'),
     canManageBackups: rawPermissions.includes('ManageBackups'),
     // Granted to server Administrators only, not Owners - used to gate
     // server-wide actions like creating a new tree.

@@ -606,6 +606,25 @@
     "Share the link only with this user: whoever opens it can set the password.": "Jaa linkki vain tälle käyttäjälle: kuka tahansa linkin avaaja voi asettaa salasanan.",
     "The user has no e-mail address.": "Käyttäjällä ei ole sähköpostiosoitetta.",
     "The e-mail could not be sent.": "Sähköpostia ei voitu lähettää.",
-    "Not allowed to set the password of a user with an equal or higher role": "Et voi asettaa salasanaa käyttäjälle, jonka rooli on sama tai korkeampi kuin sinun."
+    "Not allowed to set the password of a user with an equal or higher role": "Et voi asettaa salasanaa käyttäjälle, jonka rooli on sama tai korkeampi kuin sinun.",
+    "E-mail (SMTP)": "Sähköposti (SMTP)",
+    "The account that sends invitations and password reset links": "Tili, josta kutsut ja salasanan palautuslinkit lähetetään",
+    "Invitation links and password reset messages are sent from this account. Ask your e-mail provider for the outgoing mail (SMTP) server.": "Kutsulinkit ja salasanan palautusviestit lähetetään tältä tililtä. Lähtevän postin (SMTP) palvelimen tiedot saat sähköpostipalvelusi ohjeista.",
+    "SMTP server, e.g. smtp.example.com": "SMTP-palvelin, esim. smtp.example.com",
+    "Port": "Portti",
+    "Password (set; leave empty to keep it)": "Salasana (asetettu; jätä tyhjäksi, niin se säilyy)",
+    "Sender address": "Lähettäjän osoite",
+    "Encryption on this port: %s": "Salaus tässä portissa: %s",
+    "Usually port 587 (STARTTLS) or 465 (SSL/TLS).": "Yleensä portti 587 (STARTTLS) tai 465 (SSL/TLS).",
+    "no encryption": "ei salausta",
+    "Remove the stored password": "Poista tallennettu salasana",
+    "Send a test message": "Lähetä testiviesti",
+    "E-mail settings saved": "Sähköpostiasetukset tallennettu",
+    "Test message sent to %s": "Testiviesti lähetetty osoitteeseen %s",
+    "The port must be a number from 1 to 65535.": "Portin on oltava luku väliltä 1–65535.",
+    "The sender address is not an e-mail address.": "Lähettäjän osoite ei ole sähköpostiosoite.",
+    "Give the port and the sender address with the server.": "Anna palvelimen lisäksi portti ja lähettäjän osoite.",
+    "No e-mail server has been set.": "Sähköpostipalvelinta ei ole asetettu.",
+    "Your account has no e-mail address.": "Tililläsi ei ole sähköpostiosoitetta."
 }
 

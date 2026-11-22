@@ -23,6 +23,7 @@ from gramps_webapi.api.auth import has_permissions
 from gramps_webapi.api.resources.user import abort_unless_lower_role
 from gramps_webapi.api.util import (
     abort_with_message,
+    get_config,
     get_tree_from_jwt,
     send_email,
 )
@@ -43,15 +44,18 @@ MSG_NO_EMAIL = "The user has no e-mail address."
 
 
 def email_configured():
-    """Whether the server has an e-mail account to send from."""
-    config = current_app.config
-    return bool(config.get("DEFAULT_FROM_EMAIL")) and config.get(
+    """Whether the server has an e-mail account to send from.
+
+    The settings come from the user database, as set in the frontend's
+    administration settings, or else from the environment.
+    """
+    return bool(get_config("DEFAULT_FROM_EMAIL")) and get_config(
         "EMAIL_HOST"
     ) not in (None, "", "localhost")
 
 
 def invite_url(token):
-    base_url = current_app.config.get("BASE_URL", "").rstrip("/")
+    base_url = (get_config("BASE_URL") or "").rstrip("/")
     return f"{base_url}/set-password?jwt={token}"
 
 
