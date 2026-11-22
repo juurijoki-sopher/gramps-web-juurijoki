@@ -42,6 +42,7 @@ import {
 } from '../wikidata.ts'
 import {WikidataBuildingsController} from '../wikidataBuildingsController.ts'
 import {countEventTypes, filterPlaces, yearRange} from '../mapFilters.js'
+import {recoverPlaceCoordinates} from '../placeCoordinates.js'
 import {PlaceVectorsController} from '../placeVectorsController.ts'
 
 const EMPTY_ARRAY = []
@@ -75,6 +76,14 @@ export class GrampsjsViewMap extends GrampsjsStaleDataMixin(GrampsjsView) {
           white-space: nowrap;
           pointer-events: none;
         }
+
+        .places-hint {
+          top: 76px;
+          bottom: auto;
+          max-width: min(440px, calc(100% - 32px));
+          white-space: normal;
+          text-align: center;
+        }
       `,
     ]
   }
@@ -101,6 +110,7 @@ export class GrampsjsViewMap extends GrampsjsStaleDataMixin(GrampsjsView) {
       _hiddenOverlaysHandles: {type: Array},
       _overlayOpacity: {type: Object},
       _zoom: {type: Number},
+      _placesLoaded: {type: Boolean},
     }
   }
 
@@ -148,6 +158,7 @@ export class GrampsjsViewMap extends GrampsjsStaleDataMixin(GrampsjsView) {
     this._pendingPlace = null
     this._pendingPerson = null
     this._zoom = getMapViewport()?.zoom ?? DEFAULT_ZOOM
+    this._placesLoaded = false
     this._wikidata = new WikidataBuildingsController(this)
     // KML, GPX and GeoJSON files of the selected place.
     this._placeVectors = new PlaceVectorsController(this, {
@@ -334,6 +345,13 @@ export class GrampsjsViewMap extends GrampsjsStaleDataMixin(GrampsjsView) {
       ${this._wikidataVisible && this._zoom < WIKIDATA_MIN_ZOOM
         ? html`<div class="wikidata-hint">
             ${this._('Zoom in to see Wikidata buildings')}
+          </div>`
+        : ''}
+      ${this._noCoordinates
+        ? html`<div class="wikidata-hint places-hint">
+            ${this._(
+              'No places with coordinates. Add a latitude and longitude to a place to see it here.'
+            )}
           </div>`
         : ''}
       <grampsjs-map-searchbox
@@ -985,17 +1003,33 @@ export class GrampsjsViewMap extends GrampsjsStaleDataMixin(GrampsjsView) {
     this.loading = false
   }
 
+  // Nothing stored can be drawn: the coordinates endpoint parsed no place, and
+  // neither did the stored text or an enclosing place.
+  get _noCoordinates() {
+    return (
+      this._placesLoaded &&
+      !this.error &&
+      !this._personSelection &&
+      !this._dataPlaces.some(place => this._hasCoords(place))
+    )
+  }
+
   // Places with the shape {handle, profile: {name, lat, long}}
   async _getPlaces() {
     if (apiVersionAtLeast(this.appState.dbInfo, 3, 23)) {
       const data = await this.appState.apiGet('/api/places/coordinates/')
       if (!('data' in data)) return data
-      return {
-        data: data.data.map(({handle, name, lat, long}) => ({
-          handle,
-          profile: {name, lat, long},
-        })),
+      const places = data.data.map(({handle, name, lat, long}) => ({
+        handle,
+        profile: {name, lat, long},
+      }))
+      if (places.some(place => this._hasCoords(place)) || places.length === 0) {
+        return {data: places}
       }
+      // Every coordinate was null. The stored text may still be usable, for
+      // example a decimal comma, and a place can borrow its enclosing place.
+      const recovered = await this._recoverPlaceCoordinates()
+      return recovered ?? {data: places}
     }
     return this.appState.apiGet(
       `/api/places/?locale=${
@@ -1004,9 +1038,20 @@ export class GrampsjsViewMap extends GrampsjsStaleDataMixin(GrampsjsView) {
     )
   }
 
+  async _recoverPlaceCoordinates() {
+    const locale = this.appState.i18n.lang || 'en'
+    const data = await this.appState.apiGet(
+      `/api/places/?locale=${locale}&profile=self&place_hierarchy=0&keys=handle,lat,long,placeref_list,profile`
+    )
+    if (!('data' in data) || !Array.isArray(data.data)) return null
+    const places = recoverPlaceCoordinates(data.data)
+    return places.some(place => this._hasCoords(place)) ? {data: places} : null
+  }
+
   async _fetchPlaces() {
     const data = await this._getPlaces()
     this.loading = false
+    this._placesLoaded = true
     if ('data' in data) {
       this.error = false
       this._dataPlaces = data.data

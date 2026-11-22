@@ -177,6 +177,7 @@
   "Merge": "Merge",
   "Delete %s objects?": "Delete %s objects?",
   "No coordinates": "No coordinates",
+  "No places with coordinates. Add a latitude and longitude to a place to see it here.": "No places with coordinates. Add a latitude and longitude to a place to see it here.",
   "No objects selected.": "No objects selected.",
   "Object %s deleted.": "Object %s deleted.",
   "Registration link": "Registration link",

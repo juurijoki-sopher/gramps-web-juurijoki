@@ -609,6 +609,51 @@ describe('map view: loading places', () => {
     expect(map.jumpTo).not.toHaveBeenCalled()
   })
 
+  it('reads stored coordinates the coordinates endpoint could not parse', async () => {
+    const {view} = makeView()
+    view.appState.dbInfo = {gramps_webapi: {version: '3.26.0'}}
+    view.appState.apiGet = vi.fn(async endpoint => {
+      if (endpoint.startsWith('/api/places/coordinates')) {
+        return {data: [{handle: 'P1', name: 'Tampere', lat: null, long: null}]}
+      }
+      if (endpoint.startsWith('/api/places/')) {
+        return {
+          data: [
+            {
+              handle: 'P1',
+              lat: '61,4978',
+              long: '23,7610',
+              profile: {name: 'Tampere', lat: null, long: null},
+              placeref_list: [],
+            },
+          ],
+        }
+      }
+      return {data: []}
+    })
+    await view._fetchPlaces()
+    expect(view._placesForMap).to.deep.equal([
+      {handle: 'P1', name: 'Tampere', lat: 61.4978, long: 23.761},
+    ])
+    expect(view._placesLoaded).to.equal(true)
+    expect(view._noCoordinates).to.equal(false)
+  })
+
+  it('says when no place has coordinates', async () => {
+    const {view} = makeView()
+    view._dataPlaces = []
+    view.appState.dbInfo = {gramps_webapi: {version: '3.26.0'}}
+    view.appState.apiGet = vi.fn(async endpoint => {
+      if (endpoint.startsWith('/api/places/coordinates')) {
+        return {data: [{handle: 'P1', name: 'Tampere', lat: null, long: null}]}
+      }
+      return {data: []}
+    })
+    await view._fetchPlaces()
+    expect(view._noCoordinates).to.equal(true)
+    expect(view.appState.apiGet).toHaveBeenCalledTimes(2)
+  })
+
   it('fits the map to a loaded person when places arrive', async () => {
     const {view, map} = makeView()
     await selectLoadedPerson(view)
