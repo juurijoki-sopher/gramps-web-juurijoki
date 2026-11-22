@@ -25,9 +25,18 @@ class GrampsjsSnackbar extends GrampsjsAppStateMixin(LitElement) {
       buttonColorStyles,
       iconButtonColorStyles,
       css`
+        /* The floating action buttons (md-fab) sit 32px from the bottom
+           right corner, above the bottom bar, and are 56px high. The
+           snackbar keeps clear of them: on phones it rises above them, as
+           Material does; on wider screens it stays at the bottom but ends
+           before them. */
         .surface {
           position: fixed;
-          inset: auto 16px calc(16px + var(--grampsjs-bottom-nav-height, 0px))
+          inset: auto 16px
+            calc(
+              var(--grampsjs-fab-offset, 32px) + var(--grampsjs-fab-size, 56px) +
+                8px + var(--grampsjs-bottom-nav-height, 0px)
+            )
             16px;
           margin: 0 auto;
           width: fit-content;
@@ -82,7 +91,21 @@ class GrampsjsSnackbar extends GrampsjsAppStateMixin(LitElement) {
 
         @media (min-width: 600px) {
           .surface {
-            inset: auto 24px 24px 24px;
+            /* above the bottom bar, which tablets have too */
+            inset: auto 24px calc(24px + var(--grampsjs-bottom-nav-height, 0px))
+              24px;
+            /* centred, and as far from the right edge as the button's far
+               side plus a gap, so that both ends clear it */
+            max-width: min(
+              600px,
+              calc(
+                100vw - 2 *
+                  (
+                    var(--grampsjs-fab-offset, 32px) +
+                      var(--grampsjs-fab-size, 56px) + 16px
+                  )
+              )
+            );
           }
         }
 
