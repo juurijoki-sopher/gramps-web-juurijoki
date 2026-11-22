@@ -333,6 +333,7 @@
     "Merge": "Yhdistä",
     "Delete %s objects?": "Poistetaanko %s objektia?",
     "No coordinates": "Ei koordinaatteja",
+    "No places with coordinates. Add a latitude and longitude to a place to see it here.": "Yhdelläkään paikalla ei ole koordinaatteja. Lisää paikalle leveys- ja pituusaste, niin se näkyy tässä.",
     "No objects selected.": "Ei valittuja objekteja.",
     "Running tasks": "Käynnissä olevat tehtävät",
     "Process transactions": "Käsittele muutokset",
@@ -563,5 +564,14 @@
     "invalid data": "virheelliset tiedot",
     "too many requests": "liian monta pyyntöä",
     "server error": "palvelinvirhe",
-    "no connection to the server": "ei yhteyttä palvelimeen"
+    "no connection to the server": "ei yhteyttä palvelimeen",
+    "More actions": "Muut toiminnot",
+    "Create new": "Luo uusi",
+    "Select existing": "Valitse olemassa oleva",
+    "Download SVG": "Lataa SVG",
+    "Download PNG": "Lataa PNG",
+    "Copy Gramps ID": "Kopioi Gramps-tunnus",
+    "Copied": "Kopioitu",
+    "Share": "Jaa"
 }
+

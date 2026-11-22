@@ -12,6 +12,9 @@ import {
 // petrol blue as the main colour, copper as its warm complementary accent
 export const DEFAULT_PRIMARY = '#0E6170'
 export const DEFAULT_SECONDARY = '#A9502C'
+// Light-mode page canvas. Views, the app bar and other page surfaces use
+// this too, so the layout is one colour.
+export const LIGHT_BACKGROUND = '#F3F3F3'
 
 export function getSystemTheme() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -79,14 +82,20 @@ export function applyColors(
   )
 
   // M3 achromatic tones 90-98 are darker than expected for a web app.
-  // Override light-mode surfaces to lighter neutrals.
+  // Light-mode page, views and app bar share the off-white canvas. Dialogs
+  // stay white so they still lift off it.
   if (!isDark) {
-    root.style.setProperty('--md-sys-color-background', '#ffffff')
-    root.style.setProperty('--md-sys-color-surface', '#ffffff')
-    // lowest/low/container → menus, cards, sheets: white
-    root.style.setProperty('--md-sys-color-surface-container-lowest', '#ffffff')
-    root.style.setProperty('--md-sys-color-surface-container-low', '#ffffff')
-    root.style.setProperty('--md-sys-color-surface-container', '#ffffff')
+    root.style.setProperty('--md-sys-color-background', LIGHT_BACKGROUND)
+    root.style.setProperty('--md-sys-color-surface', LIGHT_BACKGROUND)
+    root.style.setProperty(
+      '--md-sys-color-surface-container-lowest',
+      LIGHT_BACKGROUND
+    )
+    root.style.setProperty(
+      '--md-sys-color-surface-container-low',
+      LIGHT_BACKGROUND
+    )
+    root.style.setProperty('--md-sys-color-surface-container', LIGHT_BACKGROUND)
     // high → dialogs, raised surfaces: white (md-dialog uses this token)
     root.style.setProperty('--md-sys-color-surface-container-high', '#ffffff')
     // highest → filled text-field/select backgrounds: light gray

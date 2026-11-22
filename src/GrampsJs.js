@@ -1,6 +1,6 @@
-import '@material/web/progress/linear-progress.js'
 import './dialogBackdrop.js'
 import '@material/web/button/filled-button.js'
+import './filledButtonLighting.js'
 import {mdiLogout, mdiRefresh} from '@mdi/js'
 import {LitElement, css, html} from 'lit'
 import {installMediaQueryWatcher} from 'pwa-helpers/media-query.js'
@@ -70,6 +70,7 @@ import './components/GrampsjsUpdateAvailable.js'
 import './components/GrampsjsUpgradeDb.js'
 import './components/GrampsjsObjectLink.js'
 import './components/GrampsjsObjectPreview.js'
+import './components/GrampsjsThinkingBar.js'
 import '@material/web/dialog/dialog.js'
 import {sharedStyles} from './SharedStyles.js'
 import {applyScheme, DEFAULT_PRIMARY, DEFAULT_SECONDARY} from './theme.js'
@@ -256,12 +257,6 @@ export class GrampsJs extends LitElement {
           .pull-indicator.refreshing grampsjs-icon {
             animation: none;
           }
-        }
-
-        md-linear-progress {
-          --md-linear-progress-active-indicator-color: var(
-            --grampsjs-color-page-loading-progress
-          );
         }
 
         .center-xy {
@@ -491,7 +486,9 @@ export class GrampsJs extends LitElement {
   _renderInitial() {
     return html`<div class="center-xy">
       <div>
-        <md-linear-progress indeterminate></md-linear-progress>
+        <grampsjs-thinking-bar
+          label="${this._('Loading...')}"
+        ></grampsjs-thinking-bar>
       </div>
     </div> `
   }

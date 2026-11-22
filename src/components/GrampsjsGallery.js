@@ -4,11 +4,9 @@ import {
   mdiArrowLeft,
   mdiArrowRight,
   mdiDelete,
-  mdiLinkPlus,
   mdiLock,
   mdiLockOpenVariantOutline,
   mdiLockOutline,
-  mdiPlus,
 } from '@mdi/js'
 
 import {reorderableStyles, sharedStyles} from '../SharedStyles.js'
@@ -17,6 +15,7 @@ import './GrampsjsIcon.js'
 import '../views/GrampsjsViewMediaLightbox.js'
 import './GrampsjsFormMediaRef.js'
 import './GrampsjsFormNewMedia.js'
+import './GrampsjsAddOrLinkButton.js'
 import '@material/web/iconbutton/icon-button.js'
 import {fireEvent} from '../util.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
@@ -168,24 +167,14 @@ export class GrampsjsGallery extends GrampsjsAppStateMixin(LitElement) {
       ${this.edit
         ? html`
             <div class="edit-actions">
-              <md-icon-button
-                aria-label="${this._('Select an existing media object')}"
-                @click="${this.openMediaRef}"
-              >
-                <grampsjs-icon
-                  path="${mdiLinkPlus}"
-                  color="var(--mdc-theme-secondary)"
-                ></grampsjs-icon>
-              </md-icon-button>
-              <md-icon-button
-                aria-label="${this._('Add a new media object')}"
-                @click="${this.openNewMedia}"
-              >
-                <grampsjs-icon
-                  path="${mdiPlus}"
-                  color="var(--mdc-theme-secondary)"
-                ></grampsjs-icon>
-              </md-icon-button>
+              <grampsjs-add-or-link-button
+                variant="icon"
+                addLabel="${this._('Add a new media object')}"
+                linkLabel="${this._('Select an existing media object')}"
+                .appState="${this.appState}"
+                @add-or-link:add="${this.openNewMedia}"
+                @add-or-link:link="${this.openMediaRef}"
+              ></grampsjs-add-or-link-button>
             </div>
           `
         : ''}

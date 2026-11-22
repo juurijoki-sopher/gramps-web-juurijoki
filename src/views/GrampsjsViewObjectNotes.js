@@ -1,6 +1,6 @@
 import {html, css} from 'lit'
 
-import {mdiLinkOff, mdiLinkPlus, mdiPlus} from '@mdi/js'
+import {mdiLinkOff} from '@mdi/js'
 
 import '@material/web/button/text-button'
 import '@material/web/iconbutton/icon-button.js'
@@ -9,6 +9,7 @@ import {GrampsjsViewObjectsDetail} from './GrampsjsViewObjectsDetail.js'
 import '../components/GrampsjsNoteContent.js'
 import '../components/GrampsjsFormNoteRef.js'
 import '../components/GrampsjsFormNewNote.js'
+import '../components/GrampsjsAddOrLinkButton.js'
 import '../components/GrampsjsIcon.js'
 import '../components/GrampsjsTooltip.js'
 import {fireEvent, makeHandle} from '../util.js'
@@ -92,18 +93,14 @@ export class GrampsjsViewObjectNotes extends GrampsjsViewObjectsDetail {
   renderEdit() {
     return html`
       <div>
-        <md-icon-button class="edit" @click="${this._handleShareClick}">
-          <grampsjs-icon
-            path="${mdiLinkPlus}"
-            color="var(--mdc-theme-secondary)"
-          ></grampsjs-icon>
-        </md-icon-button>
-        <md-icon-button class="edit" @click="${this._handleAddClick}">
-          <grampsjs-icon
-            path="${mdiPlus}"
-            color="var(--mdc-theme-secondary)"
-          ></grampsjs-icon>
-        </md-icon-button>
+        <grampsjs-add-or-link-button
+          variant="icon"
+          addLabel="${this._('Create and add a new note')}"
+          linkLabel="${this._('Select an existing note')}"
+          .appState="${this.appState}"
+          @add-or-link:add="${this._handleAddClick}"
+          @add-or-link:link="${this._handleShareClick}"
+        ></grampsjs-add-or-link-button>
         ${this.dialogContent}
       </div>
     `

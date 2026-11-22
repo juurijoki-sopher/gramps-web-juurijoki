@@ -101,9 +101,10 @@ export async function chartSvgDocument(
 }
 
 // Saves `content` as a file of MIME `type` named `filename` in the browser's
-// downloads
+// downloads. `content` may be a string or a Blob.
 export function downloadFile(content, filename, type) {
-  const url = URL.createObjectURL(new Blob([content], {type}))
+  const blob = content instanceof Blob ? content : new Blob([content], {type})
+  const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')
   anchor.href = url
   anchor.download = filename
@@ -111,6 +112,50 @@ export function downloadFile(content, filename, type) {
   anchor.click()
   anchor.remove()
   URL.revokeObjectURL(url)
+}
+
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.onload = () => resolve(image)
+    image.onerror = () => reject(new Error('Could not render SVG'))
+    image.src = url
+  })
+}
+
+function canvasToBlob(canvas, type) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => {
+      if (blob) {
+        resolve(blob)
+      } else {
+        reject(new Error('PNG export failed'))
+      }
+    }, type)
+  })
+}
+
+// Draws the standalone SVG document `svg` onto a canvas and returns a PNG
+// blob. The SVG must have width and height, as chartSvgDocument writes.
+export async function svgDocumentToPngBlob(svg) {
+  const url = URL.createObjectURL(
+    new Blob([svg], {type: 'image/svg+xml;charset=utf-8'})
+  )
+  try {
+    const image = await loadImage(url)
+    const width = image.naturalWidth || image.width
+    const height = image.naturalHeight || image.height
+    if (!width || !height) {
+      throw new Error('Could not determine PNG size')
+    }
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    canvas.getContext('2d').drawImage(image, 0, 0)
+    return canvasToBlob(canvas, 'image/png')
+  } finally {
+    URL.revokeObjectURL(url)
+  }
 }
 
 // Saves `content` as an SVG file named `filename` in the browser's downloads

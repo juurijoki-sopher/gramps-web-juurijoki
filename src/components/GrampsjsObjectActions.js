@@ -85,6 +85,7 @@ export class GrampsjsObjectActions extends GrampsjsAppStateMixin(LitElement) {
           `}
       <grampsjs-share-url
         href="${document.URL}"
+        grampsId="${this.data.gramps_id ?? ''}"
         .appState="${this.appState}"
       ></grampsjs-share-url>
     `

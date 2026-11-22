@@ -101,9 +101,20 @@ class GrampsjsMapPlacesLayer extends LitElement {
     const source = this._map.getSource('places')
     if (source) {
       source.setData(this._buildGeoJSON())
-    } else if (this._map.isStyleLoaded()) {
-      this.addToMap(this._map)
+      return
     }
+    if (this._map.isStyleLoaded()) {
+      this.addToMap(this._map)
+      return
+    }
+    // The style is swapping, so there is no source to write to. Without this
+    // the update is lost and the map stays empty after the new style loads.
+    if (this._sourceUpdateScheduled) return
+    this._sourceUpdateScheduled = true
+    this._map.once('idle', () => {
+      this._sourceUpdateScheduled = false
+      if (this._map) this._updateSource()
+    })
   }
 
   _buildGeoJSON() {

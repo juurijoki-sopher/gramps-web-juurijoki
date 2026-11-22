@@ -177,6 +177,7 @@
   "Merge": "Merge",
   "Delete %s objects?": "Delete %s objects?",
   "No coordinates": "No coordinates",
+  "No places with coordinates. Add a latitude and longitude to a place to see it here.": "No places with coordinates. Add a latitude and longitude to a place to see it here.",
   "No objects selected.": "No objects selected.",
   "Object %s deleted.": "Object %s deleted.",
   "Registration link": "Registration link",
@@ -560,5 +561,13 @@
   "Save research record": "Save research record",
   "A page or URL is required.": "A page or URL is required.",
   "Other people with this source": "Other people with this source",
-  "Possible matches in this tree": "Possible matches in this tree"
+  "Possible matches in this tree": "Possible matches in this tree",
+  "More actions": "More actions",
+  "Create new": "Create new",
+  "Select existing": "Select existing",
+  "Download SVG": "Download SVG",
+  "Download PNG": "Download PNG",
+  "Copy Gramps ID": "Copy Gramps ID",
+  "Copied": "Copied",
+  "Share": "Share"
 }

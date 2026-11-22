@@ -2,7 +2,7 @@ import {css, html} from 'lit'
 
 import '@material/web/iconbutton/icon-button.js'
 
-import {mdiLinkOff, mdiLinkPlus, mdiPencil, mdiPlus} from '@mdi/js'
+import {mdiLinkOff, mdiPencil} from '@mdi/js'
 
 import {fireEvent, objectIconPath} from '../util.js'
 import './GrampsjsIcon.js'
@@ -10,6 +10,7 @@ import './GrampsjsObjectLink.js'
 import './GrampsjsFormEditFamily.js'
 import './GrampsjsFormNewPerson.js'
 import './GrampsjsFormPersonRef.js'
+import './GrampsjsAddOrLinkButton.js'
 import {GrampsjsObject} from './GrampsjsObject.js'
 import {getSymbols} from '../symbols.js'
 
@@ -204,28 +205,16 @@ export class GrampsjsFamily extends GrampsjsObject {
                           </md-icon-button>
                         `
                       : ''}
-                    <md-icon-button
-                      class="edit"
-                      title="${this._('Select an existing person')}"
-                      aria-label="${this._('Select an existing person')}"
-                      @click="${() => this._handleParentShare(parent)}"
-                    >
-                      <grampsjs-icon
-                        path="${mdiLinkPlus}"
-                        color="var(--mdc-theme-secondary)"
-                      ></grampsjs-icon>
-                    </md-icon-button>
-                    <md-icon-button
-                      class="edit"
-                      title="${this._('Add a new person')}"
-                      aria-label="${this._('Add a new person')}"
-                      @click="${() => this._handleAddNewParent(parent)}"
-                    >
-                      <grampsjs-icon
-                        path="${mdiPlus}"
-                        color="var(--mdc-theme-secondary)"
-                      ></grampsjs-icon>
-                    </md-icon-button>
+                    <grampsjs-add-or-link-button
+                      variant="icon"
+                      addLabel="${this._('Add a new person')}"
+                      linkLabel="${this._('Select an existing person')}"
+                      .appState="${this.appState}"
+                      @add-or-link:add="${() =>
+                        this._handleAddNewParent(parent)}"
+                      @add-or-link:link="${() =>
+                        this._handleParentShare(parent)}"
+                    ></grampsjs-add-or-link-button>
                   </div>
                 `
               : ''}
