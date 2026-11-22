@@ -2,6 +2,7 @@
 
 from gramps_webapi.wsgi import app
 
-from .userlinks import init_app
+from . import invites, userlinks
 
-init_app(app)
+userlinks.init_app(app)
+invites.init_app(app)

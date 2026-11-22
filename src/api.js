@@ -527,6 +527,31 @@ export function cleanOldDrafts() {
   }
 }
 
+// Sets a password with the one-time token of an invitation or reset link.
+// Returns the response's status and the server's message, if any.
+export async function apiSetPasswordWithToken(token, password) {
+  try {
+    const resp = await fetch(`${__APIHOST__}/api/users/-/password/reset/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({new_password: password}),
+    })
+    let message = ''
+    try {
+      const json = await resp.json()
+      message = json?.error?.message || json?.msg || ''
+    } catch (error) {
+      // no JSON body
+    }
+    return {status: resp.status, message}
+  } catch (error) {
+    return {status: 0, message: error.message}
+  }
+}
+
 export async function apiResetPassword(username) {
   try {
     const resp = await fetch(

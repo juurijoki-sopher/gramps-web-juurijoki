@@ -585,6 +585,27 @@
     "The person is already linked to another user.": "Henkilö on jo liitetty toiseen käyttäjään.",
     "Only administrators can import user accounts.": "Vain ylläpitäjät voivat tuoda käyttäjätilejä.",
     "Link the user to a person in the tree before giving a role.": "Liitä käyttäjä sukupuun henkilöön ennen roolin antamista.",
-    "Only administrators can change or remove a link.": "Vain ylläpitäjät voivat vaihtaa tai poistaa liitoksen."
+    "Only administrators can change or remove a link.": "Vain ylläpitäjät voivat vaihtaa tai poistaa liitoksen.",
+    "Set your password": "Aseta salasanasi",
+    "Set password": "Aseta salasana",
+    "Choose a password of at least 8 characters.": "Valitse vähintään 8 merkin salasana.",
+    "Repeat the password": "Toista salasana",
+    "Your password has been set. You can now log in.": "Salasanasi on asetettu. Voit nyt kirjautua sisään.",
+    "This link has already been used.": "Tämä linkki on jo käytetty.",
+    "This link has expired. Ask for a new link.": "Tämä linkki on vanhentunut. Pyydä uusi linkki.",
+    "This link is not valid. Ask for a new link.": "Tämä linkki ei kelpaa. Pyydä uusi linkki.",
+    "The password must be at least 8 characters long.": "Salasanassa on oltava vähintään 8 merkkiä.",
+    "The passwords do not match.": "Salasanat eivät täsmää.",
+    "The user sets their own password with an invitation link, which you get after saving.": "Käyttäjä asettaa salasanansa itse kutsulinkillä, jonka saat tallennuksen jälkeen.",
+    "Invitation link": "Kutsulinkki",
+    "Copy": "Kopioi",
+    "The server cannot send e-mail, so send the link to the user yourself.": "Palvelin ei voi lähettää sähköpostia, joten lähetä linkki käyttäjälle itse.",
+    "The link was also sent to the user by e-mail.": "Linkki lähetettiin käyttäjälle myös sähköpostilla.",
+    "Send the link to the user yourself.": "Lähetä linkki käyttäjälle itse.",
+    "With this link, the user sets their own password. It works once and is valid until %s.": "Tällä linkillä käyttäjä asettaa oman salasanansa. Linkki toimii kerran ja on voimassa %s asti.",
+    "Share the link only with this user: whoever opens it can set the password.": "Jaa linkki vain tälle käyttäjälle: kuka tahansa linkin avaaja voi asettaa salasanan.",
+    "The user has no e-mail address.": "Käyttäjällä ei ole sähköpostiosoitetta.",
+    "The e-mail could not be sent.": "Sähköpostia ei voitu lähettää.",
+    "Not allowed to set the password of a user with an equal or higher role": "Et voi asettaa salasanaa käyttäjälle, jonka rooli on sama tai korkeampi kuin sinun."
 }
 

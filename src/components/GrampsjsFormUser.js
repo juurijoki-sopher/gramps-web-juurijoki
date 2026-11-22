@@ -76,21 +76,6 @@ class GrampsjsFormUser extends GrampsjsAppStateMixin(LitElement) {
           value="${this.data.name || ''}"
         ></grampsjs-form-string>
       </p>
-      ${this.newUser
-        ? html`
-            <p>
-              <grampsjs-form-string
-                required
-                @formdata:changed="${this._handleFormData}"
-                fullwidth
-                id="password"
-                type="password"
-                label="${this._('Password: ').replace(':', '')}"
-                value="${this.data.password || ''}"
-              ></grampsjs-form-string>
-            </p>
-          `
-        : ''}
       <p>
         <grampsjs-form-string
           required
@@ -156,6 +141,11 @@ class GrampsjsFormUser extends GrampsjsAppStateMixin(LitElement) {
         label="${this._('Person in the tree')}"
         @formdata:changed="${this._handlePersonChanged}"
       ></grampsjs-form-select-object-list>
+      <p class="person-hint">
+        ${this._(
+          'The user sets their own password with an invitation link, which you get after saving.'
+        )}
+      </p>
     `
   }
 

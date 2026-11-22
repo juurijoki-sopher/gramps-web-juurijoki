@@ -12,6 +12,14 @@ import {
 } from '../../src/routing.js'
 
 describe('selectPreReadyView', () => {
+  it('shows the invitation page whether signed in or not', () => {
+    for (const state of [LOADING_STATE_UNAUTHORIZED, LOADING_STATE_READY]) {
+      expect(selectPreReadyView(state, {page: 'set-password'})).toEqual({
+        view: 'set-password',
+      })
+    }
+  })
+
   it('shows the initial loading view', () => {
     expect(selectPreReadyView(LOADING_STATE_INITIAL, {page: 'home'})).toEqual({
       view: 'initial',

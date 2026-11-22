@@ -4,10 +4,18 @@ import '@material/web/select/filled-select'
 import '@material/web/select/select-option'
 
 import {GrampsjsView} from './GrampsjsView.js'
+
 import {GrampsjsStaleDataMixin} from '../mixins/GrampsjsStaleDataMixin.js'
 import '../components/GrampsjsUsers.js'
 import '../components/GrampsjsShareUrl.js'
 import '../components/GrampsjsChatPermissions.js'
+
+// a random password of 32 bytes, as base64
+export function randomPassword() {
+  const bytes = new Uint8Array(32)
+  crypto.getRandomValues(bytes)
+  return btoa(String.fromCharCode(...bytes))
+}
 
 export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
   GrampsjsView
@@ -86,6 +94,7 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
         .people="${this._people}"
         ?isAdmin="${!!this.appState.permissions?.canViewOtherTree}"
         @user:linked="${this._handleUserLinked}"
+        @user:invited="${this._handleUserInvited}"
         @user:updated="${this._handleUserChanged}"
         @user:added="${this._handleUserAdded}"
         @user:deleted="${this._handleUserDeleted}"
@@ -121,7 +130,9 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
         role: data.role,
         email: data.email,
         full_name: data.full_name,
-        password: data.password,
+        // nobody sees this password: the user sets their own with the
+        // invitation link
+        password: randomPassword(),
       },
       data.person_handle
     )
@@ -174,21 +185,39 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
   }
 
   // the person goes in the query, as the API checks the body's fields
-  _addUser(username, payload, personHandle) {
+  async _addUser(username, payload, personHandle) {
     const query = personHandle
       ? `?person_handle=${encodeURIComponent(personHandle)}`
       : ''
-    this.appState
-      .apiPost(`/api/users/${username}/${query}`, payload)
-      .then(data => {
-        if ('error' in data) {
-          this.error = true
-          this._errorMessage = data.error
-        } else {
-          this.error = false
-          this._fetchUserData()
-        }
-      })
+    const data = await this.appState.apiPost(
+      `/api/users/${username}/${query}`,
+      payload
+    )
+    this._handleResult(data)
+    if (!('error' in data)) {
+      await this._invite(username)
+    }
+  }
+
+  async _handleUserInvited(e) {
+    await this._invite(e.detail)
+  }
+
+  // an invitation link for the user to set their own password, also sent
+  // by e-mail when the server can send e-mail
+  async _invite(username) {
+    const data = await this.appState.apiPost(
+      `/api/juurijoki/invites/${encodeURIComponent(username)}/`,
+      {}
+    )
+    if ('error' in data) {
+      this.error = true
+      this._errorMessage = data.error
+      return
+    }
+    this.renderRoot
+      .querySelector('grampsjs-users')
+      ?.showInvite(username, data.data)
   }
 
   _deleteUser(username) {

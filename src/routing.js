@@ -30,6 +30,10 @@ export function selectPreReadyView(
   loadingState,
   {page, permissions = {}, frontendConfig = {}} = {}
 ) {
+  // an invitation link works signed in or not: it is about another account
+  if (page === 'set-password' && loadingState !== LOADING_STATE_INITIAL) {
+    return {view: 'set-password'}
+  }
   switch (loadingState) {
     case LOADING_STATE_INITIAL:
       return {view: 'initial'}

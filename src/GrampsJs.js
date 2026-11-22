@@ -53,6 +53,7 @@ import './components/GrampsjsFirstRun.js'
 import './components/GrampsjsIcon.js'
 import './components/GrampsjsFormRegister.js'
 import './components/GrampsjsLogin.js'
+import './components/GrampsjsSetPassword.js'
 import {
   DRAWER_EXPANDED,
   DRAWER_MODAL,
@@ -86,6 +87,7 @@ const NO_PULL_PAGES = [
   'chat',
   'login',
   'firstrun',
+  'set-password',
 ]
 
 const MINIMUM_API_VERSION = '3.17.0'
@@ -580,6 +582,10 @@ export class GrampsJs extends LitElement {
         return this._renderNoConn()
       case 'register':
         return this._renderRegister()
+      case 'set-password':
+        return html`<grampsjs-set-password
+          .appState="${this.appState}"
+        ></grampsjs-set-password>`
       case 'login':
         return this._renderLogin()
       case 'firstrun':
