@@ -12,6 +12,9 @@ import {
 // petrol blue as the main colour, copper as its warm complementary accent
 export const DEFAULT_PRIMARY = '#0E6170'
 export const DEFAULT_SECONDARY = '#A9502C'
+// Light-mode page canvas: off-white so white cards, dialogs and the app bar
+// lift off it. Surfaces stay #ffffff.
+export const LIGHT_BACKGROUND = '#F3F3F3'
 
 export function getSystemTheme() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -79,9 +82,10 @@ export function applyColors(
   )
 
   // M3 achromatic tones 90-98 are darker than expected for a web app.
-  // Override light-mode surfaces to lighter neutrals.
+  // Override light-mode surfaces to lighter neutrals: the page canvas is
+  // off-white, raised surfaces stay white.
   if (!isDark) {
-    root.style.setProperty('--md-sys-color-background', '#ffffff')
+    root.style.setProperty('--md-sys-color-background', LIGHT_BACKGROUND)
     root.style.setProperty('--md-sys-color-surface', '#ffffff')
     // lowest/low/container → menus, cards, sheets: white
     root.style.setProperty('--md-sys-color-surface-container-lowest', '#ffffff')
