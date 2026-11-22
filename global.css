@@ -121,6 +121,19 @@ html {
   /* Focus ring of the keyboard focus (:focus-visible), for elements
      without Material's own md-focus-ring */
   --grampsjs-focus-ring: 2px solid var(--md-sys-color-primary);
+  /* Four-layer lighting of filled buttons (see filledButtonLighting.js):
+     top-edge light, bottom-edge shade, contact shadow. The glow colour
+     comes from the button's own fill. The face mixes 16% white into the
+     top of its gradient. */
+  --grampsjs-filled-top-light: #ffffff59;
+  --grampsjs-filled-bottom-shade: #0003;
+  --grampsjs-filled-contact: #0006;
+  /* Thinking bar (see GrampsjsThinkingBar.js): the four stops of a looping
+     90deg gradient, same colour at both ends so the flow has no seam. */
+  --grampsjs-thinking-1: #4285f4;
+  --grampsjs-thinking-2: #9b72cb;
+  --grampsjs-thinking-3: #d96570;
+  --grampsjs-thinking-4: #f9ab00;
   /* End design tokens */
   color: var(--md-sys-color-on-surface);
   /* Web Awesome color token overrides.
@@ -422,6 +435,10 @@ html {
 }
 
 :root[data-theme='dark'] {
+  /* filled-button lighting: a little less top light, a little more contact */
+  --grampsjs-filled-top-light: #ffffff40;
+  --grampsjs-filled-bottom-shade: #0006;
+  --grampsjs-filled-contact: #0008;
   --grampsjs-top-app-bar-background-color: var(--md-sys-color-surface);
   --grampsjs-top-app-bar-font-color: var(--md-sys-color-on-surface);
   --grampsjs-body-font-color: rgba(255, 255, 255, 0.8);

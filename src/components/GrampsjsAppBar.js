@@ -7,7 +7,6 @@ import {html, css, LitElement} from 'lit'
 import '@material/web/iconbutton/icon-button.js'
 import '@material/web/button/filled-button.js'
 import '@material/web/progress/circular-progress.js'
-import '@material/web/progress/linear-progress.js'
 import {
   mdiArrowLeft,
   mdiChevronRight,
@@ -25,6 +24,7 @@ import './GrampsjsNotificationMenu.js'
 import './GrampsjsSettingsMenu.js'
 import './GrampsjsTooltip.js'
 import './GrampsjsSearchBox.js'
+import './GrampsjsThinkingBar.js'
 
 import {fireEvent} from '../util.js'
 import {getTreeName} from '../api.js'
@@ -258,20 +258,12 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
           }
         }
 
-        md-linear-progress {
+        grampsjs-thinking-bar.page-progress {
           position: absolute;
           left: 0;
           right: 0;
           top: 0;
-          visibility: hidden;
-          --md-linear-progress-active-indicator-color: var(
-            --grampsjs-color-page-loading-progress
-          );
-          --md-linear-progress-track-color: transparent;
-        }
-
-        md-linear-progress.active {
-          visibility: visible;
+          --grampsjs-thinking-radius: 0;
         }
       `,
     ]
@@ -345,10 +337,11 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
         <div class="spacer"></div>
         ${this._renderSavingIndicator()}
         ${this.editMode ? this._renderEditActions() : this._renderActions()}
-        <md-linear-progress
-          ?indeterminate="${this.progress}"
-          class="${this.progress ? 'active' : ''}"
-        ></md-linear-progress>
+        <grampsjs-thinking-bar
+          class="page-progress"
+          ?hidden="${!this.progress}"
+          label="${this._('Loading...')}"
+        ></grampsjs-thinking-bar>
       </header>
       ${this.editDialogContent}
     `
@@ -367,10 +360,11 @@ class GrampsjsAppBar extends GrampsjsAppStateMixin(LitElement) {
           ></grampsjs-icon>
         </md-icon-button>
         ${this._renderSearchField()}
-        <md-linear-progress
-          ?indeterminate="${this.progress}"
-          class="${this.progress ? 'active' : ''}"
-        ></md-linear-progress>
+        <grampsjs-thinking-bar
+          class="page-progress"
+          ?hidden="${!this.progress}"
+          label="${this._('Loading...')}"
+        ></grampsjs-thinking-bar>
       </header>
       ${this.editDialogContent}
     `
