@@ -338,9 +338,9 @@ html {
        links, add and edit actions
      - mist: light petrol surface for the drawer, bottom bar and panels
      - sand: light copper surface for hovered rows
-     The page canvas is #F3F3F3 (theme.js LIGHT_BACKGROUND) so white
-     surfaces lift off it. All text colours keep a contrast of at least
-     4.5:1 on mist, sand and the canvas. */
+     The page, views and app bar share #F3F3F3 (theme.js LIGHT_BACKGROUND).
+     All text colours keep a contrast of at least 4.5:1 on mist, sand and
+     the canvas. */
   --grampsjs-palette-mist: #e8f1f2;
   --grampsjs-palette-sand: #f6eee5;
   --grampsjs-drawer-background-color: var(--grampsjs-palette-mist);

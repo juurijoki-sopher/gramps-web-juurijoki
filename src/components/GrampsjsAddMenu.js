@@ -52,6 +52,12 @@ export function otherAddItems(items, lastAddObject) {
   return items.filter(item => item !== primary)
 }
 
+// Both halves come from Gramps strings so the label stays in one language
+// ("Lisää Henkilö", not "Add Henkilö").
+export function labelledAddAction(_, title) {
+  return `${_('Add')} ${_(title)}`
+}
+
 class GrampsjsAddMenu extends GrampsjsAppStateMixin(LitElement) {
   static get styles() {
     return [
@@ -105,7 +111,7 @@ class GrampsjsAddMenu extends GrampsjsAppStateMixin(LitElement) {
     return html`
       <grampsjs-split-button
         variant="filled"
-        label="${this._('Add %s', this._(title))}"
+        label="${labelledAddAction(this._.bind(this), title)}"
         icon="${iconPath}"
         href="${url}"
         menuAriaLabel="${this._('More actions')}"
