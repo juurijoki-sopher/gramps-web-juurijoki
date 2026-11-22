@@ -21,6 +21,7 @@ import './GrampsjsImg.js'
 import './GrampsjsEditGender.js'
 import './GrampsjsPersonRelationship.js'
 import './GrampsjsFormExternalSearch.js'
+import './GrampsjsSplitButton.js'
 import {
   fireEvent,
   objectIconPath,
@@ -369,6 +370,7 @@ export class GrampsjsPerson extends GrampsjsObject {
 
   _renderButtons() {
     const buttons = this._getButtons()
+    const [primary, ...rest] = buttons
     return html`
       <p class="button-list labeled">
         ${buttons.map(
@@ -385,20 +387,41 @@ export class GrampsjsPerson extends GrampsjsObject {
         )}
       </p>
       <p class="button-list icon-only">
-        ${buttons.map(
-          btn => html`
-            <md-filled-tonal-icon-button
-              @click="${btn.handler}"
-              aria-label="${this._(btn.label)}"
-              title="${this._(btn.label)}"
-            >
-              <grampsjs-icon
-                path="${btn.path}"
-                color="var(--mdc-theme-primary)"
-              ></grampsjs-icon>
-            </md-filled-tonal-icon-button>
-          `
-        )}
+        ${rest.length === 0
+          ? html`
+              <md-filled-tonal-icon-button
+                @click="${primary.handler}"
+                aria-label="${this._(primary.label)}"
+                title="${this._(primary.label)}"
+              >
+                <grampsjs-icon
+                  path="${primary.path}"
+                  color="var(--mdc-theme-primary)"
+                ></grampsjs-icon>
+              </md-filled-tonal-icon-button>
+            `
+          : html`
+              <grampsjs-split-button
+                variant="tonal"
+                label="${this._(primary.label)}"
+                icon="${primary.path}"
+                .appState="${this.appState}"
+                @split-button:primary="${primary.handler}"
+              >
+                ${rest.map(
+                  btn => html`
+                    <md-menu-item @click="${btn.handler}">
+                      <span slot="headline">${this._(btn.label)}</span>
+                      <grampsjs-icon
+                        slot="start"
+                        path="${btn.path}"
+                        color="var(--grampsjs-body-font-color-35)"
+                      ></grampsjs-icon>
+                    </md-menu-item>
+                  `
+                )}
+              </grampsjs-split-button>
+            `}
       </p>
     `
   }

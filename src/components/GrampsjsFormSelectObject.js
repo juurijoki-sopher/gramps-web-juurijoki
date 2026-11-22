@@ -5,6 +5,7 @@ Element for selecting a Gramps object
 import {html, css, LitElement} from 'lit'
 
 import '@material/web/button/outlined-button.js'
+import '@material/web/menu/menu-item.js'
 
 import {mdiLinkPlus, mdiPlus} from '@mdi/js'
 import {sharedStyles} from '../SharedStyles.js'
@@ -17,6 +18,7 @@ import './GrampsjsObjectPickerDialog.js'
 import './GrampsjsFormNewPlace.js'
 import './GrampsjsFormNewSource.js'
 import './GrampsjsIcon.js'
+import './GrampsjsSplitButton.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 
 // labels for button
@@ -88,35 +90,46 @@ class GrampsjsFormSelectObject extends GrampsjsAppStateMixin(LitElement) {
   }
 
   render() {
+    const selectLabel =
+      this.label || this._(btnLabel[this.objectType]) || this._('Select')
     return html`
       <div class="buttons">
-        <md-outlined-button
-          ?disabled="${this.disabled}"
-          style="${this.hideButton ? 'display:none;' : ''}"
-          @click="${this._handleBtnClick}"
-        >
-          <grampsjs-icon
-            slot="icon"
-            path="${this.iconPath}"
-            color="currentColor"
-          ></grampsjs-icon>
-          ${this.label || this._(btnLabel[this.objectType]) || this._('Select')}
-        </md-outlined-button>
         ${this._canCreate()
           ? html`
+              <grampsjs-split-button
+                variant="outlined"
+                ?disabled="${this.disabled}"
+                label="${selectLabel}"
+                icon="${this.iconPath}"
+                .appState="${this.appState}"
+                @split-button:primary="${this._handleBtnClick}"
+              >
+                <md-menu-item @click="${this._handleNewBtnClick}">
+                  <span slot="headline"
+                    >${this._(newBtnLabel[this.objectType])}</span
+                  >
+                  <grampsjs-icon
+                    slot="start"
+                    path="${mdiPlus}"
+                    color="var(--grampsjs-body-font-color-35)"
+                  ></grampsjs-icon>
+                </md-menu-item>
+              </grampsjs-split-button>
+            `
+          : html`
               <md-outlined-button
                 ?disabled="${this.disabled}"
-                @click="${this._handleNewBtnClick}"
+                style="${this.hideButton ? 'display:none;' : ''}"
+                @click="${this._handleBtnClick}"
               >
                 <grampsjs-icon
                   slot="icon"
-                  path="${mdiPlus}"
+                  path="${this.iconPath}"
                   color="currentColor"
                 ></grampsjs-icon>
-                ${this._(newBtnLabel[this.objectType])}
+                ${selectLabel}
               </md-outlined-button>
-            `
-          : ''}
+            `}
       </div>
 
       <grampsjs-object-picker-dialog
