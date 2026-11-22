@@ -20,6 +20,9 @@ export class GrampsjsViewPerson extends GrampsjsViewObject {
     this._timelineData = []
     this._timelineLoading = false
     this._boundHandleTimelineNeeded = this._handleTimelineNeeded.bind(this)
+    this._boundResearchSaved = () => {
+      if (this.active) this._updateData(false)
+    }
   }
 
   connectedCallback() {
@@ -28,6 +31,7 @@ export class GrampsjsViewPerson extends GrampsjsViewObject {
       'person:timeline-needed',
       this._boundHandleTimelineNeeded
     )
+    this.addEventListener('research:saved', this._boundResearchSaved)
   }
 
   disconnectedCallback() {
@@ -35,6 +39,7 @@ export class GrampsjsViewPerson extends GrampsjsViewObject {
       'person:timeline-needed',
       this._boundHandleTimelineNeeded
     )
+    this.removeEventListener('research:saved', this._boundResearchSaved)
     super.disconnectedCallback()
   }
 

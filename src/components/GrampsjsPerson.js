@@ -21,6 +21,7 @@ import './GrampsjsImg.js'
 import './GrampsjsEditGender.js'
 import './GrampsjsPersonRelationship.js'
 import './GrampsjsFormExternalSearch.js'
+import './GrampsjsResearchProposals.js'
 import './GrampsjsSplitButton.js'
 import {
   fireEvent,
@@ -263,6 +264,12 @@ export class GrampsjsPerson extends GrampsjsObject {
       </h2>
       ${this._renderBirth()} ${this._renderDeath()} ${this._renderRelation()}
       ${this.preview ? '' : this._renderButtons()}
+      ${this.preview
+        ? ''
+        : html`<grampsjs-research-proposals
+            .person="${this.data}"
+            .appState="${this.appState}"
+          ></grampsjs-research-proposals>`}
     `
   }
 

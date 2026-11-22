@@ -23,11 +23,16 @@ import {
 } from '@mdi/js'
 import {renderIcon} from '../icons.js'
 import {updateSettings, getSettings} from '../api.js'
+import {expandSearchLinks} from '../nameVariants.js'
 import {clickKeyHandler, makeHandle} from '../util.js'
 import './GrampsjsFormSelectType.js'
 import './GrampsjsIcon.js'
 import './GrampsjsHelpButton.js'
 import {GrampsjsObjectForm} from './GrampsjsObjectForm.js'
+
+function siteKey(web) {
+  return web.visibilityKey || web.key
+}
 
 const EXTERNAL_SEARCH_WEBSITES = [
   {
@@ -279,12 +284,7 @@ class GrampsjsFormExternalSearch extends GrampsjsObjectForm {
   }
 
   getExternalSearchWebsitesData() {
-    const builtIn = EXTERNAL_SEARCH_WEBSITES.map(website => ({
-      ...website,
-      baseUrl: this.interpolateTemplate(website.baseUrl, this.data),
-      params: this.interpolateTemplate(website.params, this.data),
-    }))
-
+    const builtIn = EXTERNAL_SEARCH_WEBSITES.map(website => ({...website}))
     const custom = this.customEngines.map(engine => ({
       key: engine.key,
       value: engine.name,
@@ -292,12 +292,22 @@ class GrampsjsFormExternalSearch extends GrampsjsObjectForm {
         reqRegistration: false,
         reqSubscription: false,
       },
-      baseUrl: this.interpolateTemplate(engine.url, this.data),
+      baseUrl: engine.url,
       params: '',
       isCustom: true,
     }))
-
-    return [...builtIn, ...custom]
+    const sites = [...builtIn, ...custom]
+    const fill = site => ({
+      ...site,
+      visibilityKey: site.key,
+      baseUrl: this.interpolateTemplate(site.baseUrl, this.data),
+      params: this.interpolateTemplate(site.params, this.data),
+    })
+    // Editing the list is one row per service. Variants are extra links.
+    if (this.editMode) return sites.map(fill)
+    return expandSearchLinks(sites, this.data, (template, data) =>
+      this.interpolateTemplate(template, data)
+    )
   }
 
   getWebCriteriaIcon(websiteCriteria, isCustom) {
@@ -322,9 +332,9 @@ class GrampsjsFormExternalSearch extends GrampsjsObjectForm {
     if (!this.editMode) return
     e.preventDefault()
     if (web.isCustom) {
-      this._deleteCustomEngine(web.key)
+      this._deleteCustomEngine(siteKey(web))
     } else {
-      this._toggleWebsiteVisibility(web.key)
+      this._toggleWebsiteVisibility(siteKey(web))
     }
   }
 
@@ -351,7 +361,7 @@ class GrampsjsFormExternalSearch extends GrampsjsObjectForm {
   _renderWebsiteItem(web) {
     const metaIcon = this.getWebCriteriaIcon(web.websiteCriteria, web.isCustom)
     return html`
-      <div class="${this.hiddenWebsites[web.key] ? 'item-hidden' : ''}">
+      <div class="${this.hiddenWebsites[siteKey(web)] ? 'item-hidden' : ''}">
         <md-list-item
           type="button"
           href="${this.editMode ? '' : `${web.baseUrl}${web.params}`}"
@@ -464,7 +474,7 @@ class GrampsjsFormExternalSearch extends GrampsjsObjectForm {
     const searchWebUrls = this.getExternalSearchWebsitesData()
     const visibleWebUrls = this.editMode
       ? searchWebUrls
-      : searchWebUrls.filter(web => !this.hiddenWebsites[web.key])
+      : searchWebUrls.filter(web => !this.hiddenWebsites[siteKey(web)])
 
     return html`
       <div>
