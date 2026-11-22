@@ -693,4 +693,20 @@ describe('right-angled routes', () => {
       .map(link => link.points[1][1])
     expect(new Set(bars).size).toBe(1)
   })
+
+  it('records relatives who were not fetched', async () => {
+    const parents = family('parents', 'P', 'Gone', [
+      childRef('C'),
+      childRef('Hidden'),
+    ])
+    const fetched = new FamilyGraph([
+      person('P', {families: [parents]}),
+      person('C', {primary_parent_family: parents}),
+    ])
+    const layout = await layoutRelationships(fetched, 'P')
+    const continuation = handle =>
+      layout.nodes.find(node => node.handle === handle).continuation
+    expect(continuation('P')).toEqual(['descendants'])
+    expect(continuation('C')).toEqual(['ancestors'])
+  })
 })

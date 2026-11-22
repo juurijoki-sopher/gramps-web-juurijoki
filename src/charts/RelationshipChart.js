@@ -1,5 +1,11 @@
+import {fireEvent} from '../util.js'
 import {ChartCanvas, place} from './ChartCanvas.js'
 import {cornerRadius, roundedPath, sameX} from './connectors.js'
+import {
+  continuationSide,
+  includeTabBounds,
+  updateContinuationTabs,
+} from './continuationTab.js'
 import {
   appendFamilyMarker,
   familyMarkerPosition,
@@ -130,8 +136,22 @@ export class RelationshipChart extends ChartCanvas {
   prepare(layout, {shadowHandles = []} = {}) {
     this._rootHandle = layout.root?.handle ?? null
     this._shadowHandles = new Set(shadowHandles)
+    const bounds = {...layout.bounds}
+    const {boxWidth, boxHeight} = this.boxSize
+    for (const node of layout.nodes) {
+      for (const direction of node.continuation ?? []) {
+        includeTabBounds(
+          bounds,
+          node.x,
+          node.y,
+          continuationSide(direction, true),
+          boxWidth,
+          boxHeight
+        )
+      }
+    }
     return {
-      bounds: layout.bounds,
+      bounds,
       rootHandle: this._rootHandle,
       candidates: layout.nodes
         .filter(node => this.isRootPerson(node))
@@ -224,7 +244,10 @@ export class RelationshipChart extends ChartCanvas {
   // marker of a family whose partners are not next to each other sits on a
   // bracket that joins the bottoms of their cards. Outside edit mode, the
   // marker opens the preview of its family, like the cards of people do.
-  drawExtras(nodes, {palette, interactive, canEdit = false}) {
+  drawExtras(
+    nodes,
+    {palette, interactive, canEdit = false, continuationLabels = {}}
+  ) {
     const markers = nodes
       .filter(node => node.kind === 'family')
       .select('.family-marker')
@@ -248,5 +271,30 @@ export class RelationshipChart extends ChartCanvas {
     if (interactive && !canEdit) {
       setFamilyInteraction(markers, {palette})
     }
+    // Selecting the person makes them the root, which brings the relatives
+    // within the chart's separation into view. In edit mode the card itself
+    // does not navigate, and neither does the tab.
+    const chart = this
+    const {boxWidth, boxHeight} = this.boxSize
+    updateContinuationTabs(
+      nodes.filter(node => node.kind === 'person'),
+      {
+        directions: node => node.continuation ?? [],
+        vertical: true,
+        interactive: interactive && !canEdit,
+        palette,
+        boxWidth,
+        boxHeight,
+        label: direction => continuationLabels[direction],
+        activate(event, {node}) {
+          const grampsId = node.person?.profile?.gramps_id
+          if (!grampsId) {
+            return
+          }
+          chart._viewport.rememberClick(node.handle, node.key)
+          fireEvent(this, 'pedigree:person-selected', {grampsId})
+        },
+      }
+    )
   }
 }

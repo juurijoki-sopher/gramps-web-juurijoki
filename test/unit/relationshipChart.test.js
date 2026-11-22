@@ -4,6 +4,7 @@ import {zoomTransform} from 'd3-zoom'
 import {RelationshipChart} from '../../src/charts/RelationshipChart.js'
 import {layoutRelationships} from '../../src/charts/layout/relationshipLayout.js'
 import {FamilyGraph} from '../../src/charts/model/FamilyGraph.js'
+import {chartPalette} from '../../src/charts/palette.js'
 
 const childRef = (ref, frel = 'Birth', mrel = 'Birth') => ({ref, frel, mrel})
 
@@ -557,5 +558,78 @@ describe('RelationshipChart', () => {
     click(root)
     expect(selected).toEqual([])
     select(chart.node).selectAll('*').interrupt()
+  })
+})
+
+describe('continuation tabs', () => {
+  const labels = {ancestors: 'Parents', descendants: 'Children'}
+  const personNode = (handle, continuation, sex, x) => ({
+    key: `person:${handle}`,
+    kind: 'person',
+    handle,
+    x,
+    y: 0,
+    continuation,
+    person: {
+      handle,
+      profile: {gramps_id: `I_${handle}`, sex, name_surname: handle},
+    },
+  })
+  const layout = {
+    root: {handle: 'A'},
+    links: [],
+    bounds: {xMin: -120, yMin: -80, xMax: 700, yMax: 80},
+    nodes: [
+      personNode('A', ['descendants'], 'M', 0),
+      personNode('B', ['ancestors', 'descendants'], 'F', 250),
+      personNode('C', [], 'F', 500),
+    ],
+  }
+  const tabsOf = (chart, handle) => [
+    ...nodeWithKey(chart, `person:${handle}`).querySelectorAll(
+      '.continuation-tab'
+    ),
+  ]
+
+  it('draws a tab for each hidden direction', () => {
+    const chart = new RelationshipChart()
+    chart.update(layout, {...size, continuationLabels: labels})
+    const down = tabsOf(chart, 'A')
+    expect(down).toHaveLength(1)
+    expect(down[0].getAttribute('aria-label')).toBe('Children')
+    expect(down[0].getAttribute('transform')).toBe('translate(0,45)')
+    expect(down[0].querySelector('.tab').getAttribute('fill')).toBe(
+      chartPalette.sex.M
+    )
+    expect(
+      tabsOf(chart, 'B').map(tab => tab.getAttribute('aria-label'))
+    ).toEqual(['Parents', 'Children'])
+    expect(tabsOf(chart, 'C')).toHaveLength(0)
+  })
+
+  it('selects the person once from the tab', () => {
+    const chart = new RelationshipChart()
+    chart.update(layout, {...size, continuationLabels: labels})
+    const selected = []
+    chart.node.addEventListener('pedigree:person-selected', event =>
+      selected.push(event.detail)
+    )
+    const tab = tabsOf(chart, 'A')[0]
+    tab.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+    tab.dispatchEvent(new KeyboardEvent('keydown', {key: ' ', bubbles: true}))
+    expect(selected).toEqual([{grampsId: 'I_A'}, {grampsId: 'I_A'}])
+  })
+
+  it('stays a mark in edit mode', () => {
+    const chart = new RelationshipChart()
+    chart.update(layout, {...size, canEdit: true, continuationLabels: labels})
+    const tab = tabsOf(chart, 'A')[0]
+    expect(tab.getAttribute('role')).toBeNull()
+    const selected = []
+    chart.node.addEventListener('pedigree:person-selected', event =>
+      selected.push(event.detail)
+    )
+    click(tab)
+    expect(selected).toEqual([])
   })
 })

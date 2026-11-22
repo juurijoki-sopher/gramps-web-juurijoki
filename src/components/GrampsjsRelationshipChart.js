@@ -56,6 +56,10 @@ class GrampsjsRelationshipChart extends GrampsjsChartBase {
   chartOptions() {
     return {
       getImageUrl: node => getImageUrl(node.person, 100),
+      continuationLabels: {
+        ancestors: this._('Parents'),
+        descendants: this._('Children'),
+      },
       nameDisplayFormat: this.nameDisplayFormat,
       ...getSymbols(this.appState.settings, s => this._(s)),
       canEdit: this.canEdit,

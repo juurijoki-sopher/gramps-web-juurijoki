@@ -393,58 +393,56 @@ describe('TreeChart', () => {
     expect(selected).toEqual([])
   })
 
-  describe('expand buttons', () => {
+  describe('continuation tabs', () => {
     const expandLabels = {ancestors: 'Parents', descendants: 'Children'}
-    const buttonOf = (chart, key) =>
-      nodeWithKey(chart, key).querySelector('.expand-button')
+    const tabOf = (chart, key) =>
+      nodeWithKey(chart, key).querySelector('.continuation-tab')
 
-    it('draws a labelled button where a branch grows', () => {
+    it('draws a labelled tab where a branch grows', () => {
       const chart = new TreeChart()
       chart.update(layoutAncestors(graph, 'R', {depth: 2}), {
         ...size,
         expandLabels,
       })
       // M has no parents
-      expect(chart.node.querySelectorAll('.expand-button')).toHaveLength(1)
-      const button = buttonOf(chart, 'pf')
-      expect(button.getAttribute('role')).toBe('button')
-      expect(button.getAttribute('tabindex')).toBe('0')
-      expect(button.getAttribute('aria-label')).toBe('Parents')
-      // Beyond the card like the menu button
-      expect(button.getAttribute('transform')).toBe('translate(123,0)')
-      expect(button.querySelector('path').getAttribute('d')).toBe(
+      expect(chart.node.querySelectorAll('.continuation-tab')).toHaveLength(1)
+      const tab = tabOf(chart, 'pf')
+      expect(tab.getAttribute('role')).toBe('button')
+      expect(tab.getAttribute('tabindex')).toBe('0')
+      expect(tab.getAttribute('aria-label')).toBe('Parents')
+      // Flush with the right edge of the card
+      expect(tab.getAttribute('transform')).toBe('translate(95,0)')
+      expect(tab.querySelector('.tab').getAttribute('fill')).toBe(
+        chartPalette.sex.F
+      )
+      expect(tab.querySelector('.chevron').getAttribute('d')).toBe(
         mdiChevronRight
+      )
+      expect(tab.querySelector('.chevron').getAttribute('fill')).toBe(
+        'rgba(0, 0, 0, 0.78)'
       )
       chart.update(layoutAncestors(graph, 'R', {depth: 2, vertical: true}), {
         ...size,
         expandLabels,
       })
-      expect(buttonOf(chart, 'pf').getAttribute('transform')).toBe(
-        'translate(0,-73)'
+      expect(tabOf(chart, 'pf').getAttribute('transform')).toBe(
+        'translate(0,-45)'
       )
       expect(
-        buttonOf(chart, 'pf').querySelector('path').getAttribute('d')
+        tabOf(chart, 'pf').querySelector('.chevron').getAttribute('d')
       ).toBe(mdiChevronUp)
     })
 
-    it('fades lines under the chevron with the background colour', () => {
-      const chart = new TreeChart()
-      chart.update(layoutAncestors(graph, 'R', {depth: 2}), size)
-      const backdrop = buttonOf(chart, 'pf').querySelector('.backdrop')
-      expect(backdrop.getAttribute('fill')).toBe(chartPalette.background)
-      expect(backdrop.getAttribute('fill-opacity')).toBe('0.8')
-    })
-
-    it('has no button on an expanded branch', () => {
+    it('has no tab on an expanded branch', () => {
       const chart = new TreeChart()
       chart.update(
         layoutAncestors(graph, 'R', {depth: 2, expanded: new Set(['F'])}),
         size
       )
-      expect(chart.node.querySelectorAll('.expand-button')).toHaveLength(0)
+      expect(chart.node.querySelectorAll('.continuation-tab')).toHaveLength(0)
     })
 
-    it('gives the root person both the menu and the expand button', () => {
+    it('gives the root person both the menu and the continuation tab', () => {
       const chart = new TreeChart()
       chart.update(layoutDescendants(graph, 'F', {depth: 1}), {
         ...size,
@@ -454,9 +452,13 @@ describe('TreeChart', () => {
       })
       const root = nodeWithKey(chart, 'p')
       expect(root.querySelectorAll('.children-triangle')).toHaveLength(1)
-      const button = root.querySelector('.expand-button')
-      expect(button.getAttribute('transform')).toBe('translate(-127,0)')
-      expect(button.getAttribute('aria-label')).toBe('Children')
+      const tab = root.querySelector('.continuation-tab')
+      // Outside the colour stripe on the left edge
+      expect(tab.getAttribute('transform')).toBe('translate(-99,0)')
+      expect(tab.getAttribute('aria-label')).toBe('Children')
+      expect(tab.querySelector('.chevron').getAttribute('d')).toBe(
+        mdiChevronLeft
+      )
     })
 
     it('expands the branch by click or keyboard without selecting the person', () => {
@@ -470,14 +472,12 @@ describe('TreeChart', () => {
       chart.node.addEventListener('pedigree:person-selected', e =>
         selected.push(e.detail)
       )
-      const button = buttonOf(chart, 'pf')
-      button.dispatchEvent(new MouseEvent('click', {bubbles: true}))
-      button.dispatchEvent(
+      const tab = tabOf(chart, 'pf')
+      tab.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      tab.dispatchEvent(
         new KeyboardEvent('keydown', {key: 'Enter', bubbles: true})
       )
-      button.dispatchEvent(
-        new KeyboardEvent('keydown', {key: 'a', bubbles: true})
-      )
+      tab.dispatchEvent(new KeyboardEvent('keydown', {key: 'a', bubbles: true}))
       const detail = {handle: 'F', direction: 'ancestors'}
       expect(expanded).toEqual([detail, detail])
       expect(selected).toEqual([])
@@ -491,7 +491,7 @@ describe('TreeChart', () => {
       window.addEventListener('object:preview-show', listener)
       const node = nodeWithKey(chart, 'pf')
       node.dispatchEvent(new MouseEvent('mouseenter'))
-      buttonOf(chart, 'pf').dispatchEvent(new MouseEvent('mouseenter'))
+      tabOf(chart, 'pf').dispatchEvent(new MouseEvent('mouseenter'))
       node
         .querySelector('.person-card')
         .dispatchEvent(new MouseEvent('mouseenter'))
@@ -499,13 +499,25 @@ describe('TreeChart', () => {
       expect(previews).toEqual(['I_F'])
     })
 
-    it('leaves out expand buttons when not interactive', () => {
+    it('keeps the tab and drops the button when not interactive', () => {
       const chart = new TreeChart()
       const layout = layoutAncestors(graph, 'R', {depth: 2})
-      chart.update(layout, size)
-      expect(chart.node.querySelectorAll('.expand-button')).toHaveLength(1)
-      chart.update(layout, {...size, interactive: false})
-      expect(chart.node.querySelectorAll('.expand-button')).toHaveLength(0)
+      chart.update(layout, {...size, expandLabels})
+      const tab = tabOf(chart, 'pf')
+      expect(tab.getAttribute('role')).toBe('button')
+      chart.update(layout, {...size, interactive: false, expandLabels})
+      const mark = tabOf(chart, 'pf')
+      expect(mark).toBe(tab)
+      expect(mark.getAttribute('role')).toBeNull()
+      expect(mark.getAttribute('tabindex')).toBeNull()
+      expect(mark.getAttribute('aria-label')).toBeNull()
+      expect(mark.querySelector('.chevron')).not.toBeNull()
+      const expanded = []
+      chart.node.addEventListener('pedigree:expand-branch', e =>
+        expanded.push(e.detail)
+      )
+      mark.dispatchEvent(new MouseEvent('click', {bubbles: true}))
+      expect(expanded).toEqual([])
     })
   })
 
