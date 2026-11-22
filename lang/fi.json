@@ -333,6 +333,7 @@
     "Merge": "Yhdistä",
     "Delete %s objects?": "Poistetaanko %s objektia?",
     "No coordinates": "Ei koordinaatteja",
+    "No places with coordinates. Add a latitude and longitude to a place to see it here.": "Yhdelläkään paikalla ei ole koordinaatteja. Lisää paikalle leveys- ja pituusaste, niin se näkyy tässä.",
     "No objects selected.": "Ei valittuja objekteja.",
     "Running tasks": "Käynnissä olevat tehtävät",
     "Process transactions": "Käsittele muutokset",
