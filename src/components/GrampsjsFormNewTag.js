@@ -57,7 +57,7 @@ class GrampsjsFormNewTag extends GrampsjsObjectForm {
           border-radius: var(--grampsjs-radius-xs);
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 599px) {
           wa-color-picker {
             --grid-width: min(200px, 60vw);
             --grid-height: min(140px, 42vw);

@@ -304,7 +304,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
         }
 
         details.section > summary:focus-visible {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: 2px;
         }
 

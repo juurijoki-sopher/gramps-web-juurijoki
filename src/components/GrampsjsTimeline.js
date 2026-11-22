@@ -24,6 +24,14 @@ export class GrampsjsTimeline extends GrampsjsAppStateMixin(LitElement) {
           outline: none;
         }
 
+        /* the chart takes the keyboard (arrows pan, + and - zoom): show
+           where the focus is (WCAG 2.4.7) */
+        :host(:focus-visible) {
+          outline: var(--grampsjs-focus-ring);
+          outline-offset: -2px;
+          border-radius: var(--grampsjs-radius-sm);
+        }
+
         .container {
           display: flex;
           flex-direction: column;

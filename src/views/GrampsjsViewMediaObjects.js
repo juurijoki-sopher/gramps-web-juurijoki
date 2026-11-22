@@ -80,7 +80,7 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
         }
 
         .tile:focus-visible {
-          outline: 2px solid var(--mdc-theme-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: 2px;
         }
 
@@ -157,7 +157,7 @@ export class GrampsjsViewMediaObjects extends GrampsjsViewObjectsBase {
         }
 
         .media-list-item:focus-visible {
-          outline: 2px solid var(--mdc-theme-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: -2px;
           background-color: var(--grampsjs-color-shade-240);
         }

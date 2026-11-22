@@ -83,7 +83,7 @@ export class GrampsjsFilterBuilder extends GrampsjsAppStateMixin(LitElement) {
           --md-dialog-container-shape: 16px;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 599px) {
           md-dialog {
             width: 100vw;
             max-width: 100vw;

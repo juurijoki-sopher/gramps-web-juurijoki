@@ -125,7 +125,7 @@ class GrampsjsLightbox extends LitElement {
           text-align: center;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 599px) {
           :host {
             --grampsjs-lightbox-toolbar-height: 88px;
           }

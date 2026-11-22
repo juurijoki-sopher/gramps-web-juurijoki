@@ -54,7 +54,7 @@ export class GrampsjsBlogPostPreview extends GrampsjsAppStateMixin(LitElement) {
           gap: 16px;
         }
 
-        @media (max-width: 500px) {
+        @media (max-width: 599px) {
           #image {
             display: none;
           }

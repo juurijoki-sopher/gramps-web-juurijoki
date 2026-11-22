@@ -36,7 +36,7 @@ export class GrampsjsTagsManager extends GrampsjsTableBase {
           flex: 1;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 599px) {
           wa-color-picker {
             --grid-width: min(200px, 60vw);
             --grid-height: min(140px, 42vw);

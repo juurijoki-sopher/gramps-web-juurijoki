@@ -191,7 +191,7 @@ export class GrampsjsViewTree extends GrampsjsStaleDataMixin(GrampsjsView) {
         }
 
         #selected-person:focus-visible {
-          outline: 2px solid var(--md-sys-color-primary);
+          outline: var(--grampsjs-focus-ring);
           outline-offset: 2px;
         }
 

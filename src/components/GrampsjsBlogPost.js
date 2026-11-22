@@ -66,7 +66,7 @@ export class GrampsjsBlogPost extends GrampsjsAppStateMixin(LitElement) {
           margin-top: 2em;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 769px) {
           h2 {
             font-size: var(--grampsjs-font-size-display);
             padding-bottom: 0.3em;
