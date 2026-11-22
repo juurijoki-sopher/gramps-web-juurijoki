@@ -1,7 +1,5 @@
 import {html, css, LitElement} from 'lit'
 import '@material/web/dialog/dialog.js'
-import '@material/web/iconbutton/icon-button.js'
-import {mdiLinkPlus, mdiPlus} from '@mdi/js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 import {fireEvent} from '../util.js'
 import {linkParent, linkChild, linkSpouse} from '../util/familyLinks.js'
@@ -11,7 +9,7 @@ import './GrampsjsFormNewSpouse.js'
 import './GrampsjsFormPersonRef.js'
 import './GrampsjsFormSpouseRef.js'
 import './GrampsjsFormChildRef.js'
-import './GrampsjsIcon.js'
+import './GrampsjsAddOrLinkButton.js'
 
 export class GrampsjsTreeChartAddPerson extends GrampsjsAppStateMixin(
   LitElement
@@ -152,22 +150,16 @@ export class GrampsjsTreeChartAddPerson extends GrampsjsAppStateMixin(
     return html`
       <div class="relation-row">
         <span>${label}</span>
-        <md-icon-button
-          @click="${() => this._selectRelationship(relationship, 'link')}"
-        >
-          <grampsjs-icon
-            path="${mdiLinkPlus}"
-            color="var(--mdc-theme-secondary)"
-          ></grampsjs-icon>
-        </md-icon-button>
-        <md-icon-button
-          @click="${() => this._selectRelationship(relationship, 'new')}"
-        >
-          <grampsjs-icon
-            path="${mdiPlus}"
-            color="var(--mdc-theme-secondary)"
-          ></grampsjs-icon>
-        </md-icon-button>
+        <grampsjs-add-or-link-button
+          variant="icon"
+          addLabel="${this._('Add a new person')}"
+          linkLabel="${this._('Select an existing person')}"
+          .appState="${this.appState}"
+          @add-or-link:add="${() =>
+            this._selectRelationship(relationship, 'new')}"
+          @add-or-link:link="${() =>
+            this._selectRelationship(relationship, 'link')}"
+        ></grampsjs-add-or-link-button>
       </div>
     `
   }
