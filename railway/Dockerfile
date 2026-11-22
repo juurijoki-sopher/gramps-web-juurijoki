@@ -39,6 +39,9 @@ COPY railway/addons/FilterRules.addon.tgz /tmp/FilterRules.addon.tgz
 RUN mkdir -p /opt/gramps-addons \
     && tar -xzf /tmp/FilterRules.addon.tgz -C /opt/gramps-addons \
     && rm /tmp/FilterRules.addon.tgz
+# Juurijoki additions, wrapped around the API app without changing it: user
+# accounts are linked to people in the tree (see juurijoki/userlinks.py)
+COPY railway/juurijoki /opt/juurijoki/juurijoki
 COPY railway/start.sh /railway-start.sh
 RUN chmod +x /railway-start.sh
 

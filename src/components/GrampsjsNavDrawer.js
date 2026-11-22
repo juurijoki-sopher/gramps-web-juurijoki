@@ -30,6 +30,13 @@ class GrampsjsNavDrawer extends GrampsjsAppStateMixin(LitElement) {
           top: 0;
           align-self: start;
           height: 100dvh;
+          /* the drawer's own colours: light on the light theme's petrol */
+          --md-sys-color-on-surface: var(--grampsjs-drawer-on-color);
+          --md-sys-color-on-surface-variant: var(
+            --grampsjs-drawer-on-variant-color
+          );
+          --md-sys-color-primary: var(--grampsjs-drawer-accent-color);
+          --md-focus-ring-color: var(--grampsjs-drawer-on-color);
           color: var(--md-sys-color-on-surface-variant);
         }
 

@@ -49,7 +49,7 @@ celery -A gramps_webapi.celery worker --loglevel=INFO \
 CELERY_PID=$!
 
 gunicorn -w "${GUNICORN_NUM_WORKERS:-2}" -b "0.0.0.0:${PORT:-5000}" \
-    gramps_webapi.wsgi:app --timeout "${GUNICORN_TIMEOUT:-120}" \
+    --pythonpath /opt/juurijoki juurijoki.wsgi:app --timeout "${GUNICORN_TIMEOUT:-120}" \
     --limit-request-line 8190 --preload &
 GUNICORN_PID=$!
 

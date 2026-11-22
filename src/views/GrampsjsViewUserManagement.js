@@ -40,6 +40,8 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
     return {
       userData: {type: Array},
       dbInfo: {type: Object},
+      _links: {type: Object},
+      _people: {type: Object},
     }
   }
 
@@ -47,6 +49,8 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
     super()
     this.userData = []
     this.dbInfo = {}
+    this._links = {}
+    this._people = {}
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -78,6 +82,10 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
         .appState="${this.appState}"
         .data="${this.userData}"
         ?ismulti="${!!this.dbInfo?.server?.multi_tree}"
+        .links="${this._links}"
+        .people="${this._people}"
+        ?isAdmin="${!!this.appState.permissions?.canViewOtherTree}"
+        @user:linked="${this._handleUserLinked}"
         @user:updated="${this._handleUserChanged}"
         @user:added="${this._handleUserAdded}"
         @user:deleted="${this._handleUserDeleted}"
@@ -107,12 +115,35 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
 
   _handleUserAdded(e) {
     const data = e.detail
-    this._addUser(e.detail.name, {
-      role: data.role,
-      email: data.email,
-      full_name: data.full_name,
-      password: data.password,
-    })
+    this._addUser(
+      e.detail.name,
+      {
+        role: data.role,
+        email: data.email,
+        full_name: data.full_name,
+        password: data.password,
+      },
+      data.person_handle
+    )
+  }
+
+  async _handleUserLinked(e) {
+    const {name, person_handle: personHandle} = e.detail
+    const data = await this.appState.apiPut(
+      `/api/juurijoki/user-links/${encodeURIComponent(name)}/`,
+      {person_handle: personHandle}
+    )
+    this._handleResult(data)
+  }
+
+  _handleResult(data) {
+    if ('error' in data) {
+      this.error = true
+      this._errorMessage = data.error
+    } else {
+      this.error = false
+      this._fetchUserData()
+    }
   }
 
   _handleUserDeleted(e) {
@@ -142,16 +173,22 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
     })
   }
 
-  _addUser(username, payload) {
-    this.appState.apiPost(`/api/users/${username}/`, payload).then(data => {
-      if ('error' in data) {
-        this.error = true
-        this._errorMessage = data.error
-      } else {
-        this.error = false
-        this._fetchUserData()
-      }
-    })
+  // the person goes in the query, as the API checks the body's fields
+  _addUser(username, payload, personHandle) {
+    const query = personHandle
+      ? `?person_handle=${encodeURIComponent(personHandle)}`
+      : ''
+    this.appState
+      .apiPost(`/api/users/${username}/${query}`, payload)
+      .then(data => {
+        if ('error' in data) {
+          this.error = true
+          this._errorMessage = data.error
+        } else {
+          this.error = false
+          this._fetchUserData()
+        }
+      })
   }
 
   _deleteUser(username) {
@@ -166,7 +203,42 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
     })
   }
 
+  // which person each account belongs to, and those people's names
+  async _fetchLinks() {
+    const res = await this.appState.apiGet('/api/juurijoki/user-links/')
+    if (!Array.isArray(res?.data)) return
+    const links = Object.fromEntries(
+      res.data.map(link => [link.name, link.person_handle])
+    )
+    this._links = links
+    const lang = this.appState.i18n.lang || 'en'
+    const handles = [...new Set(Object.values(links))].filter(
+      handle => !(handle in this._people)
+    )
+    const people = await Promise.all(
+      handles.map(async handle => {
+        const person = await this.appState.apiGet(
+          `/api/people/${handle}?keys=gramps_id,profile&profile=self&locale=${lang}`
+        )
+        if (!person?.data) return [handle, null]
+        const {profile} = person.data
+        const name = [profile?.name_given, profile?.name_surname]
+          .filter(Boolean)
+          .join(' ')
+        return [
+          handle,
+          {
+            name: name || person.data.gramps_id,
+            href: `/person/${person.data.gramps_id}`,
+          },
+        ]
+      })
+    )
+    this._people = {...this._people, ...Object.fromEntries(people)}
+  }
+
   _fetchUserData() {
+    this._fetchLinks()
     this.loading = true
     this.appState.apiGet('/api/users/').then(data => {
       if ('data' in data) {

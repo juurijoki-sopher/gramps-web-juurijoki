@@ -572,6 +572,19 @@
     "Download PNG": "Lataa PNG",
     "Copy Gramps ID": "Kopioi Gramps-tunnus",
     "Copied": "Kopioitu",
-    "Share": "Jaa"
+    "Share": "Jaa",
+    "Person in the tree": "Henkilö sukupuussa",
+    "Not linked": "Ei liitetty",
+    "Person deleted from the tree": "Henkilö poistettu sukupuusta",
+    "Link to a person": "Liitä henkilöön",
+    "Change the linked person": "Vaihda liitetty henkilö",
+    "A user must be a person in the tree. Select the person first.": "Käyttäjän on oltava sukupuun henkilö. Valitse ensin henkilö.",
+    "As an administrator, you can also add a user without a person, such as a test or technical account.": "Ylläpitäjänä voit lisätä myös käyttäjän ilman henkilöä, esimerkiksi testi- tai teknisen käyttäjän.",
+    "A user must be linked to a person in the tree.": "Käyttäjä on liitettävä sukupuun henkilöön.",
+    "The person was not found in the tree.": "Henkilöä ei löytynyt sukupuusta.",
+    "The person is already linked to another user.": "Henkilö on jo liitetty toiseen käyttäjään.",
+    "Only administrators can import user accounts.": "Vain ylläpitäjät voivat tuoda käyttäjätilejä.",
+    "Link the user to a person in the tree before giving a role.": "Liitä käyttäjä sukupuun henkilöön ennen roolin antamista.",
+    "Only administrators can change or remove a link.": "Vain ylläpitäjät voivat vaihtaa tai poistaa liitoksen."
 }
 

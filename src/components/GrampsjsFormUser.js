@@ -8,6 +8,7 @@ import '@material/web/select/select-option.js'
 
 import {sharedStyles} from '../SharedStyles.js'
 import './GrampsjsFormString.js'
+import './GrampsjsFormSelectObjectList.js'
 import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 
 export const userRoles = {
@@ -31,6 +32,11 @@ class GrampsjsFormUser extends GrampsjsAppStateMixin(LitElement) {
         .hide {
           display: none;
         }
+
+        .person-hint {
+          color: var(--grampsjs-text-secondary-color);
+          font-size: var(--grampsjs-font-size-sm);
+        }
       `,
     ]
   }
@@ -41,6 +47,9 @@ class GrampsjsFormUser extends GrampsjsAppStateMixin(LitElement) {
       ismulti: {type: Boolean},
       isFormValid: {type: Boolean},
       newUser: {type: Boolean},
+      // the tree's users are its people: a new user must be linked to one,
+      // except for administrators adding test or technical accounts
+      requirePerson: {type: Boolean},
     }
   }
 
@@ -50,10 +59,12 @@ class GrampsjsFormUser extends GrampsjsAppStateMixin(LitElement) {
     this.ismulti = false
     this.isFormValid = false
     this.newUser = false
+    this.requirePerson = true
   }
 
   render() {
     return html`
+      ${this.newUser ? this._renderPerson() : ''}
       <p>
         <grampsjs-form-string
           required
@@ -126,6 +137,55 @@ class GrampsjsFormUser extends GrampsjsAppStateMixin(LitElement) {
     `
   }
 
+  _renderPerson() {
+    return html`
+      <p class="person-hint">
+        ${this.requirePerson
+          ? this._(
+              'A user must be a person in the tree. Select the person first.'
+            )
+          : this._(
+              'As an administrator, you can also add a user without a person, such as a test or technical account.'
+            )}
+      </p>
+      <grampsjs-form-select-object-list
+        fixedMenuPosition
+        objectType="person"
+        .appState="${this.appState}"
+        id="person-select"
+        label="${this._('Person in the tree')}"
+        @formdata:changed="${this._handlePersonChanged}"
+      ></grampsjs-form-select-object-list>
+    `
+  }
+
+  async _handlePersonChanged(e) {
+    e.stopPropagation()
+    if (e.composedPath()[0].id !== 'person-select-list') return
+    const [handle] = e.detail.data
+    this.data = {...this.data, person_handle: handle || ''}
+    this._checkFormValid()
+    if (!handle || this.data.full_name) return
+    // the user's name defaults to the person's
+    const res = await this.appState.apiGet(
+      `/api/people/${handle}?keys=profile&profile=self&locale=${
+        this.appState.i18n.lang || 'en'
+      }`
+    )
+    const profile = res?.data?.profile
+    const name = [profile?.name_given, profile?.name_surname]
+      .filter(Boolean)
+      .join(' ')
+    if (name && !this.data.full_name && this.data.person_handle === handle) {
+      this.data = {...this.data, full_name: name}
+      this._checkFormValid()
+    }
+  }
+
+  get hasRequiredPerson() {
+    return !this.newUser || !this.requirePerson || !!this.data.person_handle
+  }
+
   reset() {
     this.shadowRoot
       .querySelectorAll('grampsjs-form-string')
@@ -149,7 +209,8 @@ class GrampsjsFormUser extends GrampsjsAppStateMixin(LitElement) {
     const fields = Array.from(
       this.shadowRoot.querySelectorAll('grampsjs-form-string')
     )
-    this.isFormValid = fields.every(el => el.isValid())
+    this.isFormValid =
+      fields.every(el => el.isValid()) && this.hasRequiredPerson
   }
 }
 

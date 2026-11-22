@@ -10,7 +10,7 @@ import {
 
 // The colour chart of this site (see also global.css):
 // petrol blue as the main colour, copper as its warm complementary accent
-export const DEFAULT_PRIMARY = '#0E6170'
+export const DEFAULT_PRIMARY = '#0A4F5C'
 export const DEFAULT_SECONDARY = '#A9502C'
 // Light-mode page canvas. Views, the app bar and other page surfaces use
 // this too, so the layout is one colour.
@@ -109,7 +109,8 @@ export function applyColors(
   // so very light or very dark seeds still contrast against their background.
   const actionTone = isDark
     ? Math.min(80, Math.max(60, Math.round(secondaryHct.tone)))
-    : Math.min(55, Math.max(30, Math.round(secondaryHct.tone)))
+    : // at most tone 43 so links keep 4.5:1 on the mist panels (#dce7e8)
+      Math.min(43, Math.max(30, Math.round(secondaryHct.tone)))
   root.style.setProperty(
     '--mdc-theme-secondary',
     hexFromArgb(secondaryPalette.tone(actionTone))
