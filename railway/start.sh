@@ -44,6 +44,16 @@ if [ "$1" != "run" ]; then
     exec /docker-entrypoint.sh /railway-start.sh run
 fi
 
+# Railway stops the old container with SIGTERM when a new deployment takes
+# over. That is a normal stop: pass it on and exit with 0, so that Railway
+# does not report the deployment as crashed.
+STOPPING=0
+trap 'STOPPING=1; kill -TERM $GUNICORN_PID $CELERY_PID 2>/dev/null' TERM INT
+# (set before the processes start, as the shell runs as PID 1 and would
+# otherwise ignore the signal)
+GUNICORN_PID=""
+CELERY_PID=""
+
 celery --workdir /opt/juurijoki -A juurijoki.celery worker --loglevel=INFO \
     --concurrency="${CELERY_CONCURRENCY:-2}" &
 CELERY_PID=$!
@@ -53,13 +63,26 @@ gunicorn -w "${GUNICORN_NUM_WORKERS:-2}" -b "0.0.0.0:${PORT:-5000}" \
     --limit-request-line 8190 --preload &
 GUNICORN_PID=$!
 
-trap 'kill -TERM $GUNICORN_PID $CELERY_PID 2>/dev/null' TERM INT
+# a stop that came while the processes were starting
+if [ "$STOPPING" = 1 ]; then
+    kill -TERM $GUNICORN_PID $CELERY_PID 2>/dev/null || true
+fi
 
-# POSIX sh has no "wait -n": poll until one of the processes is gone
-while kill -0 $GUNICORN_PID 2>/dev/null && kill -0 $CELERY_PID 2>/dev/null; do
-    sleep 5
+# POSIX sh has no "wait -n": poll until one of the processes is gone. The
+# sleep runs in the background so that the trap runs at once on a signal.
+while [ "$STOPPING" = 0 ] && kill -0 $GUNICORN_PID 2>/dev/null \
+    && kill -0 $CELERY_PID 2>/dev/null; do
+    sleep 5 &
+    wait $! 2>/dev/null || true
 done
 
+if [ "$STOPPING" = 1 ]; then
+    wait $GUNICORN_PID $CELERY_PID 2>/dev/null || true
+    echo "Stopped on request." >&2
+    exit 0
+fi
+
+# one of the processes died on its own: a real failure, so Railway restarts
 echo "A process exited; stopping the container." >&2
 kill -TERM $GUNICORN_PID $CELERY_PID 2>/dev/null || true
 wait
