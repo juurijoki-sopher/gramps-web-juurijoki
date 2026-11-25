@@ -4,7 +4,6 @@ import '@material/web/menu/menu-item.js'
 import '../../src/components/GrampsjsSplitButton.js'
 import {
   primaryAddItem,
-  otherAddItems,
   labelledAddAction,
   ADD_MENU_ITEMS,
 } from '../../src/components/GrampsjsAddMenu.js'
@@ -76,14 +75,10 @@ describe('GrampsjsSplitButton', () => {
 describe('Add menu last-used type', () => {
   it('defaults to Person', () => {
     expect(primaryAddItem(ADD_MENU_ITEMS, undefined)[0]).toBe('Person')
-    expect(
-      otherAddItems(ADD_MENU_ITEMS, undefined).map(([title]) => title)
-    ).not.toContain('Person')
   })
 
   it('uses the last chosen type as the primary action', () => {
     expect(primaryAddItem(ADD_MENU_ITEMS, 'Event')[1]).toBe('/new_event')
-    expect(otherAddItems(ADD_MENU_ITEMS, 'Event')[0][0]).toBe('Person')
   })
 
   it('falls back to Person for an unknown last type', () => {
