@@ -1,7 +1,8 @@
 /*
 The dropdown menu for adding objects in the top app bar. On wide screens a
 split button: the leading half opens the last-used type, the chevron lists
-the others. On small screens an icon button opens the full menu.
+every type, always in the same order. On small screens an icon button opens
+the same menu.
 */
 
 import {html, css, LitElement} from 'lit'
@@ -28,6 +29,7 @@ import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 import './GrampsjsIcon.js'
 import './GrampsjsTooltip.js'
 import './GrampsjsSplitButton.js'
+import {fireEvent} from '../util.js'
 
 export const ADD_MENU_ITEMS = [
   ['Person', '/new_person', mdiAccount],
@@ -45,11 +47,6 @@ export const ADD_MENU_ITEMS = [
 
 export function primaryAddItem(items, lastAddObject) {
   return items.find(([title]) => title === lastAddObject) ?? items[0]
-}
-
-export function otherAddItems(items, lastAddObject) {
-  const primary = primaryAddItem(items, lastAddObject)
-  return items.filter(item => item !== primary)
 }
 
 // Both halves come from Gramps strings so the label stays in one language
@@ -118,9 +115,7 @@ class GrampsjsAddMenu extends GrampsjsAppStateMixin(LitElement) {
         .appState="${this.appState}"
         @split-button:primary="${() => this._remember(title)}"
       >
-        ${otherAddItems(ADD_MENU_ITEMS, title).map(item =>
-          this._menuItem(...item)
-        )}
+        ${ADD_MENU_ITEMS.map(item => this._menuItem(...item))}
       </grampsjs-split-button>
     `
   }
@@ -153,13 +148,12 @@ class GrampsjsAddMenu extends GrampsjsAppStateMixin(LitElement) {
     `
   }
 
+  // The item navigates itself rather than through an href: remembering the
+  // type re-renders the button and the menu, and a link could then follow
+  // the address that another item had moved into its place.
   _menuItem(title, url, iconPath) {
     return html`
-      <md-menu-item
-        href="${url}"
-        graphic="icon"
-        @click="${() => this._remember(title)}"
-      >
+      <md-menu-item graphic="icon" @click="${() => this._open(title, url)}">
         <span slot="headline">${this._(title)}</span>
         <grampsjs-icon
           slot="start"
@@ -168,6 +162,11 @@ class GrampsjsAddMenu extends GrampsjsAppStateMixin(LitElement) {
         ></grampsjs-icon>
       </md-menu-item>
     `
+  }
+
+  _open(title, url) {
+    fireEvent(this, 'nav', {path: url.replace(/^\//, '')})
+    this._remember(title)
   }
 
   _remember(title) {
