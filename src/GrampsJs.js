@@ -126,8 +126,12 @@ export class GrampsJs extends LitElement {
         this._drawerMode === DRAWER_MODAL &&
         !this._drawerOpen &&
         !NO_PULL_PAGES.includes(this.appState?.path?.page),
-      // views refetch their data on db:changed
-      onRefresh: () => window.dispatchEvent(new CustomEvent('db:changed')),
+      // list views refetch their data on db:changed; object and search
+      // views, which do not follow db:changed, refetch on pull:refresh
+      onRefresh: () => {
+        fireEvent(window, 'db:changed')
+        fireEvent(window, 'pull:refresh')
+      },
     })
     this.loadingState = LOADING_STATE_INITIAL
     this._homePersonDetails = {}

@@ -35,6 +35,7 @@ from gramps_webapi.auth.const import (
     PERM_EDIT_OTHER_USER,
     SCOPE_RESET_PW,
 )
+from gramps_webapi.auth.oidc_helpers import is_local_auth_disabled
 
 from .userlinks import MSG_LINK_FIRST, get_link
 
@@ -91,6 +92,9 @@ def invite_email_body(full_name, user_name, url):
 
 def _create_invite(user_name):
     verify_jwt_in_request()
+    if is_local_auth_disabled():
+        # the link sets a password, which no one could then sign in with
+        abort_with_message(405, "Local authentication is disabled")
     if not has_permissions({PERM_EDIT_OTHER_USER}):
         abort_with_message(403, "Forbidden")
     try:

@@ -238,7 +238,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
         }
 
         #picture > * {
-          margin-bottom: 16px;
+          margin-bottom: var(--grampsjs-space-4);
         }
 
         .profile {
@@ -287,8 +287,8 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
            closed to a single line */
         details.section {
           box-sizing: border-box;
-          margin-bottom: 16px;
-          padding: 4px 20px 8px 20px;
+          margin-bottom: var(--grampsjs-space-4);
+          padding: var(--grampsjs-space-1) 20px var(--grampsjs-space-2) 20px;
           border-radius: var(--grampsjs-radius-md);
           background-color: var(--grampsjs-panel-color);
         }
@@ -311,7 +311,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
         .sections h3 {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: var(--grampsjs-space-2);
           min-height: 48px;
           margin: 0;
           font-size: var(--grampsjs-font-size-xl);
@@ -338,7 +338,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
         details.section[open] > summary h3 {
           margin-bottom: 1rem;
-          padding-bottom: 8px;
+          padding-bottom: var(--grampsjs-space-2);
           border-bottom: 1px solid var(--grampsjs-divider-color);
         }
 
@@ -385,7 +385,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
 
           details.section:not([open]) > summary h3 {
             margin-bottom: 1rem;
-            padding-bottom: 8px;
+            padding-bottom: var(--grampsjs-space-2);
             border-bottom: 1px solid var(--grampsjs-divider-color);
           }
 
@@ -486,7 +486,7 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
         }
 
         .section-wrap > details.section > summary h3 {
-          padding-right: 48px;
+          padding-right: var(--grampsjs-space-7);
         }
 
         .toc-button {
@@ -534,7 +534,8 @@ export class GrampsjsObject extends GrampsjsAppStateMixin(LitElement) {
           }
 
           details.section {
-            padding: 2px 12px 8px 12px;
+            padding: 2px var(--grampsjs-space-3) var(--grampsjs-space-2)
+              var(--grampsjs-space-3);
           }
         }
       `,

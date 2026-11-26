@@ -322,6 +322,14 @@ export class GrampsjsViewSearch extends GrampsjsView {
     super.connectedCallback()
     window.addEventListener('nav', event => this._handleNav(event))
     window.addEventListener('search:query', event => this._handleQuery(event))
+    window.addEventListener('pull:refresh', () => this._handlePullRefresh())
+  }
+
+  // pulled down on a phone: run the current search again
+  _handlePullRefresh() {
+    if (this.active && this._lastSearch) {
+      this._fetchData(this._lastSearch)
+    }
   }
 
   // a search submitted from the app bar, with the object types selected there

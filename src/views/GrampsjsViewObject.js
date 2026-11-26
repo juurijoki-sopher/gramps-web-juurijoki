@@ -116,6 +116,7 @@ export class GrampsjsViewObject extends GrampsjsView {
     this._boundToggleEditMode = this._toggleEditMode.bind(this)
     // Reuse one function reference so disconnectedCallback can release it.
     this._boundHandleEditAction = this.handleEditAction.bind(this)
+    this._boundHandlePullRefresh = this._handlePullRefresh.bind(this)
     this._dataRequestId = 0
     this._dataLang = ''
   }
@@ -239,7 +240,16 @@ export class GrampsjsViewObject extends GrampsjsView {
     window.addEventListener('edit-mode:delete', this._boundDeleteSelf)
     window.addEventListener('edit-mode:delete-check', this._boundCheckDelete)
     window.addEventListener('edit-mode:toggle', this._boundToggleEditMode)
+    window.addEventListener('pull:refresh', this._boundHandlePullRefresh)
     this.addEventListener('edit:action', this._boundHandleEditAction)
+  }
+
+  // pulled down on a phone: fetch the object again, keeping what is shown
+  // until the new data arrives
+  _handlePullRefresh() {
+    if (this.active) {
+      this._updateData(false)
+    }
   }
 
   disconnectedCallback() {
@@ -248,6 +258,7 @@ export class GrampsjsViewObject extends GrampsjsView {
     window.removeEventListener('edit-mode:delete', this._boundDeleteSelf)
     window.removeEventListener('edit-mode:delete-check', this._boundCheckDelete)
     window.removeEventListener('edit-mode:toggle', this._boundToggleEditMode)
+    window.removeEventListener('pull:refresh', this._boundHandlePullRefresh)
     super.disconnectedCallback()
   }
 

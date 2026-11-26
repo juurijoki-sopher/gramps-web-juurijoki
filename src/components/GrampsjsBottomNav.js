@@ -66,10 +66,10 @@ class GrampsjsBottomNav extends GrampsjsAppStateMixin(LitElement) {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 4px;
+          gap: var(--grampsjs-space-1);
           min-width: 48px;
           height: 100%;
-          padding: 0 4px;
+          padding: 0 var(--grampsjs-space-1);
           border: none;
           background: none;
           color: var(--md-sys-color-on-surface-variant);

@@ -36,7 +36,12 @@ describe('coordinatePair', () => {
     expect(coordinatePair(0, 0)).to.equal(null)
     expect(coordinatePair('0', '0')).to.equal(null)
     expect(coordinatePair(91, 24)).to.equal(null)
-    expect(coordinatePair(61, 180)).to.equal(null)
+    expect(coordinatePair(61, 181)).to.equal(null)
+  })
+
+  it('keeps both ends of the longitude range', () => {
+    expect(coordinatePair(-16.5, 180)).to.deep.equal({lat: -16.5, long: 180})
+    expect(coordinatePair(-16.5, -180)).to.deep.equal({lat: -16.5, long: -180})
   })
 })
 

@@ -32,7 +32,7 @@ class GrampsjsEmailSettings extends GrampsjsAppStateMixin(LitElement) {
         .fields {
           display: grid;
           grid-template-columns: 1fr 9em;
-          gap: 12px;
+          gap: var(--grampsjs-space-3);
           max-width: 40em;
         }
 
@@ -52,8 +52,8 @@ class GrampsjsEmailSettings extends GrampsjsAppStateMixin(LitElement) {
         .buttons {
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
-          margin-top: 16px;
+          gap: var(--grampsjs-space-2);
+          margin-top: var(--grampsjs-space-4);
         }
 
         @media (max-width: 600px) {

@@ -17,6 +17,7 @@ export const MIN_PASSWORD_LENGTH = 8
 // What went wrong with a link, from the API's answer
 export function setPasswordError(status, message = '') {
   if (status === 409) return 'This link has already been used.'
+  if (status === 405) return 'Password sign-in is turned off on this site.'
   if (status === 401 && /expired/i.test(message)) {
     return 'This link has expired. Ask for a new link.'
   }

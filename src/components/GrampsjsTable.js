@@ -43,7 +43,7 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
            several rows at once */
         tbody tr {
           display: grid;
-          gap: 8px 12px;
+          gap: var(--grampsjs-space-2) var(--grampsjs-space-3);
           border-top: 1px solid var(--grampsjs-divider-color);
           grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
           padding: 10px 0;
@@ -64,8 +64,8 @@ export class GrampsjsTable extends GrampsjsAppStateMixin(LitElement) {
           border-top: none;
           border-radius: var(--grampsjs-radius-md);
           background-color: var(--grampsjs-panel-color);
-          padding: 12px 4px;
-          margin-bottom: 8px;
+          padding: var(--grampsjs-space-3) var(--grampsjs-space-1);
+          margin-bottom: var(--grampsjs-space-2);
         }
 
         /* the row's name, at the top of the card (serial position) */

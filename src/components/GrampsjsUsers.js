@@ -41,7 +41,7 @@ export class GrampsjsUsers extends GrampsjsTableBase {
           flex-wrap: wrap;
           flex-direction: row;
           align-items: center;
-          gap: 8px;
+          gap: var(--grampsjs-space-2);
           margin-top: 16px;
           margin-bottom: 4px;
         }
@@ -54,7 +54,7 @@ export class GrampsjsUsers extends GrampsjsTableBase {
         .invite-url {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: var(--grampsjs-space-2);
         }
 
         .invite-url md-filled-text-field {
@@ -109,6 +109,8 @@ export class GrampsjsUsers extends GrampsjsTableBase {
       people: {type: Object},
       // administrators may add users without a person and change links
       isAdmin: {type: Boolean},
+      // false when password sign-in is off: invitation links set a password
+      canInvite: {type: Boolean},
       _linkHandle: {type: String},
       _downloadUrl: {type: String},
       _userData: {type: Array},
@@ -124,6 +126,7 @@ export class GrampsjsUsers extends GrampsjsTableBase {
     this.links = {}
     this.people = {}
     this.isAdmin = false
+    this.canInvite = true
     this._linkHandle = ''
     this._downloadUrl = ''
     this._userData = []
@@ -174,22 +177,27 @@ export class GrampsjsUsers extends GrampsjsTableBase {
               <td>${this._(userRoles[obj.role])}</td>
               <td>${obj.account_source || this._('Password')}</td>
               <td>
-                <md-icon-button
-                  class="edit"
-                  aria-label="${this._('Invitation link')}"
-                  @click="${() => fireEvent(this, 'user:invited', obj.name)}"
-                  id="button-invite-${index}"
-                >
-                  <grampsjs-icon
-                    path="${mdiEmailArrowRight}"
-                    height="20"
-                    width="20"
-                    color="var(--mdc-theme-secondary)"
-                  ></grampsjs-icon>
-                </md-icon-button>
-                <grampsjs-tooltip for="button-invite-${index}">
-                  ${this._('Invitation link')}
-                </grampsjs-tooltip>
+                ${this.canInvite
+                  ? html`
+                      <md-icon-button
+                        class="edit"
+                        aria-label="${this._('Invitation link')}"
+                        @click="${() =>
+                          fireEvent(this, 'user:invited', obj.name)}"
+                        id="button-invite-${index}"
+                      >
+                        <grampsjs-icon
+                          path="${mdiEmailArrowRight}"
+                          height="20"
+                          width="20"
+                          color="var(--mdc-theme-secondary)"
+                        ></grampsjs-icon>
+                      </md-icon-button>
+                      <grampsjs-tooltip for="button-invite-${index}">
+                        ${this._('Invitation link')}
+                      </grampsjs-tooltip>
+                    `
+                  : ''}
                 <md-icon-button
                   class="edit"
                   aria-label="${this._('Edit user')}"
