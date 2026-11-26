@@ -4,6 +4,7 @@ import '@material/web/select/filled-select'
 import '@material/web/select/select-option'
 
 import {GrampsjsView} from './GrampsjsView.js'
+import {apiGetOIDCConfig} from '../api.js'
 
 import {GrampsjsStaleDataMixin} from '../mixins/GrampsjsStaleDataMixin.js'
 import '../components/GrampsjsUsers.js'
@@ -49,6 +50,9 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
       userData: {type: Array},
       dbInfo: {type: Object},
       _links: {type: Object},
+      // false when the site signs in only through OIDC: no password, so no
+      // invitation links either
+      _localAuth: {type: Boolean},
       _people: {type: Object},
     }
   }
@@ -58,6 +62,7 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
     this.userData = []
     this.dbInfo = {}
     this._links = {}
+    this._localAuth = true
     this._people = {}
   }
 
@@ -91,6 +96,7 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
         .data="${this.userData}"
         ?ismulti="${!!this.dbInfo?.server?.multi_tree}"
         .links="${this._links}"
+        ?canInvite="${this._localAuth}"
         .people="${this._people}"
         ?isAdmin="${!!this.appState.permissions?.canViewOtherTree}"
         @user:linked="${this._handleUserLinked}"
@@ -106,6 +112,13 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
 
   firstUpdated() {
     this._fetchUserData()
+    this._fetchAuthConfig()
+  }
+
+  async _fetchAuthConfig() {
+    const res = await apiGetOIDCConfig()
+    const config = 'error' in res ? null : res
+    this._localAuth = !(config?.enabled && config.disable_local_auth)
   }
 
   // users can be added elsewhere, e.g. by restoring a backup
@@ -194,7 +207,7 @@ export class GrampsjsViewUserManagement extends GrampsjsStaleDataMixin(
       payload
     )
     this._handleResult(data)
-    if (!('error' in data)) {
+    if (!('error' in data) && this._localAuth) {
       await this._invite(username)
     }
   }

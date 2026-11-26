@@ -19,6 +19,7 @@ import {
   proposalsFromCitations,
   readProposal,
   splitRecord,
+  unfinishedAcceptEvent,
 } from '../../src/researchProposal.js'
 
 const filledDate = {
@@ -244,5 +245,30 @@ describe('same-source people', () => {
       {handle: 'other'},
       {handle: 'named', grampsId: 'I3', profile: {name_given: 'Maija'}},
     ])
+  })
+})
+
+describe('unfinished acceptance', () => {
+  const person = {event_ref_list: [{ref: 'E1'}]}
+
+  it('finds the event an earlier acceptance created but did not link', () => {
+    const events = [
+      {handle: 'E1', type: 'Birth'},
+      {handle: 'E2', type: 'Death'},
+      {handle: 'E3', type: 'Birth'},
+    ]
+    expect(unfinishedAcceptEvent(events, person, 'Birth')?.handle).toBe('E3')
+  })
+
+  it('ignores events the person already has', () => {
+    expect(
+      unfinishedAcceptEvent([{handle: 'E1', type: 'Birth'}], person, 'Birth')
+    ).toBeNull()
+  })
+
+  it('reads typed event types and skips missing events', () => {
+    const events = [null, {handle: 'E4', type: {string: 'Burial'}}]
+    expect(unfinishedAcceptEvent(events, person, 'Burial')?.handle).toBe('E4')
+    expect(unfinishedAcceptEvent([], person, 'Burial')).toBeNull()
   })
 })

@@ -17,6 +17,8 @@ const FI = {
   'Enter your username.': 'Kirjoita käyttäjätunnuksesi.',
   'The e-mail could not be sent. Try again later or contact the administrator.':
     'Sähköpostia ei voitu lähettää. Yritä myöhemmin uudelleen tai ota yhteyttä ylläpitäjään.',
+  'Password sign-in is turned off on this site.':
+    'Salasanalla kirjautuminen on poistettu käytöstä tällä sivustolla.',
   'Too many attempts. Wait a moment and try again.':
     'Liian monta yritystä. Odota hetki ja yritä uudelleen.',
   'Set your password': 'Aseta salasanasi',

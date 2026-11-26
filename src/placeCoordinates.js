@@ -37,7 +37,7 @@ export function coordinatePair(lat, long) {
   if (latitude === null || longitude === null) return null
   if (latitude === 0 && longitude === 0) return null
   if (latitude > 90 || latitude < -90) return null
-  if (longitude >= 180 || longitude < -180) return null
+  if (longitude > 180 || longitude < -180) return null
   return {lat: latitude, long: longitude}
 }
 

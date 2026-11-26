@@ -233,6 +233,24 @@ export function eventOfType(person, eventType) {
   return events.find(event => typeString(event?.type) === eventType) || null
 }
 
+// An event that an earlier, unfinished acceptance created: it cites the
+// proposal and has its type, but the person does not refer to it yet,
+// because a later step failed. Accepting again uses it instead of creating
+// another one.
+export function unfinishedAcceptEvent(citingEvents, person, eventType) {
+  const onPerson = new Set(
+    (person?.event_ref_list || []).map(ref => ref?.ref).filter(Boolean)
+  )
+  return (
+    (citingEvents || []).find(
+      event =>
+        event?.handle &&
+        typeString(event.type) === eventType &&
+        !onPerson.has(event.handle)
+    ) || null
+  )
+}
+
 export function fieldDecision(event, proposal) {
   const dateFilled = Boolean(event) && !dateIsEmpty(event.date)
   const placeFilled = Boolean(event?.place)

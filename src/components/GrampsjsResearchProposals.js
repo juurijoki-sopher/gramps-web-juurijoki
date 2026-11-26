@@ -34,6 +34,7 @@ import {
   catalogueHasRule,
   eventFill,
   eventOfType,
+  unfinishedAcceptEvent,
   exactPlace,
   exactTitle,
   fieldDecision,
@@ -717,6 +718,24 @@ export class GrampsjsResearchProposals extends GrampsjsAppStateMixin(
     fireEvent(this, 'research:saved')
   }
 
+  // the event an earlier, unfinished acceptance of the proposal created, if
+  // any (see unfinishedAcceptEvent)
+  async _unfinishedEvent(proposal) {
+    const res = await this.appState.apiGet(
+      `/api/citations/${proposal.handle}?keys=backlinks&backlinks=true`
+    )
+    const handles = res?.data?.backlinks?.event || []
+    const events = await Promise.all(
+      handles.map(async handle => {
+        const ev = await this.appState.apiGet(
+          `/api/events/${handle}?keys=handle,type`
+        )
+        return ev?.data || null
+      })
+    )
+    return unfinishedAcceptEvent(events, this.person, proposal.eventType)
+  }
+
   async _accept(proposal) {
     if (this._saving) return
     const event = eventOfType(this.person, proposal.eventType)
@@ -747,7 +766,10 @@ export class GrampsjsResearchProposals extends GrampsjsAppStateMixin(
       }
     }
     let eventHandle = event?.handle
-    if (plan.create) {
+    const leftover = plan.create ? await this._unfinishedEvent(proposal) : null
+    if (leftover) {
+      eventHandle = leftover.handle
+    } else if (plan.create) {
       const created = buildEvent({
         type: proposal.eventType,
         dateText: plan.applyDate ? proposal.dateText : '',

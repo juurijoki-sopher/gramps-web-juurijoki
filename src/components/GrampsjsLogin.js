@@ -25,7 +25,12 @@ import {GrampsjsAppStateMixin} from '../mixins/GrampsjsAppStateMixin.js'
 export function resetErrorText(status) {
   if (status === 429) return 'Too many attempts. Wait a moment and try again.'
   if (status === 0) return 'No connection to the server. Try again.'
-  return 'The e-mail could not be sent. Try again later or contact the administrator.'
+  if (status === 405) return 'Password sign-in is turned off on this site.'
+  // the reset endpoint answers 500 when the e-mail cannot be sent
+  if (status === 500) {
+    return 'The e-mail could not be sent. Try again later or contact the administrator.'
+  }
+  return 'Something went wrong on the server. Try again later.'
 }
 
 class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
@@ -521,7 +526,7 @@ class GrampsjsLogin extends GrampsjsAppStateMixin(LitElement) {
     const innerForm = this.shadowRoot.getElementById('inner-form')
     const divSuccess = this.shadowRoot.getElementById('reset-success')
     if ('error' in res) {
-      this._showError(pwText(lang, resetErrorText(res.status), res.error))
+      this._showError(pwText(lang, resetErrorText(res.status)))
     } else {
       divSuccess.style.display = 'block'
       innerForm.style.display = 'none'

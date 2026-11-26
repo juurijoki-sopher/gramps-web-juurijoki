@@ -181,7 +181,10 @@ def _before_request():
     elif request.method == "PUT":
         body = request.get_json(silent=True) or {}
         role = body.get("role")
-        if role is None or role < ROLE_GUEST or _is_admin():
+        # a role that is not a number is the API's to refuse, with a 422
+        if not isinstance(role, int) or isinstance(role, bool):
+            return None
+        if role < ROLE_GUEST or _is_admin():
             return None
         user_id = _user_id_or_none(user_name)
         if user_id and get_link(user_id) is None and get_role(_uuid(user_id)) != role:
